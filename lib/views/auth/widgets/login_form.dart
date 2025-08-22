@@ -36,7 +36,7 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 16),
 
           // Password field (custom widget)
-          PasswordField(controller: _passwordController),
+          PasswordField(controller: _passwordController, isLogin: true,),
 
           const SizedBox(height: 1),
 

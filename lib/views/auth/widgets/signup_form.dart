@@ -46,7 +46,7 @@ class _SignupFormState extends State<SignupForm> {
           NameField(controller: _name),
           PhoneField(controller: _phone),
           EmailField(controller: _email),
-          PasswordField(controller: _password),
+          PasswordField(controller: _password, isLogin: false,),
           ConfirmPasswordField(
             controller: _confirm,
             passwordController: _password,
