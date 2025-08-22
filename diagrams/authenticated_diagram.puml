@@ -1,0 +1,45 @@
+@startuml
+title Registered User
+top to bottom direction
+
+actor "Registered User" as RU
+
+rectangle "Main Actions" {
+  usecase "Sign in" as UC1
+  usecase "Reset password" as UC2
+  usecase "Submit found/lost pet report" as UC3
+  usecase "Set push notifications" as UC4
+  usecase "See all reports from area" as UC5
+  usecase "View report details" as UC6
+  usecase "Explore interactive map" as UC7
+}
+
+rectangle "Additional Features" {
+  usecase "Filter all reports" as UC8
+  usecase "Access profile settings" as UC9
+  usecase "Edit profile" as UC10
+  usecase "Turn off notifications" as UC11
+  usecase "Sign out" as UC12
+  usecase "Access own reports" as UC13
+  usecase "Edit report" as UC14
+  usecase "Mark report as solved" as UC15
+}
+
+' --- Connections ---
+RU -up-> UC1
+RU -up-> UC2
+RU -up-> UC3
+RU -up-> UC4
+RU -up-> UC5
+RU -up-> UC6
+RU -up-> UC7 
+
+RU -down-> UC8
+RU -down-> UC9
+RU -down-> UC10
+RU -down-> UC11
+RU -down-> UC12
+RU -down-> UC13
+RU -down-> UC14
+RU -down-> UC15
+@enduml
