@@ -3,23 +3,9 @@ title Firestore vs SQL Database
 
 left to right direction
 
-card "Firestore (NoSQL)" as Firestore
-[
-- No complex relational queries
-- Real-time data sync
-- Flexible schema (document-based)
-- Costs increase with reads/writes
-- Limited advanced filtering/search
-]
+rectangle "Firestore (NoSQL)\n-------------------\n- No complex relational queries\n- Real-time data sync\n- Flexible schema (document-based)\n- Costs increase with reads/writes\n- Limited advanced filtering/search" as Firestore
 
-card "SQL Database" as SQL
-[
-- Strong relational data support
-- No built-in real-time sync
-- Structured schema (tables/rows)
-- Costs tied to server setup/maintenance
-- Supports complex queries & joins
-]
+rectangle "SQL Database\n-------------------\n- Strong relational data support\n- No built-in real-time sync\n- Structured schema (tables/rows)\n- Costs tied to server setup/maintenance\n- Supports complex queries & joins" as SQL
 
 Firestore <--> SQL : Comparison
 @enduml
