@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../styles/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'login_screen.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -12,6 +14,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   bool _loading = false;
+  String errorMessage = '';
 
   @override
   void dispose() {
@@ -20,33 +23,64 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   InputDecoration _decoration(String label) => InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(color: AppColors.lightGrey),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        filled: true,
-        fillColor: AppColors.surface,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.orange, width: 1.6),
-        ),
-      );
+    labelText: label,
+    labelStyle: const TextStyle(color: AppColors.lightGrey),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    filled: true,
+    fillColor: AppColors.surface,
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: const BorderSide(color: AppColors.border),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: const BorderSide(color: AppColors.orange, width: 1.6),
+    ),
+  );
 
   Future<void> _sendReset() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     try {
-      // TODO: FirebaseAuth.instance.sendPasswordResetEmail(email: _email.text.trim());
-      await Future<void>.delayed(const Duration(milliseconds: 700));
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: _email.text.trim(),
+      );
+      setState(() {
+        _loading = true;
+        errorMessage = '';
+      });
+      // _clearTextFields();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (Route<dynamic> route) => false,
+      );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('If that email exists, a reset link was sent.')),
+        const SnackBar(
+          content: Text('If that email exists, a reset link was sent.'),
+        ),
       );
-      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      //TODO fix errors
+      // print(e.code);
+
+      if (e.code.toString() == 'user-not-found') {
+        setState(() {
+          _loading = false;
+          errorMessage = 'There is no account associated with this email.';
+        });
+      } else {
+        setState(() {
+          _loading = false;
+          errorMessage = 'Something went wrong. Please try again.';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _loading = false;
+        errorMessage = 'Something went wrong. Please try again.';
+      });
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -65,7 +99,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         centerTitle: true,
         toolbarHeight: 72,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(headerRadius)),
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(headerRadius),
+          ),
         ),
         clipBehavior: Clip.antiAlias,
         leading: const BackButton(color: AppColors.white),
@@ -140,8 +176,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             decoration: _decoration('Email'),
                             validator: (v) {
                               final value = (v ?? '').trim();
-                              if (value.isEmpty) return 'Please enter your email';
-                              final ok = RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(value);
+                              if (value.isEmpty)
+                                return 'Please enter your email';
+                              final ok = RegExp(
+                                r'^[^@]+@[^@]+\.[^@]+$',
+                              ).hasMatch(value);
                               return ok ? null : 'Enter a valid email';
                             },
                             onFieldSubmitted: (_) => _sendReset(),
@@ -166,8 +205,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     width: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2.2,
-                                      valueColor:
-                                          AlwaysStoppedAnimation<Color>(AppColors.white),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.white,
+                                      ),
                                     ),
                                   )
                                 : const Text('Reset password'),
