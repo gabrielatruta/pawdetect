@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "892688355669",
+    "project_id": "pawdetect-flutter",
+    "storage_bucket": "pawdetect-flutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892688355669:android:b323544565279e164b5fdc",
+        "android_client_info": {
+          "package_name": "com.example.pawdetect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZIkcdxNaRh1W3vvLBy5FGwM0DbA0C3K0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

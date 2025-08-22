@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../styles/app_colors.dart';
+import 'login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -20,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _obscurePwd = true;
   bool _obscureConfirm = true;
   bool _loading = false;
+  String errorMessage = '';
 
   @override
   void dispose() {
@@ -55,10 +58,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     try {
-      // TODO: Firebase Auth createUserWithEmailAndPassword + save profile
-      await Future<void>.delayed(const Duration(milliseconds: 700));
-      if (!mounted) return;
-      // Navigator.pop(context); // or pushReplacement to your Home screen
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: _email.text,
+            password: _password.text,
+          )
+          .then((value) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+          });
+      setState(() {
+        _loading = true;
+        errorMessage = '';
+      });
+      // _clearTextFields();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _loading = false;
+        if (e.code == 'invalid-email') {
+          _loading = false;
+          errorMessage = 'The email is not valid. Please check and try again.';
+        } else if (e.code == 'email-already-in-use') {
+          _loading = false;
+          errorMessage =
+              'The email is already in use. Please use a different email address.';
+        } else {
+          _loading = false;
+          errorMessage = 'Something went wrong. Please try again.';
+        }
+      });
+    } catch (e) {
+      setState(() {
+        _loading = false;
+        errorMessage = 'Something went wrong. Please try again.';
+      });
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -77,17 +116,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         centerTitle: true,
         toolbarHeight: 72,
         shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.vertical(bottom: Radius.circular(headerRadius)),
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(headerRadius),
+          ),
         ),
         clipBehavior: Clip.antiAlias,
         leading: const BackButton(color: AppColors.white),
         title: const Text(
           'Sign Up',
-          style: TextStyle(
-            color: AppColors.white,
-            fontWeight: FontWeight.w700,
-          ),
+          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w700),
         ),
       ),
       body: SafeArea(
@@ -174,8 +211,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 decoration: _decoration('Full name'),
                                 validator: (v) =>
                                     (v == null || v.trim().isEmpty)
-                                        ? 'Please enter your name!'
-                                        : null,
+                                    ? 'Please enter your name!'
+                                    : null,
                               ),
                               SizedBox(height: gapS),
 
@@ -188,7 +225,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 inputFormatters: [
                                   // allow digits, +, spaces, dashes, parentheses
                                   FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9+\-\s\(\)]')),
+                                    RegExp(r'[0-9+\-\s\(\)]'),
+                                  ),
                                 ],
                                 validator: (v) {
                                   final value = v?.trim() ?? '';
@@ -196,7 +234,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     return 'Please enter your phone number!';
                                   }
                                   final digits = value.replaceAll(
-                                      RegExp(r'\D'), ''); // strip non-digits
+                                    RegExp(r'\D'),
+                                    '',
+                                  ); // strip non-digits
                                   if (digits.length < 7 || digits.length > 15) {
                                     return 'Enter a valid phone number';
                                   }
@@ -216,8 +256,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   if (value.isEmpty) {
                                     return 'Please enter your email!';
                                   }
-                                  final ok = RegExp(r'^[^@]+@[^@]+\.[^@]+$')
-                                      .hasMatch(value);
+                                  final ok = RegExp(
+                                    r'^[^@]+@[^@]+\.[^@]+$',
+                                  ).hasMatch(value);
                                   return ok
                                       ? null
                                       : 'Email address is not valid!';
@@ -234,7 +275,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   'Password',
                                   suffix: IconButton(
                                     onPressed: () => setState(
-                                        () => _obscurePwd = !_obscurePwd),
+                                      () => _obscurePwd = !_obscurePwd,
+                                    ),
                                     icon: Icon(
                                       _obscurePwd
                                           ? Icons.visibility_off
@@ -243,9 +285,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                   ),
                                 ),
-                                validator: (v) => (v == null || v.length < 6)
-                                    ? 'Min 6 characters'
-                                    : null,
+                                validator: (v) {
+                                  final value = v?.trim() ?? '';
+                                  if (value.isEmpty) {
+                                    return 'Please enter your password!';
+                                  }
+                                  String pattern =
+                                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                                  RegExp regex = RegExp(pattern);
+                                  if (!regex.hasMatch(_password.toString())) {
+                                    print("12345.");
+                                    return '''
+      Password must be at least 8 characters,
+      include an uppercase letter, number and symbol.
+      ''';
+                                  }
+                                  return null;
+                                },
                               ),
                               SizedBox(height: gapS),
 
@@ -257,8 +313,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 decoration: _decoration(
                                   'Confirm password',
                                   suffix: IconButton(
-                                    onPressed: () => setState(() =>
-                                        _obscureConfirm = !_obscureConfirm),
+                                    onPressed: () => setState(
+                                      () => _obscureConfirm = !_obscureConfirm,
+                                    ),
                                     icon: Icon(
                                       _obscureConfirm
                                           ? Icons.visibility_off
@@ -269,10 +326,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 validator: (v) =>
                                     (v == null || v != _password.text)
-                                        ? 'Passwords do not match'
-                                        : null,
+                                    ? 'Passwords do not match'
+                                    : null,
                                 onFieldSubmitted: (_) => _onCreateAccount(),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -298,7 +355,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2.2,
                                       valueColor: AlwaysStoppedAnimation<Color>(
-                                          AppColors.white),
+                                        AppColors.white,
+                                      ),
                                     ),
                                   )
                                 : const Text('Create Account'),
@@ -318,8 +376,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             TextButton(
                               onPressed: () =>
                                   Navigator.pop(context), // back to Login
-                              child: const Text('Log In',
-                                  style: TextStyle(color: AppColors.orange)),
+                              child: const Text(
+                                'Log In',
+                                style: TextStyle(color: AppColors.orange),
+                              ),
                             ),
                           ],
                         ),
@@ -336,4 +396,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+}
+
+Widget signInButton(BuildContext context, Function onTap, bool _loading) {
+  return SizedBox(
+    width: double.infinity,
+    height: 48,
+    child: ElevatedButton(
+      onPressed: _loading ? null : () => onTap(),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.orange,
+        foregroundColor: AppColors.white,
+        shape: const StadiumBorder(),
+        elevation: 0,
+      ),
+      child: _loading
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.2,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+              ),
+            )
+          : Text(
+              'Sign Up',
+              // style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+    ),
+  );
 }

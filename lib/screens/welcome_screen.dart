@@ -105,7 +105,8 @@ class WelcomeScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (_) => const LoginScreen()),
+                                builder: (_) => const LoginScreen(),
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
@@ -127,14 +128,17 @@ class WelcomeScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (_) => const SignUpScreen()),
+                                builder: (_) => const SignUpScreen(),
+                              ),
                             );
                           },
                           style: OutlinedButton.styleFrom(
                             minimumSize: const Size.fromHeight(48),
                             shape: const StadiumBorder(),
                             side: const BorderSide(
-                                color: AppColors.orange, width: 1.5),
+                              color: AppColors.orange,
+                              width: 1.5,
+                            ),
                             foregroundColor: AppColors.orange,
                           ),
                           child: const Text('Sign Up'),
@@ -147,7 +151,8 @@ class WelcomeScreen extends StatelessWidget {
                       TextButton(
                         onPressed: () {},
                         style: TextButton.styleFrom(
-                            foregroundColor: AppColors.grey),
+                          foregroundColor: AppColors.grey,
+                        ),
                         child: const Text(
                           'Continue without an account',
                           textAlign: TextAlign.center,
@@ -156,7 +161,8 @@ class WelcomeScreen extends StatelessWidget {
                       ),
 
                       SizedBox(
-                          height: gapS + MediaQuery.of(context).padding.bottom),
+                        height: gapS + MediaQuery.of(context).padding.bottom,
+                      ),
                     ],
                   ),
                 ),

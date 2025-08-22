@@ -3,6 +3,8 @@ import '/screens/forgot_password_screen.dart';
 import 'signup_screen.dart';
 import '../styles/app_colors.dart';
 import '/screens/home/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _password = TextEditingController();
   bool _obscure = true;
   bool _loading = false;
+  String errorMessage = '';
 
   @override
   void dispose() {
@@ -49,15 +52,38 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     try {
-      // TODO: Firebase Auth signInWithEmailAndPassword(...)
-      // await Future<void>.delayed(const Duration(milliseconds: 600));
-
-      // if (!mounted) return;
-
-      // // ✅ Navigate to Home on success
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
+      try {
+        await Firebase.initializeApp();
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.text,
+          password: _password.text,
+        );
+        if (!mounted) return;
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          (Route<dynamic> route) => false,
+        );
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _loading = false;
+          if (e.code == 'user-not-found') {
+            errorMessage = "No user with the provided email address.";
+          } else if (e.code == 'wrong-password') {
+            errorMessage = 'The password is invalid. Please try again.';
+          } else if (e.code == 'invalid-credential') {
+            errorMessage =
+                'The email or password are invalid. Please check and try again.';
+          } else {
+            errorMessage =
+                e.message ?? 'Something went wrong. Please try again.';
+          }
+        });
+      } catch (e) {
+        setState(() {
+          _loading = false;
+          errorMessage = 'Something went wrong. Please try again.';
+        });
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -86,10 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
         clipBehavior: Clip.antiAlias, // ensure the curve is actually clipped
         title: const Text(
           'Log In',
-          style: TextStyle(
-            color: AppColors.white,
-            fontWeight: FontWeight.w700,
-          ),
+          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w700),
         ),
         // Back arrow (uses foregroundColor for white icon)
         leading: const BackButton(color: AppColors.white),
@@ -182,8 +205,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   if (value.isEmpty) {
                                     return 'Please enter your email!';
                                   }
-                                  final ok = RegExp(r'^[^@]+@[^@]+\.[^@]+$')
-                                      .hasMatch(value);
+                                  final ok = RegExp(
+                                    r'^[^@]+@[^@]+\.[^@]+$',
+                                  ).hasMatch(value);
                                   return ok
                                       ? null
                                       : 'Email address is not valid!';
@@ -210,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 validator: (v) => (v == null || v.length < 6)
                                     ? 'Min 6 characters'
                                     : null,
-                                onFieldSubmitted: (_) => _onLogin(),
+                                // onFieldSubmitted: (_) => _onLogin(),
                               ),
                               Align(
                                 alignment: Alignment.centerRight,
@@ -218,14 +242,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (_) =>
-                                              const ForgotPassword()),
+                                        builder: (_) => const ForgotPassword(),
+                                      ),
                                     );
                                   },
                                   child: const Text(
                                     'Forgot password?',
-                                    style:
-                                        TextStyle(color: AppColors.lightGrey),
+                                    style: TextStyle(
+                                      color: AppColors.lightGrey,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -235,31 +260,41 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         SizedBox(height: gapS),
 
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: _loading ? null : _onLogin,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.orange,
-                              foregroundColor: AppColors.white,
-                              minimumSize: const Size.fromHeight(48),
-                              shape: const StadiumBorder(),
-                              elevation: 0,
+                        ///////////////////////////OLD BUTTON BY GARBEILA
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   child: ElevatedButton(
+                        //     onPressed: _loading ? null : _onLogin,
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: AppColors.orange,
+                        //       foregroundColor: AppColors.white,
+                        //       minimumSize: const Size.fromHeight(48),
+                        //       shape: const StadiumBorder(),
+                        //       elevation: 0,
+                        //     ),
+                        //     child: _loading
+                        //         ? const SizedBox(
+                        //             height: 20,
+                        //             width: 20,
+                        //             child: CircularProgressIndicator(
+                        //               strokeWidth: 2.2,
+                        //               valueColor: AlwaysStoppedAnimation<Color>(
+                        //                   AppColors.white),
+                        //             ),
+                        //           )
+                        //         : const Text('Log In'),
+                        //   ),
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Center(
+                            child: Text(
+                              style: const TextStyle(color: Colors.red),
+                              errorMessage,
                             ),
-                            child: _loading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          AppColors.white),
-                                    ),
-                                  )
-                                : const Text('Log In'),
                           ),
                         ),
-
+                        signInButton(context, _onLogin, _loading),
                         SizedBox(height: gapS),
 
                         Row(
@@ -273,7 +308,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (_) => const SignUpScreen()),
+                                    builder: (_) => const SignUpScreen(),
+                                  ),
                                 );
                               },
                               child: const Text(
@@ -296,4 +332,33 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+Widget signInButton(BuildContext context, Function onTap, bool isLoading) {
+  return SizedBox(
+    width: double.infinity,
+    height: 48,
+    child: ElevatedButton(
+      onPressed: isLoading ? null : () => onTap(),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.orange,
+        foregroundColor: AppColors.white,
+        shape: const StadiumBorder(),
+        elevation: 0,
+      ),
+      child: isLoading
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.2,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+              ),
+            )
+          : Text(
+              'Log In',
+              // style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+    ),
+  );
 }
