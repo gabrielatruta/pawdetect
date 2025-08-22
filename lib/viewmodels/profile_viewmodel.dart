@@ -1,0 +1,32 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class ProfileViewModel extends ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  User? user;
+  bool isLoading = false;
+  String? errorMessage;
+
+  ProfileViewModel() {
+    _loadUser();
+  }
+
+  void _loadUser() {
+    user = _auth.currentUser;
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
+    try {
+      isLoading = true;
+      notifyListeners();
+      await _auth.signOut();
+    } catch (e) {
+      errorMessage = "Failed to log out.";
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+}

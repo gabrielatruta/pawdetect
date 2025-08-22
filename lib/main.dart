@@ -1,47 +1,46 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'styles/app_colors.dart';
-import '/screens/welcome_screen.dart';
+import 'package:provider/provider.dart';
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  // handle background message if needed
+// import all your viewmodels
+import 'package:pawdetect/viewmodels/welcome_viewmodel.dart';
+import 'package:pawdetect/viewmodels/login_viewmodel.dart';
+import 'package:pawdetect/viewmodels/signup_viewmodel.dart';
+import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
+
+// import all your views
+import 'package:pawdetect/views/welcome/welcome_screen.dart';
+import 'package:pawdetect/views/auth/login_screen.dart';
+import 'package:pawdetect/views/auth/signup_screen.dart';
+import 'package:pawdetect/views/reports/add_report_screen.dart';
+
+void main() {
+  runApp(const PawDetectApp());
 }
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Because you added GoogleService-Info.plist to the iOS target,
-  // iOS can auto-load config. (No options argument needed.)
-  await Firebase.initializeApp();
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PawDetectApp extends StatelessWidget {
+  const PawDetectApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeData(
-      useMaterial3: false,
-      primaryColor: AppColors.orange,
-      scaffoldBackgroundColor: AppColors.white,
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.orange),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.orange,
-        foregroundColor: AppColors.white,
-        elevation: 0,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => WelcomeViewModel()),
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => SignupViewModel()),
+        ChangeNotifierProvider(create: (_) => AddReportViewModel()),
+        // add more ViewModels here as your project grows
+      ],
+      child: MaterialApp(
+        title: 'PawDetect',
+        debugShowCheckedModeBanner: false,
+        initialRoute: "/welcome",
+        routes: {
+          "/welcome": (_) => const WelcomeScreen(),
+          "/login": (_) => const LoginScreen(),
+          "/signup": (_) => const SignUpScreen(),
+          "/add_report": (_) => const AddReportScreen(),
+        },
       ),
-    );
-
-    return MaterialApp(
-      title: 'PawDetect',
-      theme: theme,
-      home: const WelcomeScreen(),
     );
   }
 }

@@ -34,10 +34,12 @@ dependencies:
   #Firebase + flutter dependencies
   firebase_core: ^4.0.0
   firebase_messaging: ^16.0.0
+  cloud_firestore: ^6.0.0
   geolocator: ^14.0.2
   geocoding: ^4.0.0
   image_picker: ^1.2.0
   flutter_map: ^8.2.1
+  provider: ^6.1.2
 
 
 
