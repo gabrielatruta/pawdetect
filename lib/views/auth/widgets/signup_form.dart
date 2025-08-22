@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/auth/login_screen.dart';
+import 'package:pawdetect/views/shared/primary_button.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/signup_viewmodel.dart';
-import '../../shared/custom_button.dart';
 import '../../shared/error_message.dart';
-import '../../shared/loading_indicator.dart';
 import 'name_field.dart';
 import 'phone_field.dart';
 import 'email_field.dart';
@@ -37,40 +37,49 @@ class _SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<SignupViewModel>();
+    final signupViewModel = context.watch<SignupViewModel>();
 
     return Form(
       key: _formKey,
       child: Column(
         children: [
           NameField(controller: _name),
+          const SizedBox(height: 16),
           PhoneField(controller: _phone),
+          const SizedBox(height: 16),
           EmailField(controller: _email),
-          PasswordField(controller: _password, isLogin: false,),
+          const SizedBox(height: 16),
+          PasswordField(controller: _password, isLogin: false),
+          const SizedBox(height: 16),
           ConfirmPasswordField(
             controller: _confirm,
             passwordController: _password,
           ),
           const SizedBox(height: 16),
 
-          if (vm.errorMessage != null)
-            ErrorMessage(message: vm.errorMessage!),
+          if (signupViewModel.errorMessage != null)
+            ErrorMessage(message: signupViewModel.errorMessage!),
 
-          vm.isLoading
-              ? const LoadingIndicator()
-              : CustomButton(
-                  text: "Create Account",
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await vm.signUp(
-                        name: _name.text,
-                        email: _email.text,
-                        phone: _phone.text,
-                        password: _password.text,
-                      );
-                    }
-                  },
-                ),
+          PrimaryButton(
+            text: "Create Account",
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                await signupViewModel.signUp(
+                  name: _name.text.trim(),
+                  email: _email.text.trim(),
+                  phone: _phone.text.trim(),
+                  password: _password.text.trim(),
+                );
+
+                if (signupViewModel.errorMessage == null && context.mounted) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  );
+                }
+              }
+            },
+          ),
         ],
       ),
     );

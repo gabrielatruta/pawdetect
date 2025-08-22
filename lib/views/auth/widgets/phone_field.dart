@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pawdetect/views/shared/custom_input_field.dart';
 
 class PhoneField extends StatelessWidget {
   final TextEditingController controller;
@@ -7,13 +7,10 @@ class PhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return CustomInputField(
+      label: "Phone Number",
       controller: controller,
       keyboardType: TextInputType.phone,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9+\-\s\(\)]')),
-      ],
-      decoration: const InputDecoration(labelText: "Phone Number"),
       validator: (v) {
         final value = v?.trim() ?? '';
         if (value.isEmpty) return "Please enter your phone number!";

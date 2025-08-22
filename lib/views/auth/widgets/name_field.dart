@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/shared/custom_input_field.dart';
 
 class NameField extends StatelessWidget {
   final TextEditingController controller;
@@ -6,12 +7,12 @@ class NameField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return CustomInputField(
+      label: "Username",
       controller: controller,
-      textInputAction: TextInputAction.next,
-      decoration: const InputDecoration(labelText: "Full Name"),
+      keyboardType: TextInputType.name,
       validator: (v) =>
-          (v == null || v.trim().isEmpty) ? "Please enter your name!" : null,
+          (v == null || v.trim().isEmpty) ? "Please enter your username!" : null,
     );
   }
 }

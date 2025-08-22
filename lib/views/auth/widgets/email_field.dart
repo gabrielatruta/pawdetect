@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/shared/custom_input_field.dart';
 
 class EmailField extends StatelessWidget {
   final TextEditingController controller;
@@ -6,28 +7,10 @@ class EmailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return CustomInputField(
+      label: "Email",
       controller: controller,
       keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        labelText: "Email",
-        labelStyle: const TextStyle(color: Colors.black),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black), // black border
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.black,
-            width: 2,
-          ), // black border on focus
-        ),
-      ),
       validator: (v) {
         final value = v?.trim() ?? '';
         if (value.isEmpty) return "Please enter your email!";

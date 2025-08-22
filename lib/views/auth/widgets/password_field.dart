@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/shared/custom_input_field.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
@@ -18,31 +19,13 @@ class _PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return CustomInputField(
+      label: "Password",
       controller: widget.controller,
-      textInputAction: TextInputAction.next,
       obscureText: _obscure,
-      decoration: InputDecoration(
-        labelText: "Password",
-        labelStyle: const TextStyle(color: Colors.black),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black), // black border
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.black,
-            width: 2,
-          ), // black border on focus
-        ),
-        suffixIcon: IconButton(
-          icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
-          onPressed: () => setState(() => _obscure = !_obscure),
-        ),
+      suffixIcon: IconButton(
+        icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+        onPressed: () => setState(() => _obscure = !_obscure),
       ),
       validator: (v) {
         final value = v?.trim() ?? '';

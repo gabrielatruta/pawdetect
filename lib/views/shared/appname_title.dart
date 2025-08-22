@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WelcomeAppName extends StatelessWidget {
-  const WelcomeAppName({super.key});
+class AppnNameTitle extends StatelessWidget {
+  const AppnNameTitle({super.key});
 
   @override
   Widget build(BuildContext context) {

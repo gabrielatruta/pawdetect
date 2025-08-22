@@ -17,11 +17,22 @@ class SignupViewModel extends ChangeNotifier {
     required String password,
   }) async {
     try {
-      isLoading = true;
       errorMessage = null;
       notifyListeners();
 
-      final user = await _authService.signUp(email, password);
+      await _authService.signUp(
+        name: name,
+        email: email,
+        phone: phone,
+        password: password,
+      );
+
+      final user = await _authService.signUp(
+        name: name,
+        email: email,
+        phone: phone,
+        password: password,
+      );
       if (user != null) {
         final newUser = UserModel(
           uid: user.uid,
@@ -33,9 +44,12 @@ class SignupViewModel extends ChangeNotifier {
       }
     } catch (e) {
       errorMessage = e.toString();
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+       notifyListeners();
+    } 
+  }
+
+  void clearError() {
+    errorMessage = null;
+    notifyListeners();
   }
 }

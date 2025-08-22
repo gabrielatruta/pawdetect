@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<User?> signIn(String email, String password) async {
     try {
@@ -15,28 +17,35 @@ class AuthService {
     }
   }
 
-  String _mapError(FirebaseAuthException e) {
-    switch (e.code) {
-      case 'user-not-found':
-        return "No user with the provided email address.";
-      case 'wrong-password':
-        return "The password is invalid. Please try again.";
-      case 'invalid-credential':
-        return "The email or password are invalid. Please check and try again.";
-      default:
-        return e.message ?? "Something went wrong. Please try again.";
-    }
-  }
-
-  Future<User?> signUp(String email, String password) async {
+  Future<User?> signUp({
+    required String name,
+    required String email,
+    required String phone,
+    required String password,
+  }) async {
     try {
+      // Create account in Firebase Auth
       final result = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return result.user;
+
+      final user = result.user;
+
+      if (user != null) {
+        // Save user profile in Firestore
+        await _firestore.collection("users").doc(user.uid).set({
+          "uid": user.uid,
+          "name": name,
+          "email": email,
+          "phone": phone,
+          "createdAt": FieldValue.serverTimestamp(),
+        });
+      }
+
+      return user;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? "Signup failed");
+      throw _mapError(e);
     }
   }
 
@@ -50,6 +59,25 @@ class AuthService {
 
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  String _mapError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return "No user with the provided email address.";
+      case 'wrong-password':
+        return "The password is invalid. Please try again.";
+      case 'invalid-credential':
+        return "The email or password are invalid. Please check and try again.";
+      case 'invalid-email':
+        return "The email is not valid. Please check and try again.";
+      case 'email-already-in-use':
+        return "This email is already in use. Please use another.";
+      case 'weak-password':
+        return "Your password is too weak. Please choose a stronger one.";
+      default:
+        return e.message ?? "Something went wrong. Please try again.";
+    }
   }
 
   Stream<User?> get userChanges => _auth.authStateChanges();

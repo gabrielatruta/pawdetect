@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/views/shared/appname_title.dart';
 import '../shared/app_logo.dart';
-import 'widgets/welcome_appname.dart';
 import 'widgets/welcome_title.dart';
 import 'widgets/welcome_description.dart';
 import 'widgets/welcome_actions.dart';
@@ -21,7 +21,7 @@ class WelcomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
                 Spacer(flex: 2),
-                WelcomeAppName(),
+                AppnNameTitle(),
                 SizedBox(height: 20),
                 SizedBox(
                   height: 400,
