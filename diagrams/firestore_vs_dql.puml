@@ -1,0 +1,25 @@
+@startuml
+title Firestore vs SQL Database
+
+left to right direction
+
+card "Firestore (NoSQL)" as Firestore
+[
+- No complex relational queries
+- Real-time data sync
+- Flexible schema (document-based)
+- Costs increase with reads/writes
+- Limited advanced filtering/search
+]
+
+card "SQL Database" as SQL
+[
+- Strong relational data support
+- No built-in real-time sync
+- Structured schema (tables/rows)
+- Costs tied to server setup/maintenance
+- Supports complex queries & joins
+]
+
+Firestore <--> SQL : Comparison
+@enduml

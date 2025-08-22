@@ -1,0 +1,29 @@
+@startuml
+title Dart Development Workflow
+
+top to bottom direction
+
+actor Developer
+
+Developer --> "Write Dart Code"
+"Write Dart Code" --> "Dart Compiler"
+"Dart Compiler" --> "Flutter Framework"
+"Flutter Framework" --> "Deployment"
+
+rectangle Deployment {
+  [iOS]
+  [Android]
+  [Web]
+  [Windows]
+  [macOS]
+  [Linux]
+}
+
+"Deployment" --> [iOS]
+"Deployment" --> [Android]
+"Deployment" --> [Web]
+"Deployment" --> [Windows]
+"Deployment" --> [macOS]
+"Deployment" --> [Linux]
+
+@enduml

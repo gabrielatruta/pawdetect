@@ -1,0 +1,19 @@
+@startuml
+title Unauthenticated user
+actor Guest
+
+rectangle PawDetect {
+  usecase "Submit found pet report" as UC1
+  usecase "Browse lost pet reports" as UC2
+  usecase "View report details" as UC3
+  usecase "Access interactive map" as UC4
+  usecase "Register new account" as UC5
+  
+}
+
+Guest --> UC1
+Guest --> UC2
+Guest --> UC3
+Guest --> UC4
+Guest --> UC5
+@enduml
