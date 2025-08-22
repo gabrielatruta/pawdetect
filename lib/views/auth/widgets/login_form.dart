@@ -76,9 +76,6 @@ class _LoginFormState extends State<LoginForm> {
                   _passwordController.text.trim(),
                 );
                 if (success && mounted) {
-                  // clear errors before navigating away
-                  loginViewModel.clearError();
-
                   Navigator.pushReplacementNamed(context, "/home");
                 }
               }
