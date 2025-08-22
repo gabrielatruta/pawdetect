@@ -1,35 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../services/auth_service.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _authService = AuthService();
 
-  bool isLoading = false;
-  String? errorMessage;
+  bool _isLoading = false;
+  String? _errorMessage;
 
-  Future<User?> login(String email, String password) async {
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
+
+  Future<bool> login(String email, String password) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
     try {
-      isLoading = true;
-      errorMessage = null;
+      final user = await _authService.signIn(email, password);
+      _isLoading = false;
       notifyListeners();
-
-      final credential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return credential.user;
-    } on FirebaseAuthException catch (e) {
-      errorMessage = e.code == 'user-not-found'
-          ? "No user found with this email."
-          : e.code == 'wrong-password'
-              ? "Incorrect password."
-              : "Login failed. Please try again.";
+      return user != null;
     } catch (e) {
-      errorMessage = "Something went wrong. Please try again.";
-    } finally {
-      isLoading = false;
+      _isLoading = false;
+      _errorMessage = e.toString();
       notifyListeners();
+      return false;
     }
-    return null;
   }
 }

@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// import all your viewmodels
+// Firebase
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart'; // if you used FlutterFire CLI
+
+
+// viewmodels
 import 'package:pawdetect/viewmodels/welcome_viewmodel.dart';
 import 'package:pawdetect/viewmodels/login_viewmodel.dart';
 import 'package:pawdetect/viewmodels/signup_viewmodel.dart';
 import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
 
-// import all your views
+// views
 import 'package:pawdetect/views/welcome/welcome_screen.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/signup_screen.dart';
 import 'package:pawdetect/views/reports/add_report_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const PawDetectApp());
 }
 

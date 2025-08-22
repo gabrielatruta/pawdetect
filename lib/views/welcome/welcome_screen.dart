@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/welcome/widgets/welcome_guest_option.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/welcome_viewmodel.dart';
 import '../../../styles/app_colors.dart';
