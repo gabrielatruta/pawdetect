@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/auth/widgets/email_field.dart';
+import 'package:pawdetect/views/shared/primary_button.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/forgot_password_viewmodel.dart';
-import '../../shared/custom_button.dart';
-import '../../shared/error_message.dart';
-import '../../shared/loading_indicator.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});
@@ -13,52 +12,43 @@ class ForgotPasswordForm extends StatefulWidget {
 }
 
 class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _email = TextEditingController();
-
-  @override
-  void dispose() {
-    _email.dispose();
-    super.dispose();
-  }
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<ForgotPasswordViewModel>();
 
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-            controller: _email,
-            decoration: const InputDecoration(labelText: "Email"),
-            keyboardType: TextInputType.emailAddress,
-            validator: (v) => v == null || v.isEmpty
-                ? "Please enter your email"
-                : null,
-          ),
-          const SizedBox(height: 16),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Image.asset(
+          'web/icons/ForgotPassword.jpg',
+          width: 300,
+          height: 300,
+          fit: BoxFit.contain,
+        ),
 
-          if (vm.errorMessage != null)
-            ErrorMessage(message: vm.errorMessage!),
+        const SizedBox(height: 20),
 
-          if (vm.successMessage != null)
-            Text(vm.successMessage!,
-                style: const TextStyle(color: Colors.green)),
+        // Email input
+        EmailField(controller: _emailController),
+        const SizedBox(height: 4),
 
-          vm.isLoading
-              ? const LoadingIndicator()
-              : CustomButton(
-                  text: "Send Reset Email",
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await vm.resetPassword(_email.text.trim());
-                    }
-                  },
-                ),
-        ],
-      ),
+        //error message for the email address
+        if (vm.errorMessage != null)
+          Text(vm.errorMessage!, style: const TextStyle(color: Colors.red)),
+
+        if (vm.successMessage != null)
+          Text(vm.successMessage!, style: const TextStyle(color: Colors.green)),
+
+        const SizedBox(height: 24),
+
+        // Reset Button
+        PrimaryButton(
+          text: "Reset password",
+          onPressed: () => vm.sendResetEmail(_emailController.text),
+        ),
+      ],
     );
   }
 }

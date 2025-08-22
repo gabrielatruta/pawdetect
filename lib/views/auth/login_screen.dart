@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/viewmodels/login_viewmodel.dart';
-import 'package:pawdetect/views/auth/widgets/login_appbar.dart';
+import 'package:pawdetect/views/auth/widgets/custom_appbar.dart';
 import 'package:pawdetect/views/auth/widgets/login_form.dart';
 import 'package:pawdetect/views/auth/widgets/login_subtitle.dart';
 import 'package:pawdetect/views/shared/app_logo.dart';
@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
     context.read<LoginViewModel>().clearError();
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: const LoginAppBar(),
+      appBar: const CustomAppBar(title: "Log in"),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),

@@ -59,7 +59,7 @@ class _LoginFormState extends State<LoginForm> {
               },
               child: const Text(
                 "Forgot Password?",
-                style: TextStyle(color: AppColors.orange),
+                style: TextStyle(color: AppColors.grey),
               ),
             ),
           ),
