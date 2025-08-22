@@ -18,6 +18,7 @@ class LoginViewModel extends ChangeNotifier {
     try {
       final user = await _authService.signIn(email, password);
       _isLoading = false;
+      _errorMessage = null;
       notifyListeners();
       return user != null;
     } catch (e) {
@@ -26,5 +27,10 @@ class LoginViewModel extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  void clearError() {
+    _errorMessage = null;
+    notifyListeners();
   }
 }

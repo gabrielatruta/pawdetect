@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/auth/widgets/email_field.dart';
 import 'package:pawdetect/views/auth/widgets/password_field.dart';
+import 'package:pawdetect/views/shared/error_message.dart';
 import 'package:pawdetect/views/shared/primary_button.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/login_viewmodel.dart';
-import '../../home/home_screen.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -36,11 +36,21 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 16),
 
           // Password field (custom widget)
-          PasswordField(controller: _passwordController, isLogin: true,),
+          PasswordField(controller: _passwordController, isLogin: true),
 
           const SizedBox(height: 1),
 
-           // Forgot Password?
+          // Error message from ViewModel
+          if (loginViewModel.errorMessage != null &&
+              loginViewModel.errorMessage!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: Center(
+                child: ErrorMessage(message: loginViewModel.errorMessage!),
+              ),
+            ),
+
+          // Forgot Password?
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
@@ -50,7 +60,7 @@ class _LoginFormState extends State<LoginForm> {
               child: const Text(
                 "Forgot Password?",
                 style: TextStyle(color: AppColors.orange),
-                ),
+              ),
             ),
           ),
 
@@ -66,11 +76,10 @@ class _LoginFormState extends State<LoginForm> {
                   _passwordController.text.trim(),
                 );
                 if (success && mounted) {
+                  // clear errors before navigating away
+                  loginViewModel.clearError();
+
                   Navigator.pushReplacementNamed(context, "/home");
-                } else if (loginViewModel.errorMessage != null && mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(loginViewModel.errorMessage!)),
-                  );
                 }
               }
             },
@@ -90,7 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                 child: const Text(
                   "Sign Up",
                   style: TextStyle(color: AppColors.orange),
-                  ),
+                ),
               ),
             ],
           ),

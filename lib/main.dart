@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // if you used FlutterFire CLI
+import 'firebase_options.dart';
 
 
 // viewmodels
@@ -37,7 +37,7 @@ class PawDetectApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => SignupViewModel()),
         ChangeNotifierProvider(create: (_) => AddReportViewModel()),
-        // add more ViewModels here as your project grows
+        // add more ViewModels in case it grows
       ],
       child: MaterialApp(
         title: 'PawDetect',

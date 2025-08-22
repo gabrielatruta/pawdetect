@@ -5,13 +5,26 @@ class AuthService {
 
   Future<User?> signIn(String email, String password) async {
     try {
-      final result = await _auth.signInWithEmailAndPassword(
+      final credential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return result.user;
+      return credential.user;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? "Login failed");
+      throw _mapError(e);
+    }
+  }
+
+  String _mapError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return "No user with the provided email address.";
+      case 'wrong-password':
+        return "The password is invalid. Please try again.";
+      case 'invalid-credential':
+        return "The email or password are invalid. Please check and try again.";
+      default:
+        return e.message ?? "Something went wrong. Please try again.";
     }
   }
 
