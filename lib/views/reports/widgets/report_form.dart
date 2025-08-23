@@ -5,7 +5,6 @@ import '../../shared/error_message.dart';
 import 'pet_type_dropdown.dart';
 import 'description_field.dart';
 import 'photo_picker.dart';
-import 'location_picker.dart';
 
 class ReportForm extends StatefulWidget {
   const ReportForm({super.key});
@@ -35,7 +34,6 @@ class _ReportFormState extends State<ReportForm> {
           PetTypeDropdown(onChanged: (val) => vm.petType = val),
           DescriptionField(controller: _description),
           PhotoPicker(onPhotoSelected: (url) => vm.photoUrl = url),
-          LocationPicker(onLocationPicked: (loc) => vm.location = loc),
           const SizedBox(height: 16),
 
           if (vm.errorMessage != null)
