@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/reports/widgets/myreports/report_card_load_more.dart';
+import 'package:pawdetect/views/reports/widgets/myreports/report_card_stretched.dart';
+import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/my_reports_viewmodel.dart';
-import '../../../styles/app_colors.dart';
 
 class MyReportsScreen extends StatefulWidget {
   const MyReportsScreen({super.key});
@@ -14,8 +16,12 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<MyReportsViewModel>(context, listen: false).fetchReports());
+    Future.microtask(
+      () => Provider.of<MyReportsViewModel>(
+        context,
+        listen: false,
+      ).fetchReports(),
+    );
   }
 
   @override
@@ -23,16 +29,15 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
     context.watch<MyReportsViewModel>();
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.orange,
-        title: const Text("My Reports"),
-        centerTitle: true,
+      appBar: CustomAppBar(title: "My reports"),
+      body: Column(
+        children: [
+          const SizedBox(height: 20),
+          const ReportCardStretched(title: "Lost Dog"),
+          const SizedBox(height: 20),
+          const ReportCardLoadMore(),
+        ],
       ),
-      // body: vm.isLoading
-      //     ? const LoadingIndicator()
-      //     : vm.errorMessage != null
-      //         ? ErrorMessage(message: vm.errorMessage!)
-      //         : ReportList(reports: vm.reports),
     );
   }
 }
