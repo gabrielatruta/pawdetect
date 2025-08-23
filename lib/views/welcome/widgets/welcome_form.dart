@@ -3,8 +3,8 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/signup_screen.dart';
 import 'package:pawdetect/views/home/home_screen.dart';
-import 'package:pawdetect/views/shared/primary_button.dart';
-import 'package:pawdetect/views/shared/secondary_button.dart';
+import 'package:pawdetect/views/shared/custom_primary_button.dart';
+import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:provider/provider.dart';
 import '../../../../viewmodels/welcome_viewmodel.dart';
 

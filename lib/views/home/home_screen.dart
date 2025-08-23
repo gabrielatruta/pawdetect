@@ -5,7 +5,7 @@ import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/home_viewmodel.dart';
 import '../../../styles/app_colors.dart';
-import 'widgets/report_feed.dart';
+import 'widgets/report/report_feed.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

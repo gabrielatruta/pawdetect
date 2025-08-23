@@ -3,9 +3,9 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/auth/widgets/email_field.dart';
 import 'package:pawdetect/views/auth/widgets/password_field.dart';
 import 'package:pawdetect/views/shared/error_message.dart';
-import 'package:pawdetect/views/shared/primary_button.dart';
+import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:provider/provider.dart';
-import '../../../viewmodels/login_viewmodel.dart';
+import '../../../../viewmodels/login_viewmodel.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

@@ -4,7 +4,7 @@ import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/shared/app_logo.dart';
 import 'package:pawdetect/views/shared/appname_title.dart';
 import 'package:provider/provider.dart';
-import 'widgets/signup_form.dart';
+import 'widgets/signup/signup_form.dart';
 import '../../../styles/app_colors.dart';
 
 class SignUpScreen extends StatefulWidget {

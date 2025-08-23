@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
-import 'package:pawdetect/views/shared/primary_button.dart';
+import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:provider/provider.dart';
-import '../../../viewmodels/signup_viewmodel.dart';
-import '../../shared/error_message.dart';
+import '../../../../viewmodels/signup_viewmodel.dart';
+import '../../../shared/error_message.dart';
 import 'name_field.dart';
 import 'phone_field.dart';
-import 'email_field.dart';
-import 'password_field.dart';
+import '../email_field.dart';
+import '../password_field.dart';
 import 'confirm_password_field.dart';
 
 class SignupForm extends StatefulWidget {
