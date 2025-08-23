@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
-import 'package:pawdetect/views/reports/widgets/myreports/reports_image.dart';
+import 'package:pawdetect/views/shared/reports_image.dart';
 
 class ReportCardStretched extends StatelessWidget {
   final String title;

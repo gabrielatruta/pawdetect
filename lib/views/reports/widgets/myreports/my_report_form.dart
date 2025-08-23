@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/views/reports/widgets/myreports/my_report_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
-import 'package:pawdetect/views/reports/widgets/myreports/report_card_load_more.dart';
-import 'package:pawdetect/views/reports/widgets/myreports/report_card_stretched.dart';
+import 'package:pawdetect/views/shared/report_card_load_more.dart';
+import 'package:pawdetect/views/shared/report_card_stretched.dart';
 import 'package:pawdetect/views/shared/error_message.dart';
 
 

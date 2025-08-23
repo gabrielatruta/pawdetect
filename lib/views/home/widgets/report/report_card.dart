@@ -14,7 +14,6 @@ class ReportCard extends StatelessWidget {
           child: Text(report.petType[0]),
         ),
         title: Text(report.petType),
-        subtitle: Text("${report.description}\nLocation: ${report.location}"),
         isThreeLine: true,
       ),
     );
