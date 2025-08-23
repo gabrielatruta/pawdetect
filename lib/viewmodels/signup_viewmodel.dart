@@ -20,13 +20,6 @@ class SignupViewModel extends ChangeNotifier {
       errorMessage = null;
       notifyListeners();
 
-      await _authService.signUp(
-        name: name,
-        email: email,
-        phone: phone,
-        password: password,
-      );
-
       final user = await _authService.signUp(
         name: name,
         email: email,

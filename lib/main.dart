@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/viewmodels/forgot_password_viewmodel.dart';
+import 'package:pawdetect/viewmodels/home_viewmodel.dart';
 import 'package:pawdetect/views/auth/forgot_password_screen.dart';
+import 'package:pawdetect/views/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
 // Firebase
@@ -40,6 +42,7 @@ class PawDetectApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SignupViewModel()),
         ChangeNotifierProvider(create: (_) => AddReportViewModel()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
         // add more ViewModels in case it grows
       ],
       child: MaterialApp(
@@ -52,6 +55,7 @@ class PawDetectApp extends StatelessWidget {
           "/signup": (_) => const SignUpScreen(),
           "/add_report": (_) => const AddReportScreen(),
           "/forgot-password": (_) => const ForgotPasswordScreen(),
+          "/home": (_) => const HomeScreen(),
         },
       ),
     );

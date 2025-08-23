@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pawdetect/models/user_model.dart';
+import 'package:pawdetect/services/user_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final UserService _userService = UserService();
 
   Future<User?> signIn(String email, String password) async {
     try {
@@ -33,14 +36,16 @@ class AuthService {
       final user = result.user;
 
       if (user != null) {
-        // Save user profile in Firestore
-        await _firestore.collection("users").doc(user.uid).set({
-          "uid": user.uid,
-          "name": name,
-          "email": email,
-          "phone": phone,
-          "createdAt": FieldValue.serverTimestamp(),
-        });
+        // Create user profile model
+        final newUser = UserModel(
+          uid: user.uid,
+          name: name,
+          email: email,
+          phone: phone,
+        );
+
+        // Save in Firestore through UserService
+        _userService.createUser(newUser);
       }
 
       return user;
@@ -75,6 +80,10 @@ class AuthService {
         return "This email is already in use. Please use another.";
       case 'weak-password':
         return "Your password is too weak. Please choose a stronger one.";
+      case 'network-request-failed':
+        return "Network error. Please check your internet connection.";
+      case 'operation-not-allowed':
+        return "Sign up with email/password is not enabled. Enable it in Firebase Console.";
       default:
         return e.message ?? "Something went wrong. Please try again.";
     }
