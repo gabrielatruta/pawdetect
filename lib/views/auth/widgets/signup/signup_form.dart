@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../viewmodels/signup_viewmodel.dart';
 import '../../../shared/error_message.dart';
 import 'name_field.dart';
-import 'phone_field.dart';
+import '../../../shared/phone_field.dart';
 import '../email_field.dart';
 import '../password_field.dart';
 import 'confirm_password_field.dart';

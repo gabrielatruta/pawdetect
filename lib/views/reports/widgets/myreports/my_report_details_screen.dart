@@ -3,10 +3,10 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart' as vm;
 
-class ReportDetailsScreen extends StatelessWidget {
+class MyReportDetailsScreen extends StatelessWidget {
   final vm.Report report;
 
-  const ReportDetailsScreen({super.key, required this.report});
+  const MyReportDetailsScreen({super.key, required this.report});
 
   @override
   Widget build(BuildContext context) {

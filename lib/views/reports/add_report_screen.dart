@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'widgets/report_form.dart';
 import 'package:pawdetect/views/shared/app_logo.dart';
 import '../../../styles/app_colors.dart';
 
@@ -35,7 +34,7 @@ class AddReportScreen extends StatelessWidget {
           children: [
             AppLogo(),
             SizedBox(height: 20),
-            ReportForm(),
+          
           ],
         ),
       ),

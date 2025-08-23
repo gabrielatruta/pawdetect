@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/reports/widgets/report_details_screen.dart';
+import 'package:pawdetect/views/reports/widgets/myreports/my_report_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/myreports/report_card_load_more.dart';
 import 'package:pawdetect/views/reports/widgets/myreports/report_card_stretched.dart';
 import 'package:pawdetect/views/shared/error_message.dart';
+
 
 class MyReportsForm extends StatelessWidget {
   const MyReportsForm({super.key});
@@ -47,7 +48,7 @@ class MyReportsForm extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => ReportDetailsScreen(report: report),
+                builder: (_) => MyReportDetailsScreen(report: report),
               ),
             );
           },
