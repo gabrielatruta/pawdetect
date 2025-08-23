@@ -20,13 +20,16 @@ class SignupViewModel extends ChangeNotifier {
       errorMessage = null;
       notifyListeners();
 
+      // create FirebaseAuth account
       final user = await _authService.signUp(
         name: name,
         email: email,
         phone: phone,
         password: password,
       );
+
       if (user != null) {
+        // save profile in Firestore
         final newUser = UserModel(
           uid: user.uid,
           name: name,

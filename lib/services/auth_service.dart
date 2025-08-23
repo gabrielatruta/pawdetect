@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pawdetect/models/user_model.dart';
-import 'package:pawdetect/services/user_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final UserService _userService = UserService();
 
   Future<User?> signIn(String email, String password) async {
     try {
@@ -31,22 +28,7 @@ class AuthService {
         password: password,
       );
 
-      final user = result.user;
-
-      if (user != null) {
-        // Create user profile model
-        final newUser = UserModel(
-          uid: user.uid,
-          name: name,
-          email: email,
-          phone: phone,
-        );
-
-        // Save in Firestore through UserService
-        _userService.createUser(newUser);
-      }
-
-      return user;
+      return result.user;
     } on FirebaseAuthException catch (e) {
       throw _mapError(e);
     }

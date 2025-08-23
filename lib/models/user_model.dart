@@ -3,29 +3,42 @@ class UserModel {
   final String name;
   final String email;
   final String phone;
+  final bool notificationsEnabled;
 
   UserModel({
     required this.uid,
     required this.name,
     required this.email,
     required this.phone,
+    this.notificationsEnabled = false,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
       'name': name,
-      'email': email,
       'phone': phone,
+      'email': email,
+      'notificationsEnabled': notificationsEnabled,
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
+  factory UserModel.fromMap(String uid, Map<String, dynamic> data) {
     return UserModel(
-      uid: map['uid'],
-      name: map['name'],
-      email: map['email'],
-      phone: map['phone'],
+      uid: uid,
+      name: data['name'] ?? '',
+      phone: data['phone'] ?? '',
+      email: data['email'] ?? '',
+      notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
+    );
+  }
+
+   factory UserModel.fromFirestore(String id, Map<String, dynamic> data) {
+    return UserModel(
+      uid: id,
+      name: data['name'] ?? '',
+      email: data['email'] ?? '',
+      phone: data['phone'] ?? '',
+      notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
     );
   }
 }
