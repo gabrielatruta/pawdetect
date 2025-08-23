@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/models/report_model.dart' as report; // has ReportType + .value
+import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/views/shared/custom_dropdown.dart';
+
 
 class ReportTypeField extends StatelessWidget {
   final report.ReportType? value;
@@ -13,15 +15,11 @@ class ReportTypeField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<report.ReportType>(
-      initialValue: value,
-      isExpanded: true,
-      decoration: const InputDecoration(labelText: "Report Type"),
+    return CustomDropdown<report.ReportType>(
+      value: value,
+      labelText: "Report Type",
       items: report.ReportType.values
-          .map((t) => DropdownMenuItem<report.ReportType>(
-                value: t,
-                child: Text(t.value), // "Found" / "Lost"
-              ))
+          .map((t) => DropdownMenuItem(value: t, child: Text(t.value)))
           .toList(),
       onChanged: onChanged,
       validator: (v) => v == null ? "Please select a report type" : null,

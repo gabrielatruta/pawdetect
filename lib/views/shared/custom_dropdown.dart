@@ -1,23 +1,37 @@
-// lib/pawdetect/views/shared/description_field.dart
 import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
-class DescriptionField extends StatelessWidget {
-  final TextEditingController controller;
+class CustomDropdown<T> extends StatelessWidget {
+  final T? value;
+  final List<DropdownMenuItem<T>> items;
+  final ValueChanged<T?>? onChanged;
+  final String? labelText;
+  final FormFieldValidator<T>? validator;
+  final bool isExpanded;
 
-  const DescriptionField({super.key, required this.controller});
+  const CustomDropdown({
+    super.key,
+    this.value,
+    required this.items,
+    this.onChanged,
+    this.labelText,
+    this.validator,
+    this.isExpanded = true,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      textCapitalization: TextCapitalization.sentences,
-      keyboardType: TextInputType.multiline,
-      minLines: 3,
-      maxLines: 5,
+    return DropdownButtonFormField<T>(
+      value: value,
+      items: items,
+      onChanged: onChanged,
+      validator: validator,
+      isExpanded: isExpanded,
       style: const TextStyle(color: Colors.black),
+      iconEnabledColor: Colors.black,
+      dropdownColor: AppColors.white,
       decoration: InputDecoration(
-        labelText: 'Description',
+        labelText: labelText,
         labelStyle: const TextStyle(color: Colors.black),
         filled: true,
         fillColor: AppColors.lightBackground,

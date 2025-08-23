@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/models/report_model.dart' as report; // has Gender + .value
+import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/views/shared/custom_dropdown.dart';
 
-class PetGenderField extends StatelessWidget {
+class PetGenderDropdown extends StatelessWidget {
   final report.Gender? value;
   final ValueChanged<report.Gender?> onChanged;
 
-  const PetGenderField({
+  const PetGenderDropdown({
     super.key,
     this.value,
     required this.onChanged,
@@ -13,15 +14,11 @@ class PetGenderField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<report.Gender>(
-      initialValue: value,
-      isExpanded: true,
-      decoration: const InputDecoration(labelText: "Gender"),
+    return CustomDropdown<report.Gender>(
+      value: value,
+      labelText: "Gender",
       items: report.Gender.values
-          .map((g) => DropdownMenuItem<report.Gender>(
-                value: g,
-                child: Text(g.value), // "F", "M", "?"
-              ))
+          .map((g) => DropdownMenuItem(value: g, child: Text(g.value)))
           .toList(),
       onChanged: onChanged,
       validator: (v) => v == null ? "Please select a gender" : null,

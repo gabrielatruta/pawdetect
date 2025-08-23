@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
-import 'package:pawdetect/views/auth/widgets/email_field.dart';
+import 'package:pawdetect/views/auth/widgets/shared/email_field.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:provider/provider.dart';
 import '../../../../viewmodels/forgot_password_viewmodel.dart';

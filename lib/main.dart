@@ -7,6 +7,7 @@ import 'package:pawdetect/viewmodels/profile_viewmodel.dart';
 import 'package:pawdetect/views/auth/forgot_password_screen.dart';
 import 'package:pawdetect/views/home/home_screen.dart';
 import 'package:pawdetect/views/home/profile_screen.dart';
+import 'package:pawdetect/views/reports/add_new_report_screen.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,6 @@ import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
 import 'package:pawdetect/views/welcome/welcome_screen.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/signup_screen.dart';
-import 'package:pawdetect/views/reports/add_report_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,11 +57,11 @@ class PawDetectApp extends StatelessWidget {
           "/welcome": (_) => const WelcomeScreen(),
           "/login": (_) => const LoginScreen(),
           "/signup": (_) => const SignUpScreen(),
-          "/add_report": (_) => const AddReportScreen(),
           "/forgot-password": (_) => const ForgotPasswordScreen(),
           "/home": (_) => const HomeScreen(),
           "/profile": (_) => const ProfileScreen(),
-          "myreports": (_) => const MyReportsScreen(),
+          "/myreports": (_) => const MyReportsScreen(),
+          "/add_report": (_) => const AddNewReportScreen(),
         },
       ),
     );

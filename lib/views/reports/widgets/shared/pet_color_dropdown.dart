@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/models/report_model.dart' as report; // <- has FurColor + .value
+import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/views/shared/custom_dropdown.dart';
 
 class PetColorDropdown extends StatelessWidget {
   final report.FurColor? value;
@@ -13,15 +14,11 @@ class PetColorDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<report.FurColor>(
-      initialValue: value,
-      isExpanded: true,
-      decoration: const InputDecoration(labelText: "Color(s)"),
+    return CustomDropdown<report.FurColor>(
+      value: value,
+      labelText: "Color(s)",
       items: report.FurColor.values
-          .map((c) => DropdownMenuItem<report.FurColor>(
-                value: c,
-                child: Text(c.value), // "Black", "White", ...
-              ))
+          .map((c) => DropdownMenuItem(value: c, child: Text(c.value)))
           .toList(),
       onChanged: onChanged,
       validator: (v) => v == null ? "Please select a color" : null,
