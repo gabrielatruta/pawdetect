@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/views/home/profile_screen.dart';
+import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import '../../styles/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -26,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       foregroundColor: AppColors.white,
       automaticallyImplyLeading: !showProfileIcon,
-      
+
       // profile icon
       leading: showProfileIcon
           ? IconButton(
@@ -45,6 +46,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(28)),
       ),
       elevation: 0,
+
+      // my reports icon
+      actions: showProfileIcon
+          ? [
+              IconButton(
+                icon: const Icon(Icons.assignment_outlined),
+                color: AppColors.white,
+                tooltip: 'My reports',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => MyReportsScreen()),
+                  );
+                },
+              ),
+            ]
+          : null,
     );
   }
 
