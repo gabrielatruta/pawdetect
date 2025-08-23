@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/add_report_viewmodel.dart';
-import '../../shared/custom_button.dart';
 import '../../shared/error_message.dart';
-import '../../shared/loading_indicator.dart';
 import 'pet_type_dropdown.dart';
 import 'description_field.dart';
 import 'photo_picker.dart';
@@ -43,20 +41,20 @@ class _ReportFormState extends State<ReportForm> {
           if (vm.errorMessage != null)
             ErrorMessage(message: vm.errorMessage!),
 
-          vm.isLoading
-              ? const LoadingIndicator()
-              : CustomButton(
-                  text: "Submit Report",
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      vm.description = _description.text;
-                      await vm.submitReport();
-                      if (vm.errorMessage == null && mounted) {
-                        Navigator.pop(context); // go back after success
-                      }
-                    }
-                  },
-                ),
+          // vm.isLoading
+          //     ? const LoadingIndicator()
+          //     : CustomButton(
+          //         text: "Submit Report",
+          //         onPressed: () async {
+          //           if (_formKey.currentState!.validate()) {
+          //             vm.description = _description.text;
+          //             await vm.submitReport();
+          //             if (vm.errorMessage == null && mounted) {
+          //               Navigator.pop(context); // go back after success
+          //             }
+          //           }
+          //         },
+          //       ),
         ],
       ),
     );

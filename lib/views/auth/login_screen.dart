@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/viewmodels/login_viewmodel.dart';
-import 'package:pawdetect/views/auth/widgets/custom_appbar.dart';
+import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/auth/widgets/login_form.dart';
 import 'package:pawdetect/views/auth/widgets/login_subtitle.dart';
 import 'package:pawdetect/views/shared/app_logo.dart';

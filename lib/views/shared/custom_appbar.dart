@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../styles/app_colors.dart';
+import '../../styles/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final bool showProfileIcon; //display profile icon on homepage
 
   const CustomAppBar({
     super.key,
     required this.title,
+    this.showProfileIcon = false,
   });
 
   @override
@@ -22,6 +24,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       centerTitle: true,
       foregroundColor: AppColors.white,
+      automaticallyImplyLeading: !showProfileIcon,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(28),

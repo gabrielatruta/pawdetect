@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/views/shared/error_message.dart';
-import 'package:pawdetect/views/shared/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/my_reports_viewmodel.dart';
 import 'widgets/report_list.dart';
@@ -31,11 +30,11 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
         title: const Text("My Reports"),
         centerTitle: true,
       ),
-      body: vm.isLoading
-          ? const LoadingIndicator()
-          : vm.errorMessage != null
-              ? ErrorMessage(message: vm.errorMessage!)
-              : ReportList(reports: vm.reports),
+      // body: vm.isLoading
+      //     ? const LoadingIndicator()
+      //     : vm.errorMessage != null
+      //         ? ErrorMessage(message: vm.errorMessage!)
+      //         : ReportList(reports: vm.reports),
     );
   }
 }

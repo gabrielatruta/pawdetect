@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/home/profile_screen.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:provider/provider.dart';
@@ -13,22 +14,19 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<HomeViewModel>();
+    final homeViewModel = context.watch<HomeViewModel>();
 
     final screens = [
-      ReportFeed(reports: vm.feedReports), // tab 0
+      ReportFeed(reports: homeViewModel.feedReports), // tab 0
       const MyReportsScreen(),             // tab 1
       const ProfileScreen(),               // tab 2
     ];
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: const HomeAppBar(),
-      body: screens[vm.selectedIndex],
-      bottomNavigationBar: HomeNavBar(
-        selectedIndex: vm.selectedIndex,
-        onTabSelected: vm.changeTab,
-      ),
+      appBar: const CustomAppBar(title: "", showProfileIcon: true,),
+      body: screens[homeViewModel.selectedIndex],
+      
     );
   }
 }

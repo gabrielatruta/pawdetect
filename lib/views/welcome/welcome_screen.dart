@@ -4,7 +4,7 @@ import 'package:pawdetect/views/shared/appname_title.dart';
 import '../shared/app_logo.dart';
 import 'widgets/welcome_title.dart';
 import 'widgets/welcome_description.dart';
-import 'widgets/welcome_actions.dart';
+import 'widgets/welcome_form.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
