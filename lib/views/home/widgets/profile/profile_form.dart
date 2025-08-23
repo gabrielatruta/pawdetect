@@ -21,6 +21,20 @@ class _ProfileFormState extends State<ProfileForm> {
   bool _romanianLanguage = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    final profileViewModel = context.read<ProfileViewModel>();
+    final user = profileViewModel.profileUser;
+
+    if (user != null) {
+      _nameController.text = user.name;
+      _phoneController.text = user.phone;
+      _emailController.text = user.email;
+    }
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
@@ -32,12 +46,6 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget build(BuildContext context) {
     final profileViewModel = context.watch<ProfileViewModel>();
     final user = profileViewModel.profileUser;
-
-    if (user != null) {
-      _nameController.text = user.name;
-      _phoneController.text = user.phone;
-      _emailController.text = user.email;
-    }
 
     if (user == null) {
       return const Center(child: Text("No user profile available"));
@@ -75,6 +83,7 @@ class _ProfileFormState extends State<ProfileForm> {
               _nameController.text,
               _phoneController.text,
               _emailController.text,
+              
             );
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(

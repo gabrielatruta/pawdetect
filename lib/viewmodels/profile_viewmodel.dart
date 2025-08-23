@@ -35,19 +35,20 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   Future<void> updateProfile(String name, String phone, String email) async {
-    if (profileUser == null) return;
+  if (profileUser == null) return;
 
-    final updated = UserModel(
-      uid: profileUser!.uid,
-      name: name,
-      phone: phone,
-      email: email,
-    );
+  final updated = UserModel(
+    uid: profileUser!.uid,
+    name: name,
+    phone: phone,
+    email: email,
+    notificationsEnabled: profileUser!.notificationsEnabled,
+  );
 
-    await _userService.updateUser(updated);
-    profileUser = updated;
-    notifyListeners();
-  }
+  await _userService.updateUser(updated);
+  profileUser = updated;
+  notifyListeners();
+}
 
   Future<void> updateNotifications(bool enabled) async {
     if (profileUser == null) return;
