@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/models/user_model.dart';
 import 'package:pawdetect/viewmodels/profile_viewmodel.dart';
 import 'package:pawdetect/views/home/widgets/profile/profile_information.dart';
 import 'package:pawdetect/views/home/widgets/profile/profile_preferences.dart';
@@ -19,6 +20,24 @@ class _ProfileFormState extends State<ProfileForm> {
   final _emailController = TextEditingController();
 
   bool _romanianLanguage = false;
+
+  String? _lastUid;
+  void _sync(UserModel? u) {
+    if (u == null) {
+      if (_lastUid != null) {
+        _nameController.clear();
+        _phoneController.clear();
+        _emailController.clear();
+        _lastUid = null;
+      }
+      return;
+    }
+    if (_lastUid == u.uid) return;
+    _nameController.text = u.name;
+    _phoneController.text = u.phone;
+    _emailController.text = u.email;
+    _lastUid = u.uid;
+  }
 
   @override
   void initState() {
@@ -46,6 +65,7 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget build(BuildContext context) {
     final profileViewModel = context.watch<ProfileViewModel>();
     final user = profileViewModel.profileUser;
+    _sync(profileViewModel.profileUser);
 
     if (user == null) {
       return const Center(child: Text("No user profile available"));
@@ -83,7 +103,6 @@ class _ProfileFormState extends State<ProfileForm> {
               _nameController.text,
               _phoneController.text,
               _emailController.text,
-              
             );
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
