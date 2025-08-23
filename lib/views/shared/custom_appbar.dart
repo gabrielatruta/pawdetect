@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/home/profile_screen.dart';
 import '../../styles/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -25,10 +26,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       foregroundColor: AppColors.white,
       automaticallyImplyLeading: !showProfileIcon,
+      
+      // profile icon
+      leading: showProfileIcon
+          ? IconButton(
+              icon: const Icon(Icons.person_outline),
+              color: AppColors.white,
+              tooltip: 'My profile',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ProfileScreen()),
+                );
+              },
+            )
+          : null,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(28),
-        ),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(28)),
       ),
       elevation: 0,
     );

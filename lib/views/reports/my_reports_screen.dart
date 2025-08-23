@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/shared/error_message.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/my_reports_viewmodel.dart';
-import 'widgets/report_list.dart';
 import '../../../styles/app_colors.dart';
 
 class MyReportsScreen extends StatefulWidget {
@@ -22,7 +20,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<MyReportsViewModel>();
+    context.watch<MyReportsViewModel>();
 
     return Scaffold(
       appBar: AppBar(
