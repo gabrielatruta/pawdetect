@@ -37,7 +37,7 @@ class SignupViewModel extends ChangeNotifier {
       }
     } catch (e) {
       errorMessage = e.toString();
-       notifyListeners();
+      notifyListeners();
     } 
   }
 

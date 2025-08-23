@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/widgets/email_field.dart';
 import 'package:pawdetect/views/shared/primary_button.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<ForgotPasswordViewModel>();
+    final forgotPasswordViewModel = context.watch<ForgotPasswordViewModel>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -35,18 +36,29 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
         const SizedBox(height: 4),
 
         //error message for the email address
-        if (vm.errorMessage != null)
-          Text(vm.errorMessage!, style: const TextStyle(color: Colors.red)),
-
-        if (vm.successMessage != null)
-          Text(vm.successMessage!, style: const TextStyle(color: Colors.green)),
+        if (forgotPasswordViewModel.errorMessage != null)
+          Text(
+            forgotPasswordViewModel.errorMessage!,
+            style: const TextStyle(color: Colors.red),
+          ),
 
         const SizedBox(height: 24),
 
         // Reset Button
         PrimaryButton(
           text: "Reset password",
-          onPressed: () => vm.sendResetEmail(_emailController.text),
+          onPressed: () async {
+            await forgotPasswordViewModel.sendResetEmail(_emailController.text);
+
+            if (forgotPasswordViewModel.errorMessage == null &&
+                context.mounted) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                (route) => false, // removes all previous routes
+              );
+            }
+          },
         ),
       ],
     );

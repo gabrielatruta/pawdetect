@@ -29,24 +29,22 @@ class CustomInputField extends StatelessWidget {
       obscureText: obscureText,
       validator: validator,
       onChanged: onChanged,
+      textCapitalization: TextCapitalization.none,
+      autocorrect: false,
+      enableSuggestions: false,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.black),
         filled: true,
         fillColor: AppColors.lightBackground,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Colors.black),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.black,
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Colors.black, width: 2),
         ),
         suffixIcon: suffixIcon,
       ),

@@ -55,10 +55,11 @@ class _SignupFormState extends State<SignupForm> {
             controller: _confirm,
             passwordController: _password,
           ),
-          const SizedBox(height: 16),
 
           if (signupViewModel.errorMessage != null)
             ErrorMessage(message: signupViewModel.errorMessage!),
+
+          const SizedBox(height: 16),
 
           PrimaryButton(
             text: "Create Account",
