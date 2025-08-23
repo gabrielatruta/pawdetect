@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/signup_screen.dart';
+import 'package:pawdetect/views/home/home_screen.dart';
 import 'package:pawdetect/views/shared/primary_button.dart';
 import 'package:pawdetect/views/shared/secondary_button.dart';
 import 'package:provider/provider.dart';
 import '../../../../viewmodels/welcome_viewmodel.dart';
-import 'welcome_guest_option.dart';
 
 class WelcomeActions extends StatelessWidget {
   const WelcomeActions({super.key});
@@ -16,6 +17,7 @@ class WelcomeActions extends StatelessWidget {
 
     return Column(
       children: [
+        // Log In
         PrimaryButton(
           text: "Log In",
           onPressed: () => {
@@ -26,6 +28,8 @@ class WelcomeActions extends StatelessWidget {
           },
         ),
         const SizedBox(height: 16),
+
+        // Sign Up
         SecondaryButton(
           text: "Sign Up",
           onPressed: () => {
@@ -36,7 +40,24 @@ class WelcomeActions extends StatelessWidget {
           },
         ),
         const SizedBox(height: 16),
-        const WelcomeGuestOption(),
+
+        // Continue without an account
+        TextButton(
+          onPressed: () => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const HomeScreen()),
+            ),
+          },
+          child: const Text(
+            "Continue without an account",
+            style: TextStyle(
+              color: AppColors.grey,
+              fontSize: 14,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
       ],
     );
   }
