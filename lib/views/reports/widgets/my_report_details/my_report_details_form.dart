@@ -35,9 +35,11 @@ class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
 
   // location
   final _locationCtrl = TextEditingController();
+  // ignore: unused_field
   double? _lat, _lng;
 
   // photo
+  // ignore: unused_field
   XFile? _photo;
 
   bool _hydrated = false;
