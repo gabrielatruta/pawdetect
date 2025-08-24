@@ -1,28 +1,27 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
-import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
-
-import 'package:pawdetect/views/reports/widgets/shared/location_field.dart';
+import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/shared/description_field.dart';
+import 'package:pawdetect/views/reports/widgets/shared/location_field.dart';
+import 'package:pawdetect/views/reports/widgets/shared/pet_color_dropdown.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_gender_dropdown.dart';
+import 'package:pawdetect/views/reports/widgets/shared/pet_type_dropdown.dart';
 import 'package:pawdetect/views/reports/widgets/shared/photo_picker.dart';
 import 'package:pawdetect/views/reports/widgets/shared/report_type_field.dart';
-import 'package:pawdetect/views/reports/widgets/shared/pet_type_dropdown.dart';
-import 'package:pawdetect/views/reports/widgets/shared/pet_color_dropdown.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:pawdetect/views/shared/phone_field.dart';
+import 'package:provider/provider.dart';
 
-class AddNewReportForm extends StatefulWidget {
-  const AddNewReportForm({super.key});
+class MyReportDetailsForm extends StatefulWidget {
+  const MyReportDetailsForm({super.key});
 
   @override
-  State<AddNewReportForm> createState() => _AddNewReportFormState();
+  State<StatefulWidget> createState() => _MyReportDetailsFormState();
 }
 
-class _AddNewReportFormState extends State<AddNewReportForm> {
+class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
   report.ReportType? _reportType;
   report.AnimalType? _animalType;
   report.Gender? _gender;
@@ -44,13 +43,13 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
     _descriptionCtrl.dispose();
     _phone1Ctrl.dispose();
     _phone2Ctrl.dispose();
-    _locationCtrl.dispose(); 
+    _locationCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final addReportViewModel = context.watch<AddReportViewModel>();
+    final myReportViewModel = context.watch<MyReportsViewModel>();
     final isPhone1Required = _reportType == report.ReportType.lost;
 
     return Column(
@@ -110,71 +109,28 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
         PhotoPicker(onChanged: (file) => setState(() => _photo = file)),
         const SizedBox(height: 16),
 
-        // bottom buttons (callbacks are never null to match your button API)
         Row(
           children: [
-            // cancel
+            // cancel button
             Expanded(
               child: SecondaryButton(
                 text: "Cancel",
                 onPressed: () {
-                  if (addReportViewModel.isLoading)
+                  if (myReportViewModel.isLoading)
                     return; // don't change styling, just ignore tap
-                  Navigator.pushNamed(context, "/home");
+                  Navigator.pushNamed(context, "/myreports");
                 },
               ),
             ),
             const SizedBox(width: 12),
 
-            // create report
+            // update report button
             Expanded(
               child: PrimaryButton(
-                text: "Create report", // keep original label
-                onPressed: () async {
-                  if (addReportViewModel.isLoading) {
+                text: "Update report",
+                onPressed: () {
+                  if (myReportViewModel.isLoading) {
                     return; // ignore taps while saving
-                  }
-
-                  final requiresPhone1 = _reportType == report.ReportType.lost;
-
-                  // minimal validation without introducing new widgets
-                  if (_reportType == null ||
-                      _animalType == null ||
-                      _gender == null ||
-                      _furColor == null ||
-                      _locationCtrl.text.trim().isEmpty ||
-                      (requiresPhone1 && _phone1Ctrl.text.trim().isEmpty)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill all required fields.'),
-                      ),
-                    );
-
-                    return;
-                  }
-
-                  final ok = await addReportViewModel.submitReport(
-                    reportType: _reportType!,
-                    animalType: _animalType!,
-                    gender: _gender!,
-                    furColor: _furColor!,
-                    description: _descriptionCtrl.text.trim(),
-                    phone1: _phone1Ctrl.text.trim(),
-                    phone2: _phone2Ctrl.text.trim(),
-                    location: _locationCtrl.text.trim(),
-                    lat: _lat,
-                    lng: _lng,
-                    photo: _photo,
-                  );
-
-                  if (ok && mounted) {
-                    Navigator.pushNamed(context, "/home");
-                  } else if (!ok &&
-                      mounted &&
-                      addReportViewModel.errorMessage != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(addReportViewModel.errorMessage!)),
-                    );
                   }
                 },
               ),

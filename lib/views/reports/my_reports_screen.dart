@@ -3,7 +3,7 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
-import 'package:pawdetect/views/reports/widgets/myreports/my_report_form.dart';
+import 'package:pawdetect/views/reports/widgets/my_reports/my_report_form.dart';
 
 class MyReportsScreen extends StatefulWidget {
   const MyReportsScreen({super.key});
