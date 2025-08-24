@@ -3,7 +3,6 @@ import 'package:pawdetect/models/user_model.dart';
 import 'package:pawdetect/viewmodels/profile_viewmodel.dart';
 import 'package:pawdetect/views/home/widgets/profile/profile_information.dart';
 import 'package:pawdetect/views/home/widgets/profile/profile_preferences.dart';
-import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:provider/provider.dart';
 
