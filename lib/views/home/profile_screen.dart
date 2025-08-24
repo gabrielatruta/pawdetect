@@ -3,6 +3,7 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/home/widgets/profile/profile_form.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
+import 'package:pawdetect/views/welcome/welcome_screen.dart';
 
 import 'package:provider/provider.dart';
 import '../../../viewmodels/profile_viewmodel.dart';
@@ -32,7 +33,10 @@ class ProfileScreen extends StatelessWidget {
               onPressed: () async {
                 await profileViewModel.logout();
                 if (context.mounted) {
-                  Navigator.pushReplacementNamed(context, "/welcome");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+                  );
                 }
               },
             ),

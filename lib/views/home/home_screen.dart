@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/reports/add_new_report_screen.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,10 @@ class HomeScreen extends StatelessWidget {
           PrimaryButton(
             text: "Add new report",
             onPressed: () {
-              Navigator.pushNamed(context,  "/add_report");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AddNewReportScreen()),
+              );
             },
           ),
         ],
