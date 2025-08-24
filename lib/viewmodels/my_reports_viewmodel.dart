@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-/// Simple Report model (kept from your project; replace with your real model when ready)
 class Report {
   final String id;
   final String petType;
@@ -16,19 +17,21 @@ class Report {
 }
 
 class MyReportsViewModel extends ChangeNotifier {
-  final List<Report> reports = [];
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
 
   bool isLoading = false;
   String? errorMessage;
 
-  // Paging
-  static const int _pageSize = 4;
-  int visibleCount = _pageSize;
+  // Full result set already filtered for the current user
+  List<Report> reports = [];
 
-  List<Report> get visibleReports =>
-      reports.take(visibleCount.clamp(0, reports.length)).toList();
+  // Simple paging
+  static const int _pageSize = 10;
+  int visibleCount = 0;
 
   bool get hasMore => visibleCount < reports.length;
+  List<Report> get visibleReports => reports.take(visibleCount).toList();
 
   Future<void> fetchReports() async {
     isLoading = true;
@@ -36,54 +39,36 @@ class MyReportsViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // TODO: Replace with Firestore fetch for the logged-in user
-      await Future<void>.delayed(const Duration(milliseconds: 300));
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw Exception('Please sign in to view your reports.');
+      }
 
-      // Example data (keep/remove as you wish)
-      reports
-        ..clear()
-        ..addAll([
-          Report(
-              id: "1",
-              petType: "Dog",
-              description: "Small brown dog near park.",
-              location: "Central Park"),
-          Report(
-              id: "2",
-              petType: "Cat",
-              description: "Gray cat with blue collar.",
-              location: "5th Avenue"),
-          Report(
-              id: "3",
-              petType: "Other",
-              description: "Parrot found on balcony.",
-              location: "Elm Street"),
-          Report(
-              id: "4",
-              petType: "Dog",
-              description: "Golden retriever missing.",
-              location: "Oak Road"),
-          Report(
-              id: "5",
-              petType: "Cat",
-              description: "Orange cat, very friendly.",
-              location: "Maple Ave"),
-          Report(
-              id: "6",
-              petType: "Dog",
-              description: "Black lab seen by river.",
-              location: "Riverside"),
-          Report(
-              id: "7",
-              petType: "Other",
-              description: "Rabbit found in garden.",
-              location: "Pine Street"),
-        ]);
+      final qs = await _firestore
+          .collection('reports')
+          .where('userId', isEqualTo: user.uid)
+          .orderBy('createdAt', descending: true)
+          .get();
 
-      // Reset visible window
-      visibleCount = reports.isEmpty ? 0 : _pageSize.clamp(0, reports.length);
+      reports = qs.docs.map((d) {
+        final data = d.data();
+        return Report(
+          id: d.id,
+          petType: (data['animal'] ?? '').toString(),
+          description: (data['additionalInfo'] ?? '').toString(),
+          location: (data['location'] ?? '').toString(),
+        );
+      }).toList();
+
+      visibleCount = reports.isEmpty
+          ? 0
+          : (_pageSize <= reports.length ? _pageSize : reports.length);
     } catch (e) {
-      errorMessage = "Failed to load reports.";
+      if (e is FirebaseException) {
+        errorMessage = e.message ?? 'Failed to load reports.';
+      } else {
+        errorMessage = 'Failed to load reports.';
+      }
     } finally {
       isLoading = false;
       notifyListeners();
@@ -92,7 +77,8 @@ class MyReportsViewModel extends ChangeNotifier {
 
   void loadMore() {
     if (!hasMore) return;
-    visibleCount = (visibleCount + _pageSize).clamp(0, reports.length);
+    final next = visibleCount + _pageSize;
+    visibleCount = next <= reports.length ? next : reports.length;
     notifyListeners();
   }
 }
