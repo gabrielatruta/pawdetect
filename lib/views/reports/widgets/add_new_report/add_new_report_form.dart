@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pawdetect/views/home/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
@@ -44,7 +45,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
     _descriptionCtrl.dispose();
     _phone1Ctrl.dispose();
     _phone2Ctrl.dispose();
-    _locationCtrl.dispose(); 
+    _locationCtrl.dispose();
     super.dispose();
   }
 
@@ -120,7 +121,10 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
                 onPressed: () {
                   if (addReportViewModel.isLoading)
                     return; // don't change styling, just ignore tap
-                  Navigator.pushNamed(context, "/home");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => HomeScreen()),
+                  );
                 },
               ),
             ),
@@ -168,7 +172,10 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
                   );
 
                   if (ok && mounted) {
-                    Navigator.pushNamed(context, "/home");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => HomeScreen()),
+                    );
                   } else if (!ok &&
                       mounted &&
                       addReportViewModel.errorMessage != null) {

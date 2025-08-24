@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
+import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:pawdetect/views/reports/widgets/shared/description_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/location_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_color_dropdown.dart';
@@ -140,7 +142,10 @@ class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
                 onPressed: () {
                   if (myReportViewModel.isLoading)
                     return; // don't change styling, just ignore tap
-                  Navigator.pushNamed(context, "/myreports");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => MyReportsScreen()),
+                  );
                 },
               ),
             ),

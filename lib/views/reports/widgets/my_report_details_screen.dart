@@ -24,7 +24,6 @@ class MyReportDetailsScreen extends StatelessWidget {
                 if (vm.isDetailsLoading || vm.openedReport == null) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                // Now the form can read vm.openedReport
                 return const SingleChildScrollView(
                   child: MyReportDetailsForm(),
                 );
