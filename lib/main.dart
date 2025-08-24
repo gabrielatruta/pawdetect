@@ -1,47 +1,78 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
+import 'package:pawdetect/services/user_service.dart';
+import 'package:pawdetect/viewmodels/forgot_password_viewmodel.dart';
+import 'package:pawdetect/viewmodels/home_viewmodel.dart';
+import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/profile_viewmodel.dart';
+import 'package:pawdetect/views/auth/forgot_password_screen.dart';
+import 'package:pawdetect/views/home/home_screen.dart';
+import 'package:pawdetect/views/home/profile_screen.dart';
+import 'package:pawdetect/views/reports/add_new_report_screen.dart';
+import 'package:pawdetect/views/reports/my_reports_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:pawdetect/navigation.dart';
+
+// Firebase
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'styles/app_colors.dart';
-import '/screens/welcome_screen.dart';
+import 'firebase_options.dart';
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  // handle background message if needed
-}
+// viewmodels
+import 'package:pawdetect/viewmodels/welcome_viewmodel.dart';
+import 'package:pawdetect/viewmodels/login_viewmodel.dart';
+import 'package:pawdetect/viewmodels/signup_viewmodel.dart';
+import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
 
-Future<void> main() async {
+// views
+import 'package:pawdetect/views/welcome/welcome_screen.dart';
+import 'package:pawdetect/views/auth/login_screen.dart';
+import 'package:pawdetect/views/auth/signup_screen.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Because you added GoogleService-Info.plist to the iOS target,
-  // iOS can auto-load config. (No options argument needed.)
-  await Firebase.initializeApp();
+  final app = Firebase.app();
+  debugPrint(
+    'FIREBASE projectId=${app.options.projectId} appId=${app.options.appId}',
+  );
 
-  runApp(const MyApp());
+  runApp(const PawDetectApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PawDetectApp extends StatelessWidget {
+  const PawDetectApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeData(
-      useMaterial3: false,
-      primaryColor: AppColors.orange,
-      scaffoldBackgroundColor: AppColors.white,
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.orange),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.orange,
-        foregroundColor: AppColors.white,
-        elevation: 0,
+    
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => WelcomeViewModel()),
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => SignupViewModel()),
+        ChangeNotifierProvider(create: (_) => AddReportViewModel()),
+        ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => ProfileViewModel(UserService())),
+        ChangeNotifierProvider(create: (_) => MyReportsViewModel()),
+        // add more ViewModels in case it grows
+      ],
+      child: MaterialApp(
+        title: 'PawDetect',
+        debugShowCheckedModeBanner: false,
+        initialRoute: "/welcome",
+        routes: {
+          "/welcome": (_) => const WelcomeScreen(),
+          "/login": (_) => const LoginScreen(),
+          "/signup": (_) => const SignUpScreen(),
+          "/forgot-password": (_) => const ForgotPasswordScreen(),
+          "/home": (_) => const HomeScreen(),
+          "/profile": (_) => const ProfileScreen(),
+          "/myreports": (_) => const MyReportsScreen(),
+          "/add_report": (_) => const AddNewReportScreen(),
+        },
+        navigatorKey: appNavigatorKey,
       ),
-    );
-
-    return MaterialApp(
-      title: 'PawDetect',
-      theme: theme,
-      home: const WelcomeScreen(),
     );
   }
 }
