@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
+
 import 'package:pawdetect/views/reports/widgets/add_new_report/location_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/description_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_gender_dropdown.dart';
@@ -29,11 +32,10 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
   final _phone1Ctrl = TextEditingController();
   final _phone2Ctrl = TextEditingController();
 
-  // used for location field
+  // location
   final _locationCtrl = TextEditingController();
   double? _lat, _lng;
 
-  //photo
   // photo
   XFile? _photo;
 
@@ -42,11 +44,15 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
     _descriptionCtrl.dispose();
     _phone1Ctrl.dispose();
     _phone2Ctrl.dispose();
+    _locationCtrl.dispose(); // was missing before
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // watch only to block taps while saving; no UI text/style changes
+    final vm = context.watch<AddReportViewModel>();
+
     return Column(
       children: [
         // report type
@@ -104,7 +110,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
         PhotoPicker(onChanged: (file) => setState(() => _photo = file)),
         const SizedBox(height: 16),
 
-        // bottom buttons
+        // bottom buttons (callbacks are never null to match your button API)
         Row(
           children: [
             // cancel
@@ -112,6 +118,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
               child: SecondaryButton(
                 text: "Cancel",
                 onPressed: () {
+                  if (vm.isLoading) return; // don't change styling, just ignore tap
                   Navigator.pushNamed(context, "/home");
                 },
               ),
@@ -121,13 +128,47 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
             // create report
             Expanded(
               child: PrimaryButton(
-                text: "Create report",
-                onPressed: () {
-                  Navigator.pushNamed(context, "/home");
+                text: "Create report", // keep original label
+                onPressed: () async {
+                  if (vm.isLoading) return; // ignore taps while saving
+
+                  // minimal validation without introducing new widgets
+                  if (_reportType == null ||
+                      _animalType == null ||
+                      _gender == null ||
+                      _furColor == null ||
+                      _locationCtrl.text.trim().isEmpty ||
+                      _phone1Ctrl.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please fill all required fields.')),
+                    );
+                    return;
+                  }
+
+                  final ok = await vm.submitReport(
+                    reportType: _reportType!,
+                    animalType: _animalType!,
+                    gender: _gender!,
+                    furColor: _furColor!,
+                    description: _descriptionCtrl.text.trim(),
+                    phone1: _phone1Ctrl.text.trim(),
+                    phone2: _phone2Ctrl.text.trim(),
+                    location: _locationCtrl.text.trim(),
+                    lat: _lat,
+                    lng: _lng,
+                    photo: _photo,
+                  );
+
+                  if (ok && mounted) {
+                    Navigator.pushNamed(context, "/home");
+                  } else if (!ok && mounted && vm.errorMessage != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(vm.errorMessage!)),
+                    );
+                  }
                 },
               ),
             ),
-            
           ],
         ),
       ],
