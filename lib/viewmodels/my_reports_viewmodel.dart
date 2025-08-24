@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pawdetect/services/report_service.dart';
+import 'package:pawdetect/models/report_model.dart' as report;
 
 class Report {
   final String id;
@@ -19,6 +21,7 @@ class Report {
 class MyReportsViewModel extends ChangeNotifier {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+  final _reportSvc = ReportService();
 
   bool isLoading = false;
   String? errorMessage;
@@ -33,6 +36,12 @@ class MyReportsViewModel extends ChangeNotifier {
   bool get hasMore => visibleCount < reports.length;
   List<Report> get visibleReports => reports.take(visibleCount).toList();
 
+  // Details state
+  bool isDetailsLoading = false;
+  report.Report? openedReport;
+  String? openedReportId;
+
+  // fetch reports
   Future<void> fetchReports() async {
     isLoading = true;
     errorMessage = null;
@@ -75,10 +84,40 @@ class MyReportsViewModel extends ChangeNotifier {
     }
   }
 
+  // load more reports
   void loadMore() {
     if (!hasMore) return;
     final next = visibleCount + _pageSize;
     visibleCount = next <= reports.length ? next : reports.length;
     notifyListeners();
+  }
+
+  // fetch report by id
+  Future<void> loadReportById(String id) async {
+    isDetailsLoading = true;
+    openedReport = null;
+    openedReportId = id;
+    notifyListeners();
+    try {
+      openedReport = await _reportSvc.getReportById(id);
+    } finally {
+      isDetailsLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // update opened report
+  Future<void> updateOpenedReport(Map<String, dynamic> partial) async {
+    if (openedReportId == null) return;
+    isDetailsLoading = true;
+    notifyListeners();
+    try {
+      await _reportSvc.updateReport(openedReportId!, partial);
+      // refresh local copy (optional but nice)
+      openedReport = await _reportSvc.getReportById(openedReportId!);
+    } finally {
+      isDetailsLoading = false;
+      notifyListeners();
+    }
   }
 }

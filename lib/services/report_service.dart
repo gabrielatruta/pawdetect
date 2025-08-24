@@ -10,6 +10,7 @@ class ReportService {
   CollectionReference<Map<String, dynamic>> get _reportsCol =>
       _firestore.collection('reports');
 
+  // create report
   Future<String> createReport({
     required report.ReportType type,
     required report.AnimalType animal,
@@ -60,10 +61,22 @@ class ReportService {
     return docRef.id;
   }
 
+  // update a report
   Future<void> updateReport(String id, Map<String, dynamic> partial) async {
     partial.remove('userId');
     partial.remove('createdAt');
     partial['updatedAt'] = FieldValue.serverTimestamp();
     await _reportsCol.doc(id).update(partial);
+  }
+
+  // get report by id
+  Future<report.Report?> getReportById(String id) async {
+    final snap = await _reportsCol
+        .doc(id)
+        .get();
+    if (!snap.exists) return null;
+
+    final data = snap.data()!; 
+    return report.Report.fromFirestore(snap.id, data);
   }
 }

@@ -111,18 +111,6 @@ class _ProfileFormState extends State<ProfileForm> {
             }
           },
         ),
-        const SizedBox(height: 16),
-
-        // Log out
-        PrimaryButton(
-          text: "Log Out",
-          onPressed: () async {
-            await profileViewModel.logout();
-            if (context.mounted) {
-              Navigator.pushReplacementNamed(context, "/welcome");
-            }
-          },
-        ),
       ],
     );
   }

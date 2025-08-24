@@ -6,53 +6,56 @@ import 'package:pawdetect/views/shared/report_card_load_more.dart';
 import 'package:pawdetect/views/shared/report_card_stretched.dart';
 import 'package:pawdetect/views/shared/error_message.dart';
 
-
 class MyReportsForm extends StatelessWidget {
   const MyReportsForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<MyReportsViewModel>();
+    final myReportsViewModel = context.watch<MyReportsViewModel>();
+    final myReports = myReportsViewModel.reports;
 
-    if (vm.isLoading && vm.reports.isEmpty) {
+    if (myReports.isEmpty) {
+      return const Center(child: Text("No reports to display"));
+    }
+
+    if (myReportsViewModel.isLoading && myReportsViewModel.reports.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (vm.errorMessage != null) {
-      return Center(child: ErrorMessage(message: vm.errorMessage!));
+    if (myReportsViewModel.errorMessage != null) {
+      return Center(child: ErrorMessage(message: myReportsViewModel.errorMessage!));
     }
 
-    final items = vm.visibleReports;
+    final items = myReportsViewModel.visibleReports;
 
     return ListView.separated(
       padding: const EdgeInsets.all(16),
-      itemCount: items.length + (vm.hasMore ? 1 : 0),
+      itemCount: items.length + (myReportsViewModel.hasMore ? 1 : 0),
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         // Load More card at the end
-        final isLoadMoreTile = vm.hasMore && index == items.length;
+        final isLoadMoreTile = myReportsViewModel.hasMore && index == items.length;
         if (isLoadMoreTile) {
           return InkWell(
             borderRadius: BorderRadius.circular(18),
-            onTap: vm.loadMore,
+            onTap: myReportsViewModel.loadMore,
             child: const ReportCardLoadMore(),
           );
         }
 
-        final report = items[index];
-        
-        //Report item
+        // Report item
+        final item = items[index];
         return InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => MyReportDetailsScreen(),
+                builder: (_) => MyReportDetailsScreen(reportId: item.id),
               ),
             );
           },
-          child: ReportCardStretched(title: report.petType),
+          child: ReportCardStretched(title: item.petType),
         );
       },
     );

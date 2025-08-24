@@ -38,6 +38,8 @@ class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
   // photo
   XFile? _photo;
 
+  bool _hydrated = false;
+
   @override
   void dispose() {
     _descriptionCtrl.dispose();
@@ -45,6 +47,26 @@ class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
     _phone2Ctrl.dispose();
     _locationCtrl.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final vm = context.watch<MyReportsViewModel>();
+    final r = vm.openedReport;
+    if (!_hydrated && r != null) {
+      _reportType = r.type;
+      _animalType = r.animal;
+      _gender = r.gender;
+      _furColor = (r.colors.isNotEmpty) ? r.colors.first : null;
+
+      _descriptionCtrl.text = r.additionalInfo;
+      _phone1Ctrl.text = r.phoneNumber1;
+      _phone2Ctrl.text = r.phoneNumber2;
+      _locationCtrl.text = r.location;
+
+      _hydrated = true;
+    }
   }
 
   @override

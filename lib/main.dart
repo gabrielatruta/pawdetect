@@ -29,6 +29,12 @@ import 'package:pawdetect/views/auth/signup_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  final app = Firebase.app();
+  debugPrint(
+    'FIREBASE projectId=${app.options.projectId} appId=${app.options.appId}',
+  );
+
   runApp(const PawDetectApp());
 }
 
@@ -46,7 +52,7 @@ class PawDetectApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel(UserService())),
-          ChangeNotifierProvider(create: (_) => MyReportsViewModel()),
+        ChangeNotifierProvider(create: (_) => MyReportsViewModel()),
         // add more ViewModels in case it grows
       ],
       child: MaterialApp(

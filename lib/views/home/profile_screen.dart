@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/home/widgets/profile/profile_form.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
+import 'package:pawdetect/views/shared/custom_primary_button.dart';
 
 import 'package:provider/provider.dart';
 import '../../../viewmodels/profile_viewmodel.dart';
@@ -11,16 +12,32 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<ProfileViewModel>();
+    final profileViewModel = context.watch<ProfileViewModel>();
 
     return Scaffold(
       backgroundColor: AppColors.white,
 
       appBar: CustomAppBar(title: "My profile"),
 
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(children: [ProfileForm()]),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            const ProfileForm(),
+            const SizedBox(height: 16),
+
+            // Log out
+            PrimaryButton(
+              text: "Log Out",
+              onPressed: () async {
+                await profileViewModel.logout();
+                if (context.mounted) {
+                  Navigator.pushReplacementNamed(context, "/welcome");
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
