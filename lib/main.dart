@@ -10,6 +10,7 @@ import 'package:pawdetect/views/home/profile_screen.dart';
 import 'package:pawdetect/views/reports/add_new_report_screen.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:pawdetect/navigation.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
@@ -43,6 +44,7 @@ class PawDetectApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => WelcomeViewModel()),
@@ -69,6 +71,7 @@ class PawDetectApp extends StatelessWidget {
           "/myreports": (_) => const MyReportsScreen(),
           "/add_report": (_) => const AddNewReportScreen(),
         },
+        navigatorKey: appNavigatorKey,
       ),
     );
   }

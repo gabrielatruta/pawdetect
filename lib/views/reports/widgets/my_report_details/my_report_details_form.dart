@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/navigation.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:pawdetect/views/reports/widgets/shared/description_field.dart';
@@ -188,11 +188,10 @@ class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
 
                   await myReportViewModel.updateOpenedReport(partial);
 
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Report updated')),
-                    );
-                  }
+                  // Robust navigation after await using the global navigator key
+                  appNavigatorKey.currentState?.pushReplacementNamed(
+                    '/myreports',
+                  );
                 },
               ),
             ),
