@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/views/reports/widgets/add_new_report/location_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/description_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_gender_dropdown.dart';
 import 'package:pawdetect/views/reports/widgets/shared/photo_picker.dart';
 import 'package:pawdetect/views/reports/widgets/shared/report_type_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_type_dropdown.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_color_dropdown.dart';
-import 'package:pawdetect/views/shared/custom_input_field.dart';
+import 'package:pawdetect/views/shared/custom_primary_button.dart';
+import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:pawdetect/views/shared/phone_field.dart';
 
 class AddNewReportForm extends StatefulWidget {
@@ -25,6 +28,14 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
   final _descriptionCtrl = TextEditingController();
   final _phone1Ctrl = TextEditingController();
   final _phone2Ctrl = TextEditingController();
+
+  // used for location field
+  final _locationCtrl = TextEditingController();
+  double? _lat, _lng;
+
+  //photo
+  // photo
+  XFile? _photo;
 
   @override
   void dispose() {
@@ -66,6 +77,17 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
         ),
         const SizedBox(height: 16),
 
+        // location
+        LocationField(
+          controller: _locationCtrl,
+          country: 'ro',
+          onSelected: (addr, lat, lng) {
+            _lat = lat;
+            _lng = lng;
+          },
+        ),
+        const SizedBox(height: 16),
+
         // description input
         DescriptionField(controller: _descriptionCtrl),
         const SizedBox(height: 16),
@@ -78,13 +100,36 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
         PhoneField(controller: _phone2Ctrl),
         const SizedBox(height: 16),
 
-        // location
-        CustomInputField(label: "Location"),
+        // photo picker
+        PhotoPicker(onChanged: (file) => setState(() => _photo = file)),
         const SizedBox(height: 16),
 
-        // image picker
-        PhotoPicker(),
+        // bottom buttons
+        Row(
+          children: [
+            // cancel
+            Expanded(
+              child: SecondaryButton(
+                text: "Cancel",
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home");
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
 
+            // create report
+            Expanded(
+              child: PrimaryButton(
+                text: "Create report",
+                onPressed: () {
+                  Navigator.pushNamed(context, "/home");
+                },
+              ),
+            ),
+            
+          ],
+        ),
       ],
     );
   }
