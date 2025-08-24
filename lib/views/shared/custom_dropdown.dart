@@ -22,7 +22,7 @@ class CustomDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
-      value: value,
+      initialValue: value,
       items: items,
       onChanged: onChanged,
       validator: validator,
@@ -31,7 +31,18 @@ class CustomDropdown<T> extends StatelessWidget {
       iconEnabledColor: Colors.black,
       dropdownColor: AppColors.white,
       decoration: InputDecoration(
-        labelText: labelText,
+        label: RichText(
+          text: TextSpan(
+            text: labelText,
+            style: const TextStyle(color: Colors.black),
+            children: const [
+              TextSpan(
+                text: ' *',
+                style: TextStyle(color: Colors.red),
+              ),
+            ],
+          ),
+        ),
         labelStyle: const TextStyle(color: Colors.black),
         filled: true,
         fillColor: AppColors.lightBackground,

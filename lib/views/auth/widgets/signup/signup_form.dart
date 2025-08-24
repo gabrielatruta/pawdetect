@@ -45,7 +45,7 @@ class _SignupFormState extends State<SignupForm> {
         children: [
           NameField(controller: _name),
           const SizedBox(height: 16),
-          PhoneField(controller: _phone),
+          PhoneField(controller: _phone, isRequired: false,),
           const SizedBox(height: 16),
           EmailField(controller: _email),
           const SizedBox(height: 16),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/home/widgets/report/reports_from_area.dart';
-import 'package:pawdetect/views/shared/app_logo.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:provider/provider.dart';

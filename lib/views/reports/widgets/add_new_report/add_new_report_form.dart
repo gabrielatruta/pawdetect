@@ -50,8 +50,8 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
 
   @override
   Widget build(BuildContext context) {
-    // watch only to block taps while saving; no UI text/style changes
-    final vm = context.watch<AddReportViewModel>();
+    final addReportViewModel = context.watch<AddReportViewModel>();
+    final isPhone1Required = _reportType == report.ReportType.lost;
 
     return Column(
       children: [
@@ -99,11 +99,11 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
         const SizedBox(height: 16),
 
         // phone number 1
-        PhoneField(controller: _phone1Ctrl),
+        PhoneField(controller: _phone1Ctrl, isRequired: isPhone1Required),
         const SizedBox(height: 16),
 
         // phone number 2
-        PhoneField(controller: _phone2Ctrl),
+        PhoneField(controller: _phone2Ctrl, isRequired: false),
         const SizedBox(height: 16),
 
         // photo picker
@@ -118,7 +118,8 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
               child: SecondaryButton(
                 text: "Cancel",
                 onPressed: () {
-                  if (vm.isLoading) return; // don't change styling, just ignore tap
+                  if (addReportViewModel.isLoading)
+                    return; // don't change styling, just ignore tap
                   Navigator.pushNamed(context, "/home");
                 },
               ),
@@ -130,7 +131,11 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
               child: PrimaryButton(
                 text: "Create report", // keep original label
                 onPressed: () async {
-                  if (vm.isLoading) return; // ignore taps while saving
+                  if (addReportViewModel.isLoading) {
+                    return; // ignore taps while saving
+                  }
+
+                  final requiresPhone1 = _reportType == report.ReportType.lost;
 
                   // minimal validation without introducing new widgets
                   if (_reportType == null ||
@@ -138,14 +143,17 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
                       _gender == null ||
                       _furColor == null ||
                       _locationCtrl.text.trim().isEmpty ||
-                      _phone1Ctrl.text.trim().isEmpty) {
+                      (requiresPhone1 && _phone1Ctrl.text.trim().isEmpty)) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please fill all required fields.')),
+                      const SnackBar(
+                        content: Text('Please fill all required fields.'),
+                      ),
                     );
+
                     return;
                   }
 
-                  final ok = await vm.submitReport(
+                  final ok = await addReportViewModel.submitReport(
                     reportType: _reportType!,
                     animalType: _animalType!,
                     gender: _gender!,
@@ -161,9 +169,11 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
 
                   if (ok && mounted) {
                     Navigator.pushNamed(context, "/home");
-                  } else if (!ok && mounted && vm.errorMessage != null) {
+                  } else if (!ok &&
+                      mounted &&
+                      addReportViewModel.errorMessage != null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(vm.errorMessage!)),
+                      SnackBar(content: Text(addReportViewModel.errorMessage!)),
                     );
                   }
                 },

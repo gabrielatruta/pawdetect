@@ -31,9 +31,6 @@ class AddReportViewModel extends ChangeNotifier {
       if (location.trim().isEmpty) {
         throw Exception('Please select a location.');
       }
-      if (phone1.trim().isEmpty) {
-        throw Exception('Please enter a phone number.');
-      }
 
       // Global watchdog so UI can't be stuck forever
       await _reportService

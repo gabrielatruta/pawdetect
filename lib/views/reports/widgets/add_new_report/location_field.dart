@@ -8,7 +8,7 @@ import 'package:pawdetect/styles/app_colors.dart';
 class LocationField extends StatefulWidget {
   final TextEditingController controller;
   final void Function(String address, double lat, double lng) onSelected;
-  final String? country; // e.g. 'lv' to bias results
+  final String? country;
   final String labelText;
 
   const LocationField({
@@ -109,7 +109,18 @@ class _LocationFieldState extends State<LocationField> {
           onChanged: _onChanged,
           textCapitalization: TextCapitalization.words,
           decoration: InputDecoration(
-            labelText: widget.labelText,
+            label: RichText(
+              text: TextSpan(
+                text: widget.labelText,
+                style: const TextStyle(color: Colors.black),
+                children: const [
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ],
+              ),
+            ),
             labelStyle: const TextStyle(color: Colors.black),
             filled: true,
             fillColor: AppColors.lightBackground,
@@ -122,10 +133,16 @@ class _LocationFieldState extends State<LocationField> {
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Colors.black, width: 2),
             ),
-            suffixIcon: _loading ? const Padding(
-              padding: EdgeInsets.all(12),
-              child: SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-            ) : const Icon(Icons.place),
+            suffixIcon: _loading
+                ? const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  )
+                : const Icon(Icons.place),
           ),
         ),
         if (_suggestions.isNotEmpty)
@@ -176,8 +193,8 @@ class _Place {
   }
 
   factory _Place.fromJson(Map<String, dynamic> json) => _Place(
-        displayName: json['display_name'] as String,
-        lat: double.parse(json['lat'] as String),
-        lon: double.parse(json['lon'] as String),
-      );
+    displayName: json['display_name'] as String,
+    lat: double.parse(json['lat'] as String),
+    lon: double.parse(json['lon'] as String),
+  );
 }

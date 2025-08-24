@@ -9,6 +9,7 @@ class CustomInputField extends StatelessWidget {
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
   final Widget? suffixIcon;
+  final bool isRequired;
 
   const CustomInputField({
     super.key,
@@ -19,10 +20,13 @@ class CustomInputField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.suffixIcon,
+    this.isRequired = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final baseLabelStyle = const TextStyle(color: Colors.black);
+
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -33,7 +37,7 @@ class CustomInputField extends StatelessWidget {
       autocorrect: false,
       enableSuggestions: false,
       decoration: InputDecoration(
-        labelText: label,
+        label: _buildLabel(baseLabelStyle),
         labelStyle: const TextStyle(color: Colors.black),
         filled: true,
         fillColor: AppColors.lightBackground,
@@ -47,6 +51,24 @@ class CustomInputField extends StatelessWidget {
           borderSide: const BorderSide(color: Colors.black, width: 2),
         ),
         suffixIcon: suffixIcon,
+      ),
+    );
+  }
+
+  Widget _buildLabel(TextStyle base) {
+    if (!isRequired) {
+      return Text(label, style: base);
+    }
+    return RichText(
+      text: TextSpan(
+        text: label,
+        style: base,
+        children: const [
+          TextSpan(
+            text: ' *',
+            style: TextStyle(color: Colors.red),
+          ),
+        ],
       ),
     );
   }
