@@ -6,12 +6,14 @@ import 'package:pawdetect/models/report_model.dart' as report;
 
 class Report {
   final String id;
+  final String reportType;
   final String petType;
   final String description;
   final String location;
 
   Report({
     required this.id,
+    required this.reportType,
     required this.petType,
     required this.description,
     required this.location,
@@ -63,6 +65,7 @@ class MyReportsViewModel extends ChangeNotifier {
         final data = d.data();
         return Report(
           id: d.id,
+          reportType: (data['type'] ?? '').toString() ,
           petType: (data['animal'] ?? '').toString(),
           description: (data['additionalInfo'] ?? '').toString(),
           location: (data['location'] ?? '').toString(),

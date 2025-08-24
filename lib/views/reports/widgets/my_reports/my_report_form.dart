@@ -55,7 +55,7 @@ class MyReportsForm extends StatelessWidget {
               ),
             );
           },
-          child: ReportCardStretched(title: item.petType),
+          child: ReportCardStretched(title: "${item.reportType} ${item.petType}"),
         );
       },
     );
