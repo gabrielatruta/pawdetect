@@ -135,17 +135,30 @@ class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
 
         Row(
           children: [
-            // cancel button
+            // mark as solved button
             Expanded(
               child: SecondaryButton(
-                text: "Cancel",
-                onPressed: () {
-                  if (myReportViewModel.isLoading)
-                    return; // don't change styling, just ignore tap
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => MyReportsScreen()),
-                  );
+                text: "Mark as solved",
+                onPressed: () async {
+                  if (myReportViewModel.isLoading) return;
+
+                  await myReportViewModel.updateOpenedReport({
+                    'status': report.ReportStatus.solved.value,
+                  });
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Successfully marked as solved!'),
+                      ),
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const MyReportsScreen(),
+                      ),
+                    );
+                  }
                 },
               ),
             ),
@@ -155,9 +168,30 @@ class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
             Expanded(
               child: PrimaryButton(
                 text: "Update report",
-                onPressed: () {
-                  if (myReportViewModel.isLoading) {
-                    return; // ignore taps while saving
+                onPressed: () async {
+                  if (myReportViewModel.isLoading) return;
+
+                  final partial =
+                      <String, dynamic>{
+                        if (_reportType != null) 'type': _reportType!.value,
+                        if (_animalType != null) 'animal': _animalType!.value,
+                        if (_gender != null) 'gender': _gender!.value,
+                        if (_furColor != null) 'colors': [_furColor!.value],
+                        'location': _locationCtrl.text,
+                        'additionalInfo': _descriptionCtrl.text,
+                        'phoneNumber1': _phone1Ctrl.text,
+                        'phoneNumber2': _phone2Ctrl.text,
+                      }..removeWhere(
+                        (k, v) =>
+                            v == null || (v is String && v.trim().isEmpty),
+                      );
+
+                  await myReportViewModel.updateOpenedReport(partial);
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Report updated')),
+                    );
                   }
                 },
               ),
