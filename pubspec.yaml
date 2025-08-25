@@ -81,6 +81,7 @@ flutter:
   assets:
     - web/icons/ForgotPassword.jpg
     - web/icons/welcomeScreenPaw.png
+    - web/icons/placeholder.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
