@@ -82,33 +82,49 @@ class MapReportPreview extends StatelessWidget {
               const SizedBox(height: 8),
               PreviewItem(icon: Icons.article_outlined, text: info),
             ],
+
+            const SizedBox(height: 25),
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: SecondaryButton(
+                      text: "Close",
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        onClosed();
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: PrimaryButton(
+                      text: "Open",
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        onClosed();
+
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  ReportDetailsScreen(reportId: reportId),
+                            ),
+                          );
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
-      actions: [
-        SecondaryButton(
-          text: "Close",
-          onPressed: () {
-            Navigator.of(context).pop();
-            onClosed();
-          },
-        ),
-        PrimaryButton(
-          text: "Open",
-          onPressed: () {
-            Navigator.of(context).pop();
-            onClosed();
-
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => ReportDetailsScreen(reportId: reportId),
-                ),
-              );
-            });
-          },
-        ),
-      ],
     );
   }
 }
