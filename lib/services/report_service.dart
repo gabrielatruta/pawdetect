@@ -71,12 +71,22 @@ class ReportService {
 
   // get report by id
   Future<report.Report?> getReportById(String id) async {
-    final snap = await _reportsCol
-        .doc(id)
-        .get();
+    final snap = await _reportsCol.doc(id).get();
     if (!snap.exists) return null;
 
-    final data = snap.data()!; 
+    final data = snap.data()!;
     return report.Report.fromFirestore(snap.id, data);
+  }
+
+  // inside class ReportService
+  Stream<List<report.Report>> streamReportsWithLocation() {
+    return _reportsCol
+        .where('lat', isGreaterThan: -90) // filters out docs without coords
+        .snapshots()
+        .map(
+          (qs) => qs.docs
+              .map((d) => report.Report.fromFirestore(d.id, d.data()))
+              .toList(),
+        );
   }
 }

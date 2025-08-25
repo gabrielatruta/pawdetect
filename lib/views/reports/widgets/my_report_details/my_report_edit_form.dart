@@ -16,14 +16,14 @@ import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:pawdetect/views/shared/phone_field.dart';
 import 'package:provider/provider.dart';
 
-class MyReportDetailsForm extends StatefulWidget {
-  const MyReportDetailsForm({super.key});
+class MyReportEditForm extends StatefulWidget {
+  const MyReportEditForm({super.key});
 
   @override
   State<StatefulWidget> createState() => _MyReportDetailsFormState();
 }
 
-class _MyReportDetailsFormState extends State<MyReportDetailsForm> {
+class _MyReportDetailsFormState extends State<MyReportEditForm> {
   report.ReportType? _reportType;
   report.AnimalType? _animalType;
   report.Gender? _gender;
