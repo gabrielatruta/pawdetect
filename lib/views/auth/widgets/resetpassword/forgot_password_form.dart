@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/widgets/shared/email_field.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
@@ -23,7 +24,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Image.asset(
-          'web/icons/ForgotPassword.jpg',
+          AppAssets.forgotPasswordPath,
           width: 300,
           height: 300,
           fit: BoxFit.contain,

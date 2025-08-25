@@ -1,39 +1,32 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/views/home/widgets/map/map_preview_item.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 
 class MapReportPreview extends StatelessWidget {
   final String reportId;
-  final Map<String, dynamic> data;
+  final report.Report data;
+  final VoidCallback onClosed;
+
   const MapReportPreview({
     super.key,
     required this.reportId,
     required this.data,
+    required this.onClosed,
   });
 
-  String? _text(dynamic v) {
-    final s = (v ?? '').toString().trim();
-    return s.isEmpty ? null : s;
-  }
-
-  ImageProvider _imageProvider() {
-    final photos = (data['photoUrls'] as List?)?.cast<String>() ?? const [];
-    if (photos.isNotEmpty) return NetworkImage(photos.first);
-
-    if (kIsWeb) return const NetworkImage('web/icons/placeholder.jpeg');
-    return const AssetImage('web/icons/placeholder.jpeg');
-  }
+  String? _text(String? v) => (v ?? '').trim().isEmpty ? null : v;
 
   @override
   Widget build(BuildContext context) {
-    final type = report.ReportTypeX.parse(data['type']).value;
-    final animal = report.AnimalTypeX.parse(data['animal']).value;
-
-    final location = _text(data['location']);
-    final phone = _text(data['phoneNumber1'] ?? data['phone']);
-    final info = _text(data['additionalInfo']);
+    final title = '${data.type.value} ${data.animal.value}';
+    final location = _text(data.location);
+    final phone = _text(
+      data.phoneNumber1.isNotEmpty ? data.phoneNumber1 : data.phoneNumber2,
+    );
+    final info = _text(data.additionalInfo);
 
     return AlertDialog(
       backgroundColor: AppColors.white,
@@ -43,10 +36,9 @@ class MapReportPreview extends StatelessWidget {
       title: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          
           // title
           Text(
-            '$type $animal',
+            title,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontWeight: FontWeight.w700,
@@ -55,11 +47,11 @@ class MapReportPreview extends StatelessWidget {
             ),
           ),
 
-          // picture
+          // image
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image(
-              image: _imageProvider(),
+            child: Image.asset(
+              AppAssets.placeholderImagePath,
               width: 84,
               height: 84,
               fit: BoxFit.cover,
@@ -73,20 +65,20 @@ class MapReportPreview extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-
-            // location
-            if (location != null) _InfoLine(icon: Icons.place, text: location),
+            //location
+            if (location != null)
+              PreviewItem(icon: Icons.place, text: location),
 
             //phone
             if (phone != null) ...[
               const SizedBox(height: 8),
-              _InfoLine(icon: Icons.phone, text: phone),
+              PreviewItem(icon: Icons.phone, text: phone),
             ],
 
-            // information
+            //description
             if (info != null) ...[
               const SizedBox(height: 8),
-              _InfoLine(icon: Icons.info, text: info),
+              PreviewItem(icon: Icons.article_outlined, text: info),
             ],
           ],
         ),
@@ -94,34 +86,10 @@ class MapReportPreview extends StatelessWidget {
       actions: [
         SecondaryButton(
           text: "Close",
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ],
-    );
-  }
-}
-
-class _InfoLine extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  const _InfoLine({required this.icon, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 18, color: AppColors.orange),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.3,
-              color: AppColors.darkGrey,
-            ),
-          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+            onClosed();
+          },
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_assets.dart';
 
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key});
@@ -6,7 +7,7 @@ class AppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      'web/icons/welcomeScreenPaw.png',
+      AppAssets.pawDetectLogoPath,
       width: MediaQuery.of(context).size.width * 0.30,
       height: MediaQuery.of(context).size.width * 0.30,
       fit: BoxFit.contain,
