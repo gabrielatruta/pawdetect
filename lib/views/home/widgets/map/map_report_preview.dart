@@ -3,6 +3,8 @@ import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/home/widgets/map/map_preview_item.dart';
+import 'package:pawdetect/views/reports/report_details_screen.dart';
+import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 
 class MapReportPreview extends StatelessWidget {
@@ -89,6 +91,21 @@ class MapReportPreview extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
             onClosed();
+          },
+        ),
+        PrimaryButton(
+          text: "Open",
+          onPressed: () {
+            Navigator.of(context).pop();
+            onClosed();
+
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ReportDetailsScreen(reportId: reportId),
+                ),
+              );
+            });
           },
         ),
       ],

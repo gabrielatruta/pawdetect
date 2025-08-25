@@ -1,4 +1,3 @@
-// views/reports/report_fields_screen.dart
 import 'package:flutter/material.dart';
 import 'package:pawdetect/models/report_model.dart';
 import 'package:provider/provider.dart';
@@ -6,9 +5,9 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/viewmodels/report_details_viewmodel.dart';
 import 'package:pawdetect/services/report_service.dart';
 
-class ReportFieldsScreen extends StatelessWidget {
+class ReportDetailsScreen extends StatelessWidget {
   final String reportId;
-  const ReportFieldsScreen({super.key, required this.reportId});
+  const ReportDetailsScreen({super.key, required this.reportId});
 
   @override
   Widget build(BuildContext context) {
