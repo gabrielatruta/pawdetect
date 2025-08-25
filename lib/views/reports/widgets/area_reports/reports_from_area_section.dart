@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/reports/widgets/home/small_report_card.dart';
+import 'package:pawdetect/views/reports/widgets/area_reports/small_report_card.dart';
 
 class SimpleReport {
   final String id;
