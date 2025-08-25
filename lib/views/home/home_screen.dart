@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/home/widgets/home/home_map.dart';
 import 'package:pawdetect/views/reports/add_new_report_screen.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
@@ -7,7 +8,9 @@ import '../../../viewmodels/home_viewmodel.dart';
 import '../../../styles/app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final bool useLocation;
+  const HomeScreen({super.key, bool? useLocation})
+      : useLocation = useLocation ?? true; 
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +19,25 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: const CustomAppBar(title: "", showProfileIcon: true),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          PrimaryButton(
-            text: "Add new report",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AddNewReportScreen()),
-              );
-            },
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 16),
+            HomeMapCard(useLocation: useLocation),
+
+            const SizedBox(height: 200),
+            PrimaryButton(
+              text: "Add new report",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AddNewReportScreen()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
