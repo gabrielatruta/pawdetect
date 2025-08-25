@@ -31,7 +31,6 @@ class ReportDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-
                   // Header: title + image
                   Card(
                     elevation: 0,
@@ -44,7 +43,6 @@ class ReportDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-
                           // title
                           Text(
                             vm.title,
@@ -120,32 +118,41 @@ class _FieldRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const labelStyle = TextStyle(
+      fontSize: 16, 
+      fontWeight: FontWeight.w600,
+      color: AppColors.grey,
+      height: 1.2,
+    );
+    const valueStyle = TextStyle(
+      fontSize: 15,
+      height: 1.4,
+      color: AppColors.darkGrey,
+    );
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(Icons.circle, size: 8, color: AppColors.orange),
+        // Align the bullet with the label baseline
+        Padding(
+          padding: const EdgeInsets.only(top: 6), // tweak 5–7 if needed
+          child: Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              color: AppColors.orange,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.grey,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 15,
-                  height: 1.35,
-                  color: AppColors.darkGrey,
-                ),
-              ),
+              Text(label, style: labelStyle),
+              const SizedBox(height: 4),
+              Text(value, style: valueStyle),
             ],
           ),
         ),
