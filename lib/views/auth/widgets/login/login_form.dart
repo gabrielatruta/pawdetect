@@ -4,6 +4,7 @@ import 'package:pawdetect/services/location_consent.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/auth/forgot_password_screen.dart';
 import 'package:pawdetect/views/auth/signup_screen.dart';
+import 'package:pawdetect/views/auth/widgets/login/location_consent_popup.dart';
 import 'package:pawdetect/views/auth/widgets/shared/email_field.dart';
 import 'package:pawdetect/views/auth/widgets/shared/password_field.dart';
 import 'package:pawdetect/views/home/home_screen.dart';
@@ -23,31 +24,6 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  Future<bool> _showLocationConsentDialog(BuildContext context) async {
-    return await showDialog<bool>(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => AlertDialog(
-            title: const Text('Allow location for this account?'),
-            content: const Text(
-              'We use your location only to center the map near you. '
-              'You can change this anytime in Settings.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Not now'),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text('Allow'),
-              ),
-            ],
-          ),
-        ) ??
-        false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
                   final bool useLocation =
                       (await LocationConsent.ensureForUser(
                         userId: userId,
-                        inAppPrompt: () => _showLocationConsentDialog(context),
+                        inAppPrompt: () => showLocationConsentPopUp(context),
                       )) ==
                       true;
 
