@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pawdetect/views/home/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
@@ -111,7 +110,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
         PhotoPicker(onChanged: (file) => setState(() => _photo = file)),
         const SizedBox(height: 16),
 
-        // bottom buttons (callbacks are never null to match your button API)
+        // bottom buttons
         Row(
           children: [
             // cancel
@@ -121,10 +120,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
                 onPressed: () {
                   if (addReportViewModel.isLoading)
                     return; // don't change styling, just ignore tap
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => HomeScreen()),
-                  );
+                  Navigator.pop(context);
                 },
               ),
             ),
@@ -133,7 +129,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
             // create report
             Expanded(
               child: PrimaryButton(
-                text: "Create report", // keep original label
+                text: "Create report",
                 onPressed: () async {
                   if (addReportViewModel.isLoading) {
                     return; // ignore taps while saving
@@ -172,10 +168,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
                   );
 
                   if (ok && mounted) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => HomeScreen()),
-                    );
+                    Navigator.pop(context);
                   } else if (!ok &&
                       mounted &&
                       addReportViewModel.errorMessage != null) {

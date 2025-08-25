@@ -10,7 +10,7 @@ import '../../../styles/app_colors.dart';
 class HomeScreen extends StatelessWidget {
   final bool useLocation;
   const HomeScreen({super.key, bool? useLocation})
-    : useLocation = useLocation ?? true;
+    : useLocation = useLocation ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,9 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
           child: PrimaryButton(
             text: "Add new report",
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              // Push the add-report page and WAIT for it to finish
+              await Navigator.push<bool>(
                 context,
                 MaterialPageRoute(builder: (_) => const AddNewReportScreen()),
               );
