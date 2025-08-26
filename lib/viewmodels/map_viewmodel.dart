@@ -1,6 +1,10 @@
 // viewmodels/map_viewmodel.dart
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_service.dart';
@@ -25,6 +29,16 @@ class MapViewModel extends ChangeNotifier {
     final clamped = newZoom.clamp(minZoom, maxZoom);
     if (clamped != zoom) {
       zoom = clamped;
+      notifyListeners();
+    }
+  }
+
+  void onMapMoved(LatLng c, double z) {
+    // single notify for center+zoom
+    final nz = z.clamp(minZoom, maxZoom);
+    if (center != c || zoom != nz) {
+      center = c;
+      zoom = nz;
       notifyListeners();
     }
   }
@@ -76,5 +90,104 @@ class MapViewModel extends ChangeNotifier {
   void clearSelection() {
     selected = null;
     notifyListeners();
+  }
+
+  // ---------------- Typeahead search state ----------------
+  List<PlaceSuggestion> suggestions = [];
+  Timer? _debounce;
+
+  void onQueryChanged(String raw) {
+    _debounce?.cancel();
+    final q = raw.trim();
+    if (q.isEmpty) {
+      suggestions = [];
+      notifyListeners();
+      return;
+    }
+    _debounce = Timer(const Duration(milliseconds: 350), () {
+      _fetchSuggestions(q);
+    });
+  }
+
+  Future<void> _fetchSuggestions(String q) async {
+    final uri = Uri.https('nominatim.openstreetmap.org', '/search', {
+      'q': q,
+      'format': 'jsonv2',
+      'addressdetails': '1',
+      'limit': '5',
+    });
+    final res = await http.get(
+      uri,
+      headers: {'User-Agent': 'pawdetect/1.0 (map search suggestions)'},
+    );
+    if (res.statusCode != 200) return;
+    final data = jsonDecode(res.body);
+    if (data is! List) return;
+    suggestions = data
+        .map<PlaceSuggestion>((e) => PlaceSuggestion.fromJson(e))
+        .toList();
+    notifyListeners();
+  }
+
+  Future<void> applySuggestion(PlaceSuggestion s) async {
+    center = LatLng(s.lat, s.lon);
+    zoom = 15.0;
+    suggestions = [];
+    notifyListeners();
+  }
+
+  Future<void> searchPlace(String q) async {
+    final query = q.trim();
+    if (query.isEmpty) return;
+    final uri = Uri.https('nominatim.openstreetmap.org', '/search', {
+      'q': query,
+      'format': 'jsonv2',
+      'limit': '1',
+    });
+    final res = await http.get(
+      uri,
+      headers: {'User-Agent': 'pawdetect/1.0 (map search single)'},
+    );
+    if (res.statusCode != 200) return;
+    final data = jsonDecode(res.body);
+    if (data is! List || data.isEmpty) return;
+    final s = PlaceSuggestion.fromJson(data.first);
+    await applySuggestion(s);
+  }
+
+  void clearSuggestions() {
+    if (suggestions.isNotEmpty) {
+      suggestions = [];
+      notifyListeners();
+    }
+  }
+}
+
+// location suggestions
+class PlaceSuggestion {
+  final String title;
+  final String subtitle;
+  final double lat;
+  final double lon;
+
+  PlaceSuggestion({
+    required this.title,
+    required this.subtitle,
+    required this.lat,
+    required this.lon,
+  });
+
+  factory PlaceSuggestion.fromJson(Map<String, dynamic> j) {
+    final display = (j['display_name'] ?? '').toString();
+    final parts = display.split(',').map((s) => s.trim()).toList();
+    final title = (j['name'] ?? (parts.isNotEmpty ? parts.first : ''))
+        .toString();
+    final subtitle = parts.length > 1 ? parts.sublist(1).join(', ') : '';
+    return PlaceSuggestion(
+      title: title,
+      subtitle: subtitle,
+      lat: double.tryParse('${j['lat']}') ?? 0,
+      lon: double.tryParse('${j['lon']}') ?? 0,
+    );
   }
 }

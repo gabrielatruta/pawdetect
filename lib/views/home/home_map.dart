@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:pawdetect/views/home/widgets/map/map_report_preview.dart';
+import 'package:pawdetect/views/home/widgets/map/map_flutter.dart';
+import 'package:pawdetect/views/home/widgets/map/map_search_bar.dart';
+import 'package:pawdetect/views/home/widgets/map/map_suggestions.dart';
+import 'package:pawdetect/views/home/widgets/map/map_zoom_controls.dart';
 import 'package:provider/provider.dart';
-
-import 'package:pawdetect/models/report_model.dart' as report;
-import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/viewmodels/map_viewmodel.dart';
 import 'package:pawdetect/services/report_service.dart';
 
@@ -32,26 +31,26 @@ class _HomeMapView extends StatefulWidget {
 
 class _HomeMapViewState extends State<_HomeMapView> {
   final _map = MapController();
+  final _searchCtrl = TextEditingController();
 
-  // keep these conservative; adjust if your tile source supports more/less
-  static const double _minZoom = 3.0;
-  static const double _maxZoom = 18.0;
+  void _moveToVm(MapViewModel mapViewModel) =>
+      _map.move(mapViewModel.center, mapViewModel.zoom);
 
-  void _applyZoom(MapViewModel vm, double delta) {
-    final newZoom = (vm.zoom + delta).clamp(_minZoom, _maxZoom);
-    // keep VM and map in sync
-    vm.zoom = newZoom;
-    _map.move(vm.center, newZoom);
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<MapViewModel>();
+    final mapViewModel = context.watch<MapViewModel>();
+    void moveToVm() => _map.move(mapViewModel.center, mapViewModel.zoom);
 
-    // When the VM updates the center (after geolocation), move the map.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _map.move(vm.center, vm.zoom);
-    });
+    // Update map when VM's camera changes (geolocation/search/zoom)
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _moveToVm(mapViewModel),
+    );
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -60,86 +59,26 @@ class _HomeMapViewState extends State<_HomeMapView> {
         height: 260,
         child: Stack(
           children: [
-            FlutterMap(
-              mapController: _map,
-              options: MapOptions(
-                initialCenter: vm.center,
-                initialZoom: vm.zoom,
-                // keep VM updated when the user pans/zooms manually
-                onPositionChanged: (pos, _) {
-                  vm.center = pos.center;
-                  vm.zoom = pos.zoom;
-                },
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.pawdetect.app',
-                ),
+            // Flutter map
+            MapFlutter(controller: _map, mapViewModel: mapViewModel),
 
-                // Pins with reports from Firestore
-                StreamBuilder<List<report.Report>>(
-                  stream: vm.reports$,
-                  builder: (context, snap) {
-                    if (!snap.hasData) return const SizedBox.shrink();
-                    final markers = <Marker>[];
-                    for (final r in snap.data!) {
-                      final lat = r.lat;
-                      final lng = r.lng;
-                      if (lat == null || lng == null) continue;
-                      markers.add(
-                        Marker(
-                          point: LatLng(lat, lng),
-                          width: 40,
-                          height: 40,
-                          child: GestureDetector(
-                            onTap: () {
-                              vm.select(r);
-                              showDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (_) => MapReportPreview(
-                                  reportId: r.id!,
-                                  data: r,
-                                  onClosed: vm.clearSelection,
-                                ),
-                              );
-                            },
-                            child: const Icon(
-                              Icons.location_on,
-                              size: 36,
-                              color: AppColors.orange,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                    return MarkerLayer(markers: markers);
-                  },
-                ),
-              ],
+            // Search bar
+            MapSearchBar(
+              controller: _searchCtrl,
+              mapViewModel: mapViewModel,
+              moveToVm: moveToVm,
             ),
+
+            // Suggestions bar
+            if (mapViewModel.suggestions.isNotEmpty)
+              MapSuggestions(
+                mapViewModel: mapViewModel,
+                controller: _searchCtrl,
+                moveToVm: moveToVm,
+              ),
 
             // Zoom controls
-            Positioned(
-              right: 10,
-              bottom: 10,
-              child: Column(
-                children: [
-                  FloatingActionButton.small(
-                    heroTag: 'mapZoomIn',
-                    onPressed: () => _applyZoom(vm, 1.0),
-                    child: const Icon(Icons.add),
-                  ),
-                  const SizedBox(height: 8),
-                  FloatingActionButton.small(
-                    heroTag: 'mapZoomOut',
-                    onPressed: () => _applyZoom(vm, -1.0),
-                    child: const Icon(Icons.remove),
-                  ),
-                ],
-              ),
-            ),
+            MapZoomControls(mapViewModel: mapViewModel, moveToVm: moveToVm),
           ],
         ),
       ),
