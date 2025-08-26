@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/reports/my_reports_edit_screen.dart';
+import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
 import 'package:pawdetect/views/shared/report_card_load_more.dart';
@@ -51,7 +51,7 @@ class MyReportsForm extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => MyReportDetailsScreen(reportId: item.id),
+                builder: (_) => ReportDetailsScreen(reportId: item.id),
               ),
             );
           },
