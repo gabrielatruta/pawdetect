@@ -23,6 +23,12 @@ class ReportService {
     XFile? photo,
     double? lat,
     double? lng,
+
+    // for push notifications
+    bool receiveFoundAlerts = false,
+    String? alertArea,
+    double? alertLat,
+    double? alertLng,
   }) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -49,11 +55,19 @@ class ReportService {
     );
 
     final data = newReport.toMap();
-    // server timestamps to satisfy Firestore rules
     data['createdAt'] = FieldValue.serverTimestamp();
     data['updatedAt'] = FieldValue.serverTimestamp();
     if (lat != null) data['lat'] = lat;
     if (lng != null) data['lng'] = lng;
+
+    if (receiveFoundAlerts) {
+      data['foundAlertSubscription'] = {
+        'enabled': true,
+        'area': alertArea ?? '',
+        'lat': alertLat,
+        'lng': alertLng,
+      };
+    }
 
     // a small timeout to avoid UI hanging forever
     await docRef.set(data).timeout(const Duration(seconds: 15));
@@ -78,7 +92,7 @@ class ReportService {
     return report.Report.fromFirestore(snap.id, data);
   }
 
-  // inside class ReportService
+  // streams out reports that do not have a location
   Stream<List<report.Report>> streamReportsWithLocation() {
     return _reportsCol
         .where('lat', isGreaterThan: -90) // filters out docs without coords

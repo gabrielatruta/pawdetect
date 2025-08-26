@@ -10,6 +10,7 @@ class AddReportViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
 
+  // create new report
   Future<bool> submitReport({
     required report.ReportType reportType,
     required report.AnimalType animalType,
@@ -22,6 +23,12 @@ class AddReportViewModel extends ChangeNotifier {
     double? lat,
     double? lng,
     XFile? photo,
+
+    // info for receving alerts
+    bool receiveFoundAlerts = false,
+    String? alertArea,
+    double? alertLat,
+    double? alertLng,
   }) async {
     try {
       isLoading = true;
@@ -46,6 +53,12 @@ class AddReportViewModel extends ChangeNotifier {
             photo: photo,
             lat: lat,
             lng: lng,
+
+            // for push notificaitons
+            receiveFoundAlerts: receiveFoundAlerts,
+            alertArea: alertArea?.trim(),
+            alertLat: alertLat,
+            alertLng: alertLng,
           )
           .timeout(const Duration(seconds: 40));
 

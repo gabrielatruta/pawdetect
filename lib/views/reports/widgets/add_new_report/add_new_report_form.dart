@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pawdetect/views/reports/widgets/add_new_report/receive_notifications_card.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
@@ -39,12 +40,18 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
   // photo
   XFile? _photo;
 
+  // push notifications
+  bool _receiveFoundAlerts = false;
+  final _alertAreaCtrl = TextEditingController();
+  double? _alertLat, _alertLng;
+
   @override
   void dispose() {
     _descriptionCtrl.dispose();
     _phone1Ctrl.dispose();
     _phone2Ctrl.dispose();
     _locationCtrl.dispose();
+    _alertAreaCtrl.dispose();
     super.dispose();
   }
 
@@ -110,6 +117,26 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
         PhotoPicker(onChanged: (file) => setState(() => _photo = file)),
         const SizedBox(height: 16),
 
+        // receive alerts checkbox for lost reportws
+        if (_reportType == report.ReportType.lost) ...[
+          const SizedBox(height: 16),
+          ReceiveNotifications(
+            enabled: _receiveFoundAlerts,
+            areaController: _alertAreaCtrl,
+            onEnabledChanged: (v) => setState(() => _receiveFoundAlerts = v),
+            onAreaSelected: (address, lat, lng) {
+              setState(() {
+                _alertAreaCtrl.text = address;
+                _alertLat = lat;
+                _alertLng = lng;
+              });
+            },
+          ),
+          const SizedBox(height: 16),
+        ],
+
+        const SizedBox(height: 16),
+
         // bottom buttons
         Row(
           children: [
@@ -118,8 +145,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
               child: SecondaryButton(
                 text: "Cancel",
                 onPressed: () {
-                  if (addReportViewModel.isLoading)
-                    return; // don't change styling, just ignore tap
+                  if (addReportViewModel.isLoading) return; // just ignore tap
                   Navigator.pop(context);
                 },
               ),
@@ -137,7 +163,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
 
                   final requiresPhone1 = _reportType == report.ReportType.lost;
 
-                  // minimal validation without introducing new widgets
+                  // minimal validation
                   if (_reportType == null ||
                       _animalType == null ||
                       _gender == null ||
@@ -165,6 +191,12 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
                     lat: _lat,
                     lng: _lng,
                     photo: _photo,
+                    receiveFoundAlerts: _receiveFoundAlerts,
+                    alertArea: _receiveFoundAlerts
+                        ? _alertAreaCtrl.text.trim()
+                        : null,
+                    alertLat: _receiveFoundAlerts ? _alertLat : null,
+                    alertLng: _receiveFoundAlerts ? _alertLng : null,
                   );
 
                   if (ok && mounted) {
