@@ -24,6 +24,8 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+
+            // world map
             const SizedBox(height: 16),
             HomeMapCard(useLocation: useLocation),
             const SizedBox(height: 16),

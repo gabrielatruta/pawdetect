@@ -33,7 +33,7 @@ class ReportDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Header: title + image
-                  ReportHeaderCard(title: vm.title, imageUrl: vm.imageUrl),
+                  ReportHeaderCard(title: vm.titleWithStatus, imageUrl: vm.imageUrl),
                   const SizedBox(height: 12),
 
                   // Details

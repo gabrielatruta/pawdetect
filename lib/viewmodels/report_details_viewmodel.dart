@@ -26,12 +26,32 @@ class ReportDetailsViewModel extends ChangeNotifier {
     }
   }
 
-  String get title =>
-      reportData == null ? '' : '${reportData!.type.value} ${reportData!.animal.value}';
+  // title of the report without status
+  String get title => reportData == null
+      ? ''
+      : '${reportData!.type.value} ${reportData!.animal.value}';
 
-  String? get imageUrl =>
-      (reportData?.photoUrls.isNotEmpty ?? false) ? reportData!.photoUrls.first : null;
+  // status string 
+  String get statusLabel {
+    final s = reportData?.status;
+    if (s == null) return '';
+    return s == report.ReportStatus.solved ? 'solved' : 'unsolved';
+  }
 
+  /// title of the report + status
+  String get titleWithStatus {
+    if (reportData == null) return '';
+    final base = title;
+    final status = statusLabel;
+    return status.isEmpty ? base : '$base ($status)';
+  }
+
+  // image of the report
+  String? get imageUrl => (reportData?.photoUrls.isNotEmpty ?? false)
+      ? reportData!.photoUrls.first
+      : null;
+
+  // details of the report
   List<MapEntry<String, String>> get detailFields {
     final reportRetrieved = reportData;
     if (reportRetrieved == null) return const [];
@@ -62,13 +82,13 @@ class ReportDetailsViewModel extends ChangeNotifier {
 
     final updated = reportRetrieved.updatedAt ?? reportRetrieved.createdAt;
     if (updated != null) {
-      fields.add(MapEntry('Last updated', _fmtDate(updated)));
+      fields.add(MapEntry('Last updated', convertDateToString(updated)));
     }
 
     return fields;
   }
 
-  static String _fmtDate(DateTime d) {
+  static String convertDateToString(DateTime d) {
     final y = d.year.toString().padLeft(4, '0');
     final m = d.month.toString().padLeft(2, '0');
     final day = d.day.toString().padLeft(2, '0');
