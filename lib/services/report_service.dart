@@ -60,14 +60,12 @@ class ReportService {
     if (lat != null) data['lat'] = lat;
     if (lng != null) data['lng'] = lng;
 
-    if (receiveFoundAlerts) {
-      data['foundAlertSubscription'] = {
-        'enabled': true,
-        'area': alertArea ?? '',
-        'lat': alertLat,
-        'lng': alertLng,
-      };
-    }
+    data['foundAlertSubscription'] = {
+      'enabled': true,
+      'area': alertArea ?? '',
+      'lat': alertLat,
+      'lng': alertLng,
+    };
 
     // a small timeout to avoid UI hanging forever
     await docRef.set(data).timeout(const Duration(seconds: 15));
