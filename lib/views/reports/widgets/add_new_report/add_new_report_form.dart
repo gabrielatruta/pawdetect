@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pawdetect/views/reports/widgets/add_new_report/receive_notifications_card.dart';
+import 'package:pawdetect/views/shared/receive_notifications_card.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';

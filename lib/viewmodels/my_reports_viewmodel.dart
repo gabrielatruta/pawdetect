@@ -31,7 +31,7 @@ class MyReportsViewModel extends ChangeNotifier {
   // Full result set already filtered for the current user
   List<Report> reports = [];
 
-  // Simple paging
+  // Simple paging to display 4 results at a time
   static const int _pageSize = 4;
   int visibleCount = 0;
 
@@ -42,6 +42,12 @@ class MyReportsViewModel extends ChangeNotifier {
   bool isDetailsLoading = false;
   report.Report? openedReport;
   String? openedReportId;
+
+  // Receive notifications subscription
+  bool openedReceiveFoundAlerts = false;
+  String openedAlertArea = '';
+  double? openedAlertLat;
+  double? openedAlertLng;
 
   // fetch reports
   Future<void> fetchReports() async {
@@ -65,7 +71,7 @@ class MyReportsViewModel extends ChangeNotifier {
         final data = d.data();
         return Report(
           id: d.id,
-          reportType: (data['type'] ?? '').toString() ,
+          reportType: (data['type'] ?? '').toString(),
           petType: (data['animal'] ?? '').toString(),
           description: (data['additionalInfo'] ?? '').toString(),
           location: (data['location'] ?? '').toString(),
@@ -102,7 +108,24 @@ class MyReportsViewModel extends ChangeNotifier {
     openedReportId = id;
     notifyListeners();
     try {
+      // report details
       openedReport = await _reportSvc.getReportById(id);
+
+      // receive notifications preferences
+      // raw snapshot for the nested map
+      final snap = await FirebaseFirestore.instance
+          .collection('reports')
+          .doc(id)
+          .get();
+
+      final sub = (snap.data()?['foundAlertSubscription'] as Map?)
+          ?.cast<String, dynamic>();
+      openedReceiveFoundAlerts = (sub?['enabled'] as bool?) ?? false;
+      openedAlertArea = (sub?['area'] as String?) ?? '';
+      final lat = sub?['lat'];
+      final lng = sub?['lng'];
+      openedAlertLat = lat is num ? lat.toDouble() : null;
+      openedAlertLng = lng is num ? lng.toDouble() : null;
     } finally {
       isDetailsLoading = false;
       notifyListeners();

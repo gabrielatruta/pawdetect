@@ -14,6 +14,7 @@ import 'package:pawdetect/views/reports/widgets/shared/report_type_field.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:pawdetect/views/shared/phone_field.dart';
+import 'package:pawdetect/views/shared/receive_notifications_card.dart';
 import 'package:provider/provider.dart';
 
 class MyReportEditForm extends StatefulWidget {
@@ -42,6 +43,11 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
   // ignore: unused_field
   XFile? _photo;
 
+  // push notifications
+  bool _receiveFoundAlerts = false;
+  final _alertAreaCtrl = TextEditingController();
+  double? _alertLat, _alertLng;
+
   bool _hydrated = false;
 
   @override
@@ -50,6 +56,7 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
     _phone1Ctrl.dispose();
     _phone2Ctrl.dispose();
     _locationCtrl.dispose();
+    _alertAreaCtrl.dispose();
     super.dispose();
   }
 
@@ -68,6 +75,11 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
       _phone1Ctrl.text = r.phoneNumber1;
       _phone2Ctrl.text = r.phoneNumber2;
       _locationCtrl.text = r.location;
+
+      _receiveFoundAlerts = vm.openedReceiveFoundAlerts;
+      _alertAreaCtrl.text = vm.openedAlertArea;
+      _alertLat = vm.openedAlertLat;
+      _alertLng = vm.openedAlertLng;
 
       _hydrated = true;
     }
@@ -135,6 +147,22 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
         PhotoPicker(onChanged: (file) => setState(() => _photo = file)),
         const SizedBox(height: 16),
 
+        if (_reportType == report.ReportType.lost) ...[
+          ReceiveNotifications(
+            enabled: _receiveFoundAlerts,
+            areaController: _alertAreaCtrl,
+            onEnabledChanged: (v) => setState(() => _receiveFoundAlerts = v),
+            onAreaSelected: (address, lat, lng) {
+              setState(() {
+                _alertAreaCtrl.text = address;
+                _alertLat = lat;
+                _alertLng = lng;
+              });
+            },
+          ),
+          const SizedBox(height: 16),
+        ],
+
         Row(
           children: [
             // mark as solved button
@@ -187,6 +215,20 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
                         (k, v) =>
                             v == null || (v is String && v.trim().isEmpty),
                       );
+
+                  if (_reportType == report.ReportType.lost) {
+                    partial['foundAlertSubscription'] = {
+                      'enabled': _receiveFoundAlerts,
+                      'area': _receiveFoundAlerts
+                          ? _alertAreaCtrl.text.trim()
+                          : '',
+                      'lat': _receiveFoundAlerts ? _alertLat : null,
+                      'lng': _receiveFoundAlerts ? _alertLng : null,
+                    };
+                  } else {
+                    // If the report is changed to "Found", mark it as disabled
+                    partial['foundAlertSubscription'] = {'enabled': false};
+                  }
 
                   await myReportViewModel.updateOpenedReport(partial);
 
