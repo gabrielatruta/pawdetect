@@ -192,7 +192,7 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
 
                   // Robust navigation after await using the global navigator key
                   appNavigatorKey.currentState?.pop(
-                    '/myreports',
+                    MaterialPageRoute(builder: (_) => const MyReportsScreen()),
                   );
                 },
               ),
