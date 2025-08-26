@@ -32,7 +32,7 @@ class MyReportsViewModel extends ChangeNotifier {
   List<Report> reports = [];
 
   // Simple paging
-  static const int _pageSize = 10;
+  static const int _pageSize = 4;
   int visibleCount = 0;
 
   bool get hasMore => visibleCount < reports.length;
@@ -116,7 +116,6 @@ class MyReportsViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await _reportSvc.updateReport(openedReportId!, partial);
-      // refresh local copy (optional but nice)
       openedReport = await _reportSvc.getReportById(openedReportId!);
     } finally {
       isDetailsLoading = false;

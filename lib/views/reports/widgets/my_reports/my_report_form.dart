@@ -23,7 +23,7 @@ class MyReportsForm extends StatelessWidget {
     }
 
     if (myReportsViewModel.isLoading && myReportsViewModel.reports.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator(color: AppColors.orange));
     }
 
     if (myReportsViewModel.errorMessage != null) {
@@ -32,6 +32,7 @@ class MyReportsForm extends StatelessWidget {
       );
     }
 
+    // load 4 reports at a time
     final items = myReportsViewModel.visibleReports;
 
     return ListView.separated(
