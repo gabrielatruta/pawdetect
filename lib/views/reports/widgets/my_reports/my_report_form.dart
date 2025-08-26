@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/views/reports/my_reports_edit_screen.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
@@ -15,7 +17,9 @@ class MyReportsForm extends StatelessWidget {
     final myReports = myReportsViewModel.reports;
 
     if (myReports.isEmpty) {
-      return const Center(child: Text("No reports to display. Start reporting!"));
+      return const Center(
+        child: Text("No reports to display. Start reporting!"),
+      );
     }
 
     if (myReportsViewModel.isLoading && myReportsViewModel.reports.isEmpty) {
@@ -23,7 +27,9 @@ class MyReportsForm extends StatelessWidget {
     }
 
     if (myReportsViewModel.errorMessage != null) {
-      return Center(child: ErrorMessage(message: myReportsViewModel.errorMessage!));
+      return Center(
+        child: ErrorMessage(message: myReportsViewModel.errorMessage!),
+      );
     }
 
     final items = myReportsViewModel.visibleReports;
@@ -34,7 +40,8 @@ class MyReportsForm extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         // Load More card at the end
-        final isLoadMoreTile = myReportsViewModel.hasMore && index == items.length;
+        final isLoadMoreTile =
+            myReportsViewModel.hasMore && index == items.length;
         if (isLoadMoreTile) {
           return InkWell(
             borderRadius: BorderRadius.circular(18),
@@ -43,19 +50,47 @@ class MyReportsForm extends StatelessWidget {
           );
         }
 
-        // Report item
+        // Report items
         final item = items[index];
-        return InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ReportDetailsScreen(reportId: item.id),
+        return Stack(
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ReportDetailsScreen(reportId: item.id),
+                  ),
+                );
+              },
+              child: ReportCardStretched(
+                title: "${item.reportType} ${item.petType}",
               ),
-            );
-          },
-          child: ReportCardStretched(title: "${item.reportType} ${item.petType}"),
+            ),
+
+            // pencil icon
+            Positioned(
+              top: 8,
+              right: 8,
+              child: IconButton(
+                icon: const Icon(Icons.edit),
+                color: AppColors.darkOrange,
+                tooltip: 'Edit report',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MyReportDetailsScreen(reportId: item.id),
+                    ),
+                  ).then(
+                    // ignore: use_build_context_synchronously
+                    (_) => context.read<MyReportsViewModel>().fetchReports(),
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     );
