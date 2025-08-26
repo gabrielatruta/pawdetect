@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/shared/reports_image.dart';
 
 class ReportCardStretched extends StatelessWidget {
   final String title;
-  final ImageProvider? image; 
+  final ImageProvider? image;
 
-  const ReportCardStretched({
-    super.key,
-    required this.title,
-    this.image,
-  });
+  const ReportCardStretched({super.key, required this.title, this.image});
 
   @override
   Widget build(BuildContext context) {
+    final ImageProvider displayImage =
+        image ?? const AssetImage(AppAssets.placeholderImagePath);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
@@ -23,9 +23,8 @@ class ReportCardStretched extends StatelessWidget {
       ),
       child: Row(
         children: [
-
           // Image
-          ReportsImage(image: image, size: 56),
+          ReportsImage(image: displayImage, size: 56),
           const SizedBox(width: 12),
 
           // Title

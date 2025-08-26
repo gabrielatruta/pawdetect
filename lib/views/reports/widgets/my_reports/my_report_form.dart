@@ -15,7 +15,7 @@ class MyReportsForm extends StatelessWidget {
     final myReports = myReportsViewModel.reports;
 
     if (myReports.isEmpty) {
-      return const Center(child: Text("No reports to display"));
+      return const Center(child: Text("No reports to display. Start reporting!"));
     }
 
     if (myReportsViewModel.isLoading && myReportsViewModel.reports.isEmpty) {
