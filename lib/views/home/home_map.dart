@@ -67,14 +67,13 @@ class _HomeMapViewState extends State<_HomeMapView> {
                 initialZoom: vm.zoom,
                 // keep VM updated when the user pans/zooms manually
                 onPositionChanged: (pos, _) {
-                  if (pos.center != null) vm.center = pos.center!;
-                  if (pos.zoom != null) vm.zoom = pos.zoom!;
+                  vm.center = pos.center;
+                  vm.zoom = pos.zoom;
                 },
               ),
               children: [
                 TileLayer(
-                  urlTemplate:
-                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.pawdetect.app',
                 ),
 
