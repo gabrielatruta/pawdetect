@@ -48,7 +48,7 @@ class MyReportsForm extends StatelessWidget {
         return InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => MyReportDetailsScreen(reportId: item.id),

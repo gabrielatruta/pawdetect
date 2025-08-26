@@ -191,7 +191,7 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
                   await myReportViewModel.updateOpenedReport(partial);
 
                   // Robust navigation after await using the global navigator key
-                  appNavigatorKey.currentState?.pushReplacementNamed(
+                  appNavigatorKey.currentState?.pop(
                     '/myreports',
                   );
                 },
