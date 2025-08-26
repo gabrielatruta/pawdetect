@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
-import 'package:pawdetect/navigation.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
-import 'package:pawdetect/views/reports/my_reports_screen.dart';
+import 'package:pawdetect/views/reports/widgets/my_reports/buttons_edit_report.dart';
 import 'package:pawdetect/views/reports/widgets/shared/description_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/location_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_color_dropdown.dart';
@@ -11,8 +10,6 @@ import 'package:pawdetect/views/reports/widgets/shared/pet_gender_dropdown.dart'
 import 'package:pawdetect/views/reports/widgets/shared/pet_type_dropdown.dart';
 import 'package:pawdetect/views/reports/widgets/shared/photo_picker.dart';
 import 'package:pawdetect/views/reports/widgets/shared/report_type_field.dart';
-import 'package:pawdetect/views/shared/custom_primary_button.dart';
-import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:pawdetect/views/shared/phone_field.dart';
 import 'package:pawdetect/views/shared/receive_notifications_card.dart';
 import 'package:provider/provider.dart';
@@ -147,6 +144,7 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
         PhotoPicker(onChanged: (file) => setState(() => _photo = file)),
         const SizedBox(height: 16),
 
+        // push notifications preferences
         if (_reportType == report.ReportType.lost) ...[
           ReceiveNotifications(
             enabled: _receiveFoundAlerts,
@@ -163,83 +161,21 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
           const SizedBox(height: 16),
         ],
 
-        Row(
-          children: [
-            // mark as solved button
-            Expanded(
-              child: SecondaryButton(
-                text: "Mark as solved",
-                onPressed: () async {
-                  if (myReportViewModel.isLoading) return;
-
-                  await myReportViewModel.updateOpenedReport({
-                    'status': report.ReportStatus.solved.value,
-                  });
-
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Successfully marked as solved!'),
-                      ),
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const MyReportsScreen(),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
-            const SizedBox(width: 12),
-
-            // update report button
-            Expanded(
-              child: PrimaryButton(
-                text: "Update report",
-                onPressed: () async {
-                  if (myReportViewModel.isLoading) return;
-
-                  final partial =
-                      <String, dynamic>{
-                        if (_reportType != null) 'type': _reportType!.value,
-                        if (_animalType != null) 'animal': _animalType!.value,
-                        if (_gender != null) 'gender': _gender!.value,
-                        if (_furColor != null) 'colors': [_furColor!.value],
-                        'location': _locationCtrl.text,
-                        'additionalInfo': _descriptionCtrl.text,
-                        'phoneNumber1': _phone1Ctrl.text,
-                        'phoneNumber2': _phone2Ctrl.text,
-                      }..removeWhere(
-                        (k, v) =>
-                            v == null || (v is String && v.trim().isEmpty),
-                      );
-
-                  if (_reportType == report.ReportType.lost) {
-                    partial['foundAlertSubscription'] = {
-                      'enabled': _receiveFoundAlerts,
-                      'area': _receiveFoundAlerts
-                          ? _alertAreaCtrl.text.trim()
-                          : '',
-                      'lat': _receiveFoundAlerts ? _alertLat : null,
-                      'lng': _receiveFoundAlerts ? _alertLng : null,
-                    };
-                  } else {
-                    // If the report is changed to "Found", mark it as disabled
-                    partial['foundAlertSubscription'] = {'enabled': false};
-                  }
-
-                  await myReportViewModel.updateOpenedReport(partial);
-
-                  // Robust navigation after await using the global navigator key
-                  appNavigatorKey.currentState?.pop(
-                    MaterialPageRoute(builder: (_) => const MyReportsScreen()),
-                  );
-                },
-              ),
-            ),
-          ],
+        ButtonsEditReport(
+          myReportViewModel: myReportViewModel,
+          reportTypeValue: _reportType?.value,
+          animalTypeValue: _animalType?.value,
+          genderValue: _gender?.value,
+          furColorValue: _furColor?.value,
+          locationCtrl: _locationCtrl,
+          descriptionCtrl: _descriptionCtrl,
+          phone1Ctrl: _phone1Ctrl,
+          phone2Ctrl: _phone2Ctrl,
+          receiveFoundAlerts: _receiveFoundAlerts,
+          alertAreaCtrl: _alertAreaCtrl,
+          alertLat: _alertLat,
+          alertLng: _alertLng,
+          solvedStatusValue: report.ReportStatus.solved.value,
         ),
       ],
     );
