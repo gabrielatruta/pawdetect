@@ -17,6 +17,28 @@ class MapViewModel extends ChangeNotifier {
   // selected (for dialog)
   report.Report? selected;
 
+  // zoom-in/out
+  static const double minZoom = 3.0;
+  static const double maxZoom = 18.0;
+
+  void setZoom(double newZoom) {
+    final clamped = newZoom.clamp(minZoom, maxZoom);
+    if (clamped != zoom) {
+      zoom = clamped;
+      notifyListeners();
+    }
+  }
+
+  void zoomIn() => setZoom(zoom + 1.0);
+  void zoomOut() => setZoom(zoom - 1.0);
+
+  void setCenter(LatLng newCenter) {
+    if (newCenter != center) {
+      center = newCenter;
+      notifyListeners();
+    }
+  }
+
   // stream of reports with coordinates
   Stream<List<report.Report>> get reports$ =>
       _reportService.streamReportsWithLocation();
@@ -31,7 +53,9 @@ class MapViewModel extends ChangeNotifier {
       if (perm == LocationPermission.denied) {
         perm = await Geolocator.requestPermission();
       }
-      if (enabled && (perm == LocationPermission.always || perm == LocationPermission.whileInUse)) {
+      if (enabled &&
+          (perm == LocationPermission.always ||
+              perm == LocationPermission.whileInUse)) {
         final pos = await Geolocator.getCurrentPosition();
         center = LatLng(pos.latitude, pos.longitude);
         zoom = 14.0;

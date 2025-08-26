@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/home/widgets/map/home_map.dart';
+import 'package:pawdetect/views/home/home_map.dart';
 import 'package:pawdetect/views/reports/add_new_report_screen.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
