@@ -83,7 +83,7 @@ class AllReportsForm extends StatelessWidget {
                 final item = items[index];
                 return InkWell(
                   borderRadius: BorderRadius.circular(18),
-                  onTap: () {
+                  onTap: () async {
                     final id = item.id;
                     if (id == null || id.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -92,12 +92,15 @@ class AllReportsForm extends StatelessWidget {
                       return;
                     }
 
-                    Navigator.push(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => ReportDetailsScreen(reportId: id),
                       ),
                     );
+
+                    if (!context.mounted) return;
+                    context.read<AllReportsViewModel>().resetPagination();
                   },
                   child: ReportCardStretched(
                     title: "${item.type.value} ${item.animal.value}",

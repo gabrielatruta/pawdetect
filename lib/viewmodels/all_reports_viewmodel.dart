@@ -103,6 +103,11 @@ class AllReportsViewModel extends ChangeNotifier {
     }
   }
 
+  void resetPagination() {
+    _applyPagination(reset: true);
+    notifyListeners();
+  }
+
   // Filters
   void setAnimalFilter(String? animal) {
     _selectedAnimal = animal;
