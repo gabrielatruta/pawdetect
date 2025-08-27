@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
@@ -15,12 +16,19 @@ class AllReportsViewModel extends ChangeNotifier {
   String? _selectedAnimal;
   String? _selectedStatus;
 
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _sub;
+  bool _listening = false;
+
   String? get selectedAnimal => _selectedAnimal;
   String? get selectedStatus => _selectedStatus;
 
   bool get hasMore => visibleCount < _filteredReports.length;
 
-  // filters reports
+  // Base query (newest first)
+  Query<Map<String, dynamic>> get _query =>
+      _firestore.collection('reports').orderBy('createdAt', descending: true);
+
+  // Apply active filters
   List<report.Report> get _filteredReports {
     return reports.where((r) {
       final matchesAnimal =
@@ -31,84 +39,93 @@ class AllReportsViewModel extends ChangeNotifier {
     }).toList();
   }
 
-  // 4 reports at a time
+  // Visible page
   List<report.Report> get visibleReports =>
       _filteredReports.take(visibleCount).toList();
 
-  // fetches reports
+  /// Start listening for changes (initial load). Call once from HomeScreen.
   Future<void> fetchReports() async {
+    if (_listening) return; // prevent duplicate listeners on hot reload
+    _listening = true;
+
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
-    try {
-      final qs = await _firestore
-          .collection('reports')
-          .orderBy('createdAt', descending: true)
-          .get();
+    _sub = _query.snapshots().listen(
+      (qs) {
+        reports = qs.docs
+            .map((d) => report.Report.fromFirestore(d.id, d.data()))
+            .toList();
 
-      reports = qs.docs
-          .map((d) => report.Report.fromFirestore(d.id, d.data()))
-          .toList();
+        // Works no matter which param name your file used previously.
+        _applyPagination(resetIfEmpty: true);
 
-      visibleCount = _filteredReports.length > _pageSize
-          ? _pageSize
-          : _filteredReports.length;
-    } catch (e) {
-      errorMessage = 'Failed to load reports.';
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+        isLoading = false;
+        errorMessage = null;
+        notifyListeners();
+      },
+      onError: (e) {
+        errorMessage = 'Failed to load reports.';
+        isLoading = false;
+        notifyListeners();
+      },
+    );
   }
 
-  // loads more reports
+  // Pagination
   void loadMore() {
     if (!hasMore) return;
     visibleCount = (visibleCount + _pageSize).clamp(0, _filteredReports.length);
     notifyListeners();
   }
 
-  // animal filter
+  // Accepts any of: reset, resetIfEmpty, resetIfFirstTime.
+  void _applyPagination({
+    bool reset = false,
+    bool resetIfEmpty = false,
+    bool resetIfFirstTime = false,
+  }) {
+    final shouldReset = reset || resetIfEmpty || resetIfFirstTime;
+
+    if (shouldReset || visibleCount == 0) {
+      // Initialize or reinitialize the window
+      final total = _filteredReports.length;
+      visibleCount = total > _pageSize ? _pageSize : total;
+      return;
+    }
+
+    // Keep current window but clamp to current filtered size
+    final total = _filteredReports.length;
+    visibleCount = visibleCount.clamp(0, total);
+    if (visibleCount == 0 && total > 0) {
+      visibleCount = total > _pageSize ? _pageSize : total;
+    }
+  }
+
+  // Filters
   void setAnimalFilter(String? animal) {
     _selectedAnimal = animal;
-    _resetPagination();
+    _applyPagination(reset: true);
+    notifyListeners();
   }
 
-  // status filter
   void setStatusFilter(String? status) {
     _selectedStatus = status;
-    _resetPagination();
+    _applyPagination(reset: true);
+    notifyListeners();
   }
 
-  // clear filters
   void clearFilters() {
     _selectedAnimal = null;
     _selectedStatus = null;
-    _resetPagination();
-  }
-
-  // resets pagination
-  void _resetPagination() {
-    visibleCount = _filteredReports.length > _pageSize
-        ? _pageSize
-        : _filteredReports.length;
+    _applyPagination(reset: true);
     notifyListeners();
   }
 
-  // refresh the "all reports" list with the latest ones from the firestore
-  Future<void> refresh() async {
-    isLoading = true;
-    errorMessage = null;
-    notifyListeners();
-
-    try {
-      await fetchReports(); 
-    } catch (e) {
-      errorMessage = e.toString();
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
   }
 }

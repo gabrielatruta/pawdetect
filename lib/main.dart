@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/services/user_service.dart';
+import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
 import 'package:pawdetect/viewmodels/forgot_password_viewmodel.dart';
 import 'package:pawdetect/viewmodels/home_viewmodel.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
@@ -44,7 +45,6 @@ class PawDetectApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => WelcomeViewModel()),
@@ -52,6 +52,7 @@ class PawDetectApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SignupViewModel()),
         ChangeNotifierProvider(create: (_) => AddReportViewModel()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
+        ChangeNotifierProvider(create: (_) => AllReportsViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel(UserService())),
         ChangeNotifierProvider(create: (_) => MyReportsViewModel()),
