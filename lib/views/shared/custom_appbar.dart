@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
 import 'package:pawdetect/views/home/profile_screen.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';
+import 'package:provider/provider.dart';
 import '../../styles/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -34,11 +36,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               icon: const Icon(Icons.person_outline),
               color: AppColors.white,
               tooltip: 'My profile',
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => ProfileScreen()),
                 );
+                
+                if (!context.mounted) return;
+                  // Safely try to reset pagination in all reports
+                  try {
+                    context.read<AllReportsViewModel>().resetPagination();
+                  } catch (_) {}
               },
             )
           : null,
@@ -54,11 +62,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: const Icon(Icons.assignment_outlined),
                 color: AppColors.white,
                 tooltip: 'My reports',
-                onPressed: () {
+                onPressed: () async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => MyReportsScreen()),
                   );
+
+                  if (!context.mounted) return;
+                  // Safely try to reset pagination in all reports
+                  try {
+                    context.read<AllReportsViewModel>().resetPagination();
+                  } catch (_) {}
                 },
               ),
             ]

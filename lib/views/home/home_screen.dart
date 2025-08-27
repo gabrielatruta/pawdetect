@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/home_viewmodel.dart';
 import 'package:pawdetect/views/home/home_map.dart';
 import 'package:pawdetect/views/home/widgets/home_bottom_navigation.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/all_reports_form.dart';
@@ -14,13 +15,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: const CustomAppBar(title: "", showProfileIcon: true),
-      bottomNavigationBar: HomeBottomNavigation(),
-      body: ChangeNotifierProvider(
-        create: (_) => AllReportsViewModel()..fetchReports(),
-        child: SingleChildScrollView(
+    context.watch<HomeViewModel>();
+
+    return ChangeNotifierProvider(
+      create: (_) => AllReportsViewModel()..fetchReports(),
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: const CustomAppBar(title: "", showProfileIcon: true),
+        bottomNavigationBar: const HomeBottomNavigation(),
+        body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

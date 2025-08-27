@@ -98,9 +98,6 @@ class AllReportsForm extends StatelessWidget {
                         builder: (_) => ReportDetailsScreen(reportId: id),
                       ),
                     );
-
-                    if (!context.mounted) return;
-                    context.read<AllReportsViewModel>().resetPagination();
                   },
                   child: ReportCardStretched(
                     title: "${item.type.value} ${item.animal.value}",
