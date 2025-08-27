@@ -105,7 +105,7 @@ class ButtonsEditReport extends StatelessWidget {
               await myReportViewModel.updateOpenedReport(partial);
 
               if (!context.mounted) return;
-              Navigator.push(
+              Navigator.pop(
                 context,
                 MaterialPageRoute(builder: (_) => const MyReportsScreen()),
               );

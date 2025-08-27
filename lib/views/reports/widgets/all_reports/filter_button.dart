@@ -1,0 +1,89 @@
+import 'package:flutter/material.dart';
+import 'package:pawdetect/views/reports/widgets/all_reports/filter_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+
+class FilterButton extends StatelessWidget {
+  const FilterButton({super.key});
+
+  // Helper method to count active filters
+  int _getActiveFilterCount(AllReportsViewModel viewModel) {
+    int count = 0;
+    if (viewModel.selectedAnimal != null) count++;
+    if (viewModel.selectedStatus != null) count++;
+    return count;
+  }
+
+  void _showFilterBottomSheet(BuildContext context) {
+    final viewModel = context.read<AllReportsViewModel>();
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (bottomSheetContext) => ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const FilterBottomSheet(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Use context.watch to get the ViewModel
+    final viewModel = context.watch<AllReportsViewModel>();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.orange.shade50,
+        borderRadius: BorderRadius.circular(25),
+        border: Border.all(color: Colors.orange.shade200, width: 1),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(25),
+          onTap: () => _showFilterBottomSheet(context),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.tune, color: Colors.orange.shade700, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  'Filter',
+                  style: TextStyle(
+                    color: Colors.orange.shade700,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+                // Show active filter count if any filters are applied
+                if (_getActiveFilterCount(viewModel) > 0) ...[
+                  const SizedBox(width: 6),
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade600,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${_getActiveFilterCount(viewModel)}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
