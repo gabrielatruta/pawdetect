@@ -17,7 +17,9 @@ class AllReportsForm extends StatelessWidget {
     final allReports = allReportsViewModel.reports;
 
     if (allReportsViewModel.isLoading && allReports.isEmpty) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.orange));
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.orange),
+      );
     }
 
     if (allReportsViewModel.errorMessage != null) {
@@ -35,11 +37,28 @@ class AllReportsForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        // filter button + text
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [FilterButton()],
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                child: const Text(
+                  'All reports',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.orange,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              const FilterButton(),
+            ],
           ),
         ),
         ListView.separated(

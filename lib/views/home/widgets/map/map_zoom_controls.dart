@@ -20,6 +20,7 @@ class MapZoomControls extends StatelessWidget {
         children: [
           FloatingActionButton.small(
             heroTag: 'mapZoomIn',
+            backgroundColor: Colors.orange.shade400,
             onPressed: () {
               mapViewModel.zoomIn();
               moveToVm();
@@ -29,6 +30,7 @@ class MapZoomControls extends StatelessWidget {
           const SizedBox(height: 8),
           FloatingActionButton.small(
             heroTag: 'mapZoomOut',
+            backgroundColor: Colors.orange.shade400,
             onPressed: () {
               mapViewModel.zoomOut();
               moveToVm();
