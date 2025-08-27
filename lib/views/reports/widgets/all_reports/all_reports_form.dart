@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/models/report_model.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_button.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
@@ -83,18 +84,18 @@ class AllReportsForm extends StatelessWidget {
                 return InkWell(
                   borderRadius: BorderRadius.circular(18),
                   onTap: () {
+                    final id = item.id;
+                    if (id == null || id.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Missing report id')),
+                      );
+                      return;
+                    }
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => Scaffold(
-                          appBar: AppBar(title: const Text("Report Details")),
-                          body: Center(
-                            child: Text(
-                              "Viewing report:\nID: ${item.id}",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
+                        builder: (_) => ReportDetailsScreen(reportId: id),
                       ),
                     );
                   },
