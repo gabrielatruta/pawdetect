@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/viewmodels/map_viewmodel.dart';
 
 class MapSearchBar extends StatelessWidget {
@@ -46,7 +47,7 @@ class MapSearchBar extends StatelessWidget {
                   )
                 : null,
             filled: true,
-            fillColor: Colors.white,
+            fillColor: AppColors.white,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 10,

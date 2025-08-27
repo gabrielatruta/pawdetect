@@ -27,33 +27,33 @@ class CustomDropdown<T> extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       isExpanded: isExpanded,
-      style: const TextStyle(color: Colors.black),
-      iconEnabledColor: Colors.black,
+      style: const TextStyle(color: AppColors.black),
+      iconEnabledColor: AppColors.black,
       dropdownColor: AppColors.white,
       decoration: InputDecoration(
         label: RichText(
           text: TextSpan(
             text: labelText,
-            style: const TextStyle(color: Colors.black),
+            style: const TextStyle(color: AppColors.black),
             children: const [
               TextSpan(
                 text: ' *',
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(color: AppColors.errorRed),
               ),
             ],
           ),
         ),
-        labelStyle: const TextStyle(color: Colors.black),
+        labelStyle: const TextStyle(color: AppColors.black),
         filled: true,
         fillColor: AppColors.lightBackground,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black),
+          borderSide: const BorderSide(color: AppColors.black),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black, width: 2),
+          borderSide: const BorderSide(color: AppColors.black, width: 2),
         ),
       ),
     );

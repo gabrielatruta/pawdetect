@@ -25,7 +25,7 @@ class CustomInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final baseLabelStyle = const TextStyle(color: Colors.black);
+    final baseLabelStyle = const TextStyle(color: AppColors.black);
 
     return TextFormField(
       controller: controller,
@@ -38,17 +38,17 @@ class CustomInputField extends StatelessWidget {
       enableSuggestions: false,
       decoration: InputDecoration(
         label: _buildLabel(baseLabelStyle),
-        labelStyle: const TextStyle(color: Colors.black),
+        labelStyle: const TextStyle(color: AppColors.black),
         filled: true,
         fillColor: AppColors.lightBackground,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black),
+          borderSide: const BorderSide(color: AppColors.black),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black, width: 2),
+          borderSide: const BorderSide(color: AppColors.black, width: 2),
         ),
         suffixIcon: suffixIcon,
       ),
@@ -66,7 +66,7 @@ class CustomInputField extends StatelessWidget {
         children: const [
           TextSpan(
             text: ' *',
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: AppColors.errorRed),
           ),
         ],
       ),

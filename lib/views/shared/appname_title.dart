@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 
 class AppnNameTitle extends StatelessWidget {
   const AppnNameTitle({super.key});
@@ -10,13 +11,13 @@ class AppnNameTitle extends StatelessWidget {
         style: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: AppColors.black,
         ),
         children: [
           TextSpan(text: "Paw"),
           TextSpan(
             text: "Detect",
-            style: TextStyle(color: Colors.orange),
+            style: TextStyle(color: AppColors.orange),
           ),
         ],
       ),

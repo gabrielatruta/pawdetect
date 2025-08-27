@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 
 class LoginSubtitle extends StatelessWidget {
   const LoginSubtitle({super.key});
@@ -9,7 +10,7 @@ class LoginSubtitle extends StatelessWidget {
       "Welcome back! Please log in to continue.",
       style: TextStyle(
         fontSize: 16,
-        color: Colors.black54,
+        color: AppColors.black,
       ),
       textAlign: TextAlign.center,
     );

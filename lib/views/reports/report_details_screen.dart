@@ -16,7 +16,7 @@ class ReportDetailsScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => ReportDetailsViewModel(ReportService())..load(reportId),
       child: Scaffold(
-        backgroundColor: const Color(0xffF7F7F7),
+        backgroundColor: AppColors.surface,
         appBar: CustomAppBar(title: "Report"),
         body: Consumer<ReportDetailsViewModel>(
           builder: (_, vm, __) {

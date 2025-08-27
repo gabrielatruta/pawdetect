@@ -3,7 +3,6 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 
-/// Returns true if the user taps "Allow", false otherwise.
 Future<bool> showLocationConsentPopUp(BuildContext context) async {
   final result = await showDialog<bool>(
     context: context,
@@ -13,7 +12,7 @@ Future<bool> showLocationConsentPopUp(BuildContext context) async {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
           child: Material(
-            color: Colors.transparent,
+            color: AppColors.transparent,
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.white,
@@ -23,7 +22,7 @@ Future<bool> showLocationConsentPopUp(BuildContext context) async {
                   BoxShadow(
                     blurRadius: 24,
                     offset: Offset(0, 12),
-                    color: Color(0x1A000000),
+                    color: AppColors.blackAlpha10,
                   ),
                 ],
               ),
@@ -46,7 +45,10 @@ Future<bool> showLocationConsentPopUp(BuildContext context) async {
                       const Expanded(
                         child: Text(
                           'Allow location for this account?',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ],

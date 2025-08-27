@@ -64,7 +64,7 @@ class _PhotoPickerState extends State<PhotoPicker> {
             decoration: BoxDecoration(
               color: AppColors.lightBackground,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.black),
+              border: Border.all(color: AppColors.black),
             ),
             clipBehavior: Clip.antiAlias,
             child: Image.memory(_bytes!, fit: BoxFit.cover),
@@ -81,9 +81,9 @@ class _PhotoPickerState extends State<PhotoPicker> {
             ),
             onPressed: _pick,
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.black,
+              foregroundColor: AppColors.black,
               backgroundColor: AppColors.lightBackground,
-              side: const BorderSide(color: Colors.black),
+              side: const BorderSide(color: AppColors.black),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/viewmodels/map_viewmodel.dart';
 
 class MapSuggestions extends StatelessWidget {
@@ -33,7 +34,7 @@ class MapSuggestions extends StatelessWidget {
             padding: EdgeInsets.zero,
             itemCount: mapViewModel.suggestions.length,
             separatorBuilder: (_, __) =>
-                const Divider(height: 1, color: Color(0x11000000)),
+                const Divider(height: 1, color: AppColors.blackAlpha06),
             itemBuilder: (context, i) {
               final s = mapViewModel.suggestions[i];
               return ListTile(

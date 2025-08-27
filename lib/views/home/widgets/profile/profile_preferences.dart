@@ -22,7 +22,7 @@ class PreferencesForm extends StatelessWidget {
       children: [
         Text(
           "Preferences",
-          style: TextStyle(fontSize: 18, color: Colors.black54),
+          style: TextStyle(fontSize: 18, color: AppColors.black),
         ),
         const SizedBox(height: 8),
 

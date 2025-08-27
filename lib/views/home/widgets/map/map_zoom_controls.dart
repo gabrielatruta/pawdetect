@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/viewmodels/map_viewmodel.dart';
 
 class MapZoomControls extends StatelessWidget {
@@ -20,7 +21,7 @@ class MapZoomControls extends StatelessWidget {
         children: [
           FloatingActionButton.small(
             heroTag: 'mapZoomIn',
-            backgroundColor: Colors.orange.shade400,
+            backgroundColor: AppColors.orange400,
             onPressed: () {
               mapViewModel.zoomIn();
               moveToVm();
@@ -30,7 +31,7 @@ class MapZoomControls extends StatelessWidget {
           const SizedBox(height: 8),
           FloatingActionButton.small(
             heroTag: 'mapZoomOut',
-            backgroundColor: Colors.orange.shade400,
+            backgroundColor: AppColors.orange400,
             onPressed: () {
               mapViewModel.zoomOut();
               moveToVm();

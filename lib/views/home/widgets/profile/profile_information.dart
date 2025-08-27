@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/shared/custom_input_field.dart';
 
 class ProfileInformation extends StatelessWidget {
@@ -20,7 +21,7 @@ class ProfileInformation extends StatelessWidget {
       children: [
         Text(
           "Account Information",
-          style: const TextStyle(fontSize: 18, color: Colors.black54),
+          style: const TextStyle(fontSize: 18, color: AppColors.black),
         ),
         const SizedBox(height: 16),
 

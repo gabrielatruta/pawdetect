@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_assets.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/widgets/shared/email_field.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
@@ -40,7 +41,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
         if (forgotPasswordViewModel.errorMessage != null)
           Text(
             forgotPasswordViewModel.errorMessage!,
-            style: const TextStyle(color: Colors.red),
+            style: const TextStyle(color: AppColors.errorRed),
           ),
 
         const SizedBox(height: 24),

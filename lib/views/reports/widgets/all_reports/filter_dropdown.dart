@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 
 class FilterDropdown extends StatelessWidget {
   final String label;
@@ -26,7 +27,7 @@ class FilterDropdown extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade700,
+            color: AppColors.grey700,
           ),
         ),
         const SizedBox(height: 8),
@@ -34,7 +35,7 @@ class FilterDropdown extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: AppColors.grey300),
             borderRadius: BorderRadius.circular(8),
           ),
           child: DropdownButton<String>(

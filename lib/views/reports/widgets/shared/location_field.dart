@@ -1,4 +1,3 @@
-// lib/pawdetect/views/shared/location_field.dart
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -112,26 +111,26 @@ class _LocationFieldState extends State<LocationField> {
             label: RichText(
               text: TextSpan(
                 text: widget.labelText,
-                style: const TextStyle(color: Colors.black),
+                style: const TextStyle(color: AppColors.black),
                 children: const [
                   TextSpan(
                     text: ' *',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: AppColors.errorRed),
                   ),
                 ],
               ),
             ),
-            labelStyle: const TextStyle(color: Colors.black),
+            labelStyle: const TextStyle(color: AppColors.black),
             filled: true,
             fillColor: AppColors.lightBackground,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.black),
+              borderSide: const BorderSide(color: AppColors.black),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.black, width: 2),
+              borderSide: const BorderSide(color: AppColors.black, width: 2),
             ),
             suffixIcon: _loading
                 ? const Padding(
@@ -151,7 +150,7 @@ class _LocationFieldState extends State<LocationField> {
             decoration: BoxDecoration(
               color: AppColors.lightBackground,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.black),
+              border: Border.all(color: AppColors.black),
             ),
             constraints: const BoxConstraints(maxHeight: 220),
             child: ListView.separated(

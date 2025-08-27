@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 
 class WelcomeDescription extends StatelessWidget {
   const WelcomeDescription({super.key});
@@ -9,7 +10,7 @@ class WelcomeDescription extends StatelessWidget {
       "Your real-time investigator searching for your lost pet!",
       style: TextStyle(
         fontSize: 14,
-        color: Colors.black54,
+        color: AppColors.black,
       ),
       textAlign: TextAlign.center,
     );

@@ -15,20 +15,20 @@ class DescriptionField extends StatelessWidget {
       keyboardType: TextInputType.multiline,
       minLines: 3,
       maxLines: 5,
-      style: const TextStyle(color: Colors.black),
+      style: const TextStyle(color: AppColors.black),
       decoration: InputDecoration(
         labelText: 'Description',
-        labelStyle: const TextStyle(color: Colors.black),
+        labelStyle: const TextStyle(color: AppColors.black),
         filled: true,
         fillColor: AppColors.lightBackground,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black),
+          borderSide: const BorderSide(color: AppColors.black),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black, width: 2),
+          borderSide: const BorderSide(color: AppColors.black, width: 2),
         ),
       ),
     );

@@ -39,7 +39,7 @@ class __SignUpScreenState extends State<SignUpScreen> {
             SizedBox(height: 20),
             Text(
               "Create your account to access all functionalities.",
-              style: TextStyle(fontSize: 16, color: Colors.black54),
+              style: TextStyle(fontSize: 16, color: AppColors.black),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),

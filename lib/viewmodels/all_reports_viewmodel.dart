@@ -96,9 +96,8 @@ class AllReportsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // refresh the whole list
+  // refresh the "all reports" list with the latest ones from the firestore
   Future<void> refresh() async {
-    // optional: show the spinner
     isLoading = true;
     errorMessage = null;
     notifyListeners();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
@@ -18,7 +19,7 @@ class FilterButton extends StatelessWidget {
     final viewModel = context.read<AllReportsViewModel>();
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -36,12 +37,12 @@ class FilterButton extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.orange.shade50,
+        color: AppColors.orange50,
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.orange.shade200, width: 1),
+        border: Border.all(color: AppColors.orange200, width: 1),
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(25),
           onTap: () => _showFilterBottomSheet(context),
@@ -50,12 +51,12 @@ class FilterButton extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.tune, color: Colors.orange.shade700, size: 20),
+                Icon(Icons.tune, color: AppColors.orange700, size: 20),
                 const SizedBox(width: 8),
                 Text(
                   'Filter',
                   style: TextStyle(
-                    color: Colors.orange.shade700,
+                    color: AppColors.orange700,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
                   ),
@@ -66,13 +67,13 @@ class FilterButton extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: Colors.orange.shade600,
+                      color: AppColors.orange600,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '${_getActiveFilterCount(viewModel)}',
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),

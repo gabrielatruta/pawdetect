@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_action_buttons.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_dropdown.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class FilterBottomSheet extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: AppColors.grey300,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -34,7 +35,7 @@ class FilterBottomSheet extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.grey.shade800,
+              color: AppColors.grey800,
             ),
           ),
           const SizedBox(height: 24),

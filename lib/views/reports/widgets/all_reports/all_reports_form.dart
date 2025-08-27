@@ -60,12 +60,12 @@ class AllReportsForm extends StatelessWidget {
               child: Card(
                 margin: EdgeInsets.zero,
                 elevation: 15, // soft shadow
-                shadowColor: AppColors.orange.withOpacity(0.20),
+                shadowColor: AppColors.orange600,
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                   side: BorderSide(
-                    color: AppColors.orange.withOpacity(0.10),
+                    color: AppColors.orange600,
                   ),
                 ),
                 child: Column(
