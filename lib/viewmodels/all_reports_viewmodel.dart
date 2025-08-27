@@ -9,7 +9,7 @@ class AllReportsViewModel extends ChangeNotifier {
   String? errorMessage;
   List<report.Report> reports = [];
 
-  static const int _pageSize = 10;
+  static const int _pageSize = 4;
   int visibleCount = 0;
 
   String? _selectedAnimal;
@@ -20,6 +20,7 @@ class AllReportsViewModel extends ChangeNotifier {
 
   bool get hasMore => visibleCount < _filteredReports.length;
 
+  // filters reports
   List<report.Report> get _filteredReports {
     return reports.where((r) {
       final matchesAnimal =
@@ -30,9 +31,11 @@ class AllReportsViewModel extends ChangeNotifier {
     }).toList();
   }
 
+  // 4 reports at a time
   List<report.Report> get visibleReports =>
       _filteredReports.take(visibleCount).toList();
 
+  // fetches reports
   Future<void> fetchReports() async {
     isLoading = true;
     errorMessage = null;
@@ -59,32 +62,54 @@ class AllReportsViewModel extends ChangeNotifier {
     }
   }
 
+  // loads more reports
   void loadMore() {
     if (!hasMore) return;
     visibleCount = (visibleCount + _pageSize).clamp(0, _filteredReports.length);
     notifyListeners();
   }
 
+  // animal filter
   void setAnimalFilter(String? animal) {
     _selectedAnimal = animal;
     _resetPagination();
   }
 
+  // status filter
   void setStatusFilter(String? status) {
     _selectedStatus = status;
     _resetPagination();
   }
 
+  // clear filters
   void clearFilters() {
     _selectedAnimal = null;
     _selectedStatus = null;
     _resetPagination();
   }
 
+  // resets pagination
   void _resetPagination() {
     visibleCount = _filteredReports.length > _pageSize
         ? _pageSize
         : _filteredReports.length;
     notifyListeners();
+  }
+
+  // refresh the whole list
+  Future<void> refresh() async {
+    // optional: show the spinner
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      await fetchReports(); 
+    } catch (e) {
+      errorMessage = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }
