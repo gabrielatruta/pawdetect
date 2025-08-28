@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/navigation.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as fs;
 
 class ButtonsEditReport extends StatelessWidget {
   const ButtonsEditReport({
@@ -43,7 +44,6 @@ class ButtonsEditReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       children: [
         // Mark as solved
@@ -86,16 +86,49 @@ class ButtonsEditReport extends StatelessWidget {
                     (k, v) => v == null || (v is String && v.trim().isEmpty),
                   );
 
-              if (reportTypeValue == 'lost') {
-                partial['foundAlertSubscription'] = {
-                  'enabled': receiveFoundAlerts,
-                  'area': receiveFoundAlerts ? alertAreaCtrl.text.trim() : '',
-                  'lat': receiveFoundAlerts ? alertLat : null,
-                  'lng': receiveFoundAlerts ? alertLng : null,
-                };
+              final currentType =
+                  (reportTypeValue ?? myReportViewModel.openedReport?.type)
+                      ?.toString()
+                      .toLowerCase();
+              final isLost = currentType == 'lost';
+
+              if (isLost) {
+                partial['foundAlertSubscription.enabled'] = receiveFoundAlerts;
+
+                if (receiveFoundAlerts) {
+                  final area = alertAreaCtrl.text.trim();
+                  if (area.isNotEmpty) {
+                    partial['foundAlertSubscription.area'] = area;
+                  } else {
+                    partial['foundAlertSubscription.area'] =
+                        fs.FieldValue.delete();
+                  }
+
+                  if (alertLat != null && alertLng != null) {
+                    partial['foundAlertSubscription.lat'] = alertLat;
+                    partial['foundAlertSubscription.lng'] = alertLng;
+                  } else {
+                    partial['foundAlertSubscription.lat'] =
+                        fs.FieldValue.delete();
+                    partial['foundAlertSubscription.lng'] =
+                        fs.FieldValue.delete();
+                  }
+                } else {
+                  // disabling → clear the extras
+                  partial['foundAlertSubscription.area'] =
+                      fs.FieldValue.delete();
+                  partial['foundAlertSubscription.lat'] =
+                      fs.FieldValue.delete();
+                  partial['foundAlertSubscription.lng'] =
+                      fs.FieldValue.delete();
+                }
               } else {
-                partial['foundAlertSubscription'] = {'enabled': false};
+                // non-lost reports: force off
+                partial['foundAlertSubscription.enabled'] = false;
               }
+
+              // (optional) quick sanity check in console
+              // debugPrint('UPDATE PARTIAL: $partial');
 
               await myReportViewModel.updateOpenedReport(partial);
 
