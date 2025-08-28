@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/reports/my_reports_screen.dart';
+import 'package:pawdetect/navigation.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 
@@ -7,10 +7,10 @@ class ButtonsEditReport extends StatelessWidget {
   const ButtonsEditReport({
     super.key,
     required this.myReportViewModel,
-    required this.reportTypeValue, 
-    required this.animalTypeValue, 
-    required this.genderValue,     
-    required this.furColorValue,   
+    required this.reportTypeValue,
+    required this.animalTypeValue,
+    required this.genderValue,
+    required this.furColorValue,
     required this.locationCtrl,
     required this.descriptionCtrl,
     required this.phone1Ctrl,
@@ -19,7 +19,7 @@ class ButtonsEditReport extends StatelessWidget {
     required this.alertAreaCtrl,
     required this.alertLat,
     required this.alertLng,
-    required this.solvedStatusValue, 
+    required this.solvedStatusValue,
   });
 
   final dynamic myReportViewModel;
@@ -43,6 +43,7 @@ class ButtonsEditReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Row(
       children: [
         // Mark as solved
@@ -58,14 +59,7 @@ class ButtonsEditReport extends StatelessWidget {
                 'foundAlertSubscription.enabled': false,
               });
 
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Successfully marked as solved!')),
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const MyReportsScreen()),
-              );
+              appNavigatorKey.currentState?.pop('/myreports');
             },
           ),
         ),
@@ -78,18 +72,19 @@ class ButtonsEditReport extends StatelessWidget {
             onPressed: () async {
               if (myReportViewModel.isLoading == true) return;
 
-              final partial = <String, dynamic>{
-                if (reportTypeValue != null) 'type': reportTypeValue,
-                if (animalTypeValue != null) 'animal': animalTypeValue,
-                if (genderValue != null) 'gender': genderValue,
-                if (furColorValue != null) 'colors': [furColorValue],
-                'location': locationCtrl.text,
-                'additionalInfo': descriptionCtrl.text,
-                'phoneNumber1': phone1Ctrl.text,
-                'phoneNumber2': phone2Ctrl.text,
-              }..removeWhere(
-                  (k, v) => v == null || (v is String && v.trim().isEmpty),
-                );
+              final partial =
+                  <String, dynamic>{
+                    if (reportTypeValue != null) 'type': reportTypeValue,
+                    if (animalTypeValue != null) 'animal': animalTypeValue,
+                    if (genderValue != null) 'gender': genderValue,
+                    if (furColorValue != null) 'colors': [furColorValue],
+                    'location': locationCtrl.text,
+                    'additionalInfo': descriptionCtrl.text,
+                    'phoneNumber1': phone1Ctrl.text,
+                    'phoneNumber2': phone2Ctrl.text,
+                  }..removeWhere(
+                    (k, v) => v == null || (v is String && v.trim().isEmpty),
+                  );
 
               if (reportTypeValue == 'lost') {
                 partial['foundAlertSubscription'] = {
@@ -104,11 +99,7 @@ class ButtonsEditReport extends StatelessWidget {
 
               await myReportViewModel.updateOpenedReport(partial);
 
-              if (!context.mounted) return;
-              Navigator.pop(
-                context,
-                MaterialPageRoute(builder: (_) => const MyReportsScreen()),
-              );
+              appNavigatorKey.currentState?.pop('/myreports');
             },
           ),
         ),
