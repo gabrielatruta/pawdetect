@@ -72,66 +72,70 @@ class ButtonsEditReport extends StatelessWidget {
             onPressed: () async {
               if (myReportViewModel.isLoading == true) return;
 
-              final partial =
-                  <String, dynamic>{
-                    if (reportTypeValue != null) 'type': reportTypeValue,
-                    if (animalTypeValue != null) 'animal': animalTypeValue,
-                    if (genderValue != null) 'gender': genderValue,
-                    if (furColorValue != null) 'colors': [furColorValue],
-                    'location': locationCtrl.text,
-                    'additionalInfo': descriptionCtrl.text,
-                    'phoneNumber1': phone1Ctrl.text,
-                    'phoneNumber2': phone2Ctrl.text,
-                  }..removeWhere(
-                    (k, v) => v == null || (v is String && v.trim().isEmpty),
-                  );
-
-              final currentType =
-                  (reportTypeValue ?? myReportViewModel.openedReport?.type)
-                      ?.toString()
-                      .toLowerCase();
+              // Use effective (current) type if the user didn't change it.
+              final currentType = (reportTypeValue ??
+                      myReportViewModel.openedReport?.type)
+                  ?.toString()
+                  .toLowerCase();
               final isLost = currentType == 'lost';
+
+              // Require an area (and coords) if enabling alerts on a lost report.
+              if (isLost && receiveFoundAlerts) {
+                final area = alertAreaCtrl.text.trim();
+                if (area.isEmpty || alertLat == null || alertLng == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Please choose an alert area before enabling notifications.',
+                      ),
+                    ),
+                  );
+                  return; // prevent save
+                }
+              }
+
+              final partial = <String, dynamic>{
+                if (reportTypeValue != null) 'type': reportTypeValue,
+                if (animalTypeValue != null) 'animal': animalTypeValue,
+                if (genderValue != null) 'gender': genderValue,
+                if (furColorValue != null) 'colors': [furColorValue],
+                'location': locationCtrl.text,
+                'additionalInfo': descriptionCtrl.text,
+                'phoneNumber1': phone1Ctrl.text,
+                'phoneNumber2': phone2Ctrl.text,
+              }..removeWhere(
+                  (k, v) =>
+                      v == null ||
+                      (v is String && v.trim().isEmpty),
+                );
 
               if (isLost) {
                 partial['foundAlertSubscription.enabled'] = receiveFoundAlerts;
 
                 if (receiveFoundAlerts) {
-                  final area = alertAreaCtrl.text.trim();
-                  if (area.isNotEmpty) {
-                    partial['foundAlertSubscription.area'] = area;
-                  } else {
-                    partial['foundAlertSubscription.area'] =
-                        fs.FieldValue.delete();
-                  }
-
-                  if (alertLat != null && alertLng != null) {
-                    partial['foundAlertSubscription.lat'] = alertLat;
-                    partial['foundAlertSubscription.lng'] = alertLng;
-                  } else {
-                    partial['foundAlertSubscription.lat'] =
-                        fs.FieldValue.delete();
-                    partial['foundAlertSubscription.lng'] =
-                        fs.FieldValue.delete();
-                  }
+                  partial.addAll({
+                    'foundAlertSubscription.area':
+                        alertAreaCtrl.text.trim(),
+                    'foundAlertSubscription.lat': alertLat,
+                    'foundAlertSubscription.lng': alertLng,
+                  });
                 } else {
                   // disabling → clear the extras
-                  partial['foundAlertSubscription.area'] =
-                      fs.FieldValue.delete();
-                  partial['foundAlertSubscription.lat'] =
-                      fs.FieldValue.delete();
-                  partial['foundAlertSubscription.lng'] =
-                      fs.FieldValue.delete();
+                  partial.addAll({
+                    'foundAlertSubscription.area':
+                        fs.FieldValue.delete(),
+                    'foundAlertSubscription.lat':
+                        fs.FieldValue.delete(),
+                    'foundAlertSubscription.lng':
+                        fs.FieldValue.delete(),
+                  });
                 }
               } else {
-                // non-lost reports: force off
+                // not a lost report → alerts always off
                 partial['foundAlertSubscription.enabled'] = false;
               }
 
-              // (optional) quick sanity check in console
-              // debugPrint('UPDATE PARTIAL: $partial');
-
               await myReportViewModel.updateOpenedReport(partial);
-
               appNavigatorKey.currentState?.pop('/myreports');
             },
           ),
