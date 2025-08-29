@@ -4,11 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_service.dart';
 import 'package:pawdetect/views/reports/widgets/area_reports/small_report_card.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 
 class ReportsFromAreaSection extends StatelessWidget {
   const ReportsFromAreaSection({
     super.key,
-    required this.filtersByAnimal,   // {AnimalType.dog: ['Cluj', ...], ...}
+    required this.filtersByAnimal, // {AnimalType.dog: ['Cluj', ...], ...}
     this.limit = 10,
     this.serviceOverride,
     this.onOpen,
@@ -23,81 +24,98 @@ class ReportsFromAreaSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final service = serviceOverride ?? ReportService();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Text(
-            'Found reports in your area',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
+    return Padding(
+      // Match AllReportsForm outer padding
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Card(
+        // Match AllReportsForm Card style exactly
+        margin: EdgeInsets.zero,
+        elevation: 3,
+        shadowColor: AppColors.orange600,
+        color: AppColors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppColors.grey300),
         ),
-
-        if (filtersByAnimal.isEmpty)
-          const _InfoBox('No alerts/areas selected yet.')
-        else
-          StreamBuilder<List<QueryDocumentSnapshot<Map<String, dynamic>>>>(
-            stream: service.watchFoundReportsByAnimalAreaFilters(
-              filters: filtersByAnimal,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Header (same spacing as AllReportsForm)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              child: Text(
+                'Found reports in your area',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.orange,
+                    ),
+              ),
             ),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: LinearProgressIndicator(),
-                );
-              }
-              if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              }
+            const Divider(height: 16, thickness: 0.6),
 
-              final docs = snapshot.data ?? const [];
-              if (docs.isEmpty) {
-                return const _InfoBox(
-                  'No found reports in your selected area yet.',
-                );
-              }
-
-              final items = docs
-                  .map((d) => report.Report.fromFirestore(d.id, d.data()))
-                  .toList();
-
-              final count = items.length < limit ? items.length : limit;
-
-              // Horizontal list of SmallReportCard
-              return SizedBox(
-                height: 180, // room for image + fixed footer in the card
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  itemCount: count,
-                  separatorBuilder: (_, __) => const SizedBox(width: 12),
-                  itemBuilder: (_, i) {
-                    final r = items[i];
-                    final img =
-                        (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
-
-                    return GestureDetector(
-                      onTap: onOpen == null ? null : () => onOpen!(r),
-                      child: SmallReportCard(
-                        title: r.location.isNotEmpty
-                            ? r.location
-                            : 'Found report',
-                        imageUrl: img,
-                        // placeholder handled internally by SmallReportCard via AppAssets
-                      ),
-                    );
-                  },
+            if (filtersByAnimal.isEmpty)
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: _InfoBox('No alerts/areas selected yet.'),
+              )
+            else
+              StreamBuilder<List<QueryDocumentSnapshot<Map<String, dynamic>>>>(
+                stream: service.watchFoundReportsByAnimalAreaFilters(
+                  filters: filtersByAnimal,
                 ),
-              );
-            },
-          ),
-      ],
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: LinearProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  }
+
+                  final docs = snapshot.data ?? const [];
+                  if (docs.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: _InfoBox('No found reports in your selected area yet.'),
+                    );
+                  }
+
+                  final items = docs
+                      .map((d) => report.Report.fromFirestore(d.id, d.data()))
+                      .toList();
+                  final count = items.length < limit ? items.length : limit;
+
+                  // Content padding matches AllReportsForm (uses EdgeInsets.all(16))
+                  return SizedBox(
+                    height: 190, // room for image + fixed footer in SmallReportCard
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.all(16),
+                      itemCount: count,
+                      separatorBuilder: (_, __) => const SizedBox(width: 12),
+                      itemBuilder: (_, i) {
+                        final r = items[i];
+                        final img = (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
+                        return GestureDetector(
+                          onTap: onOpen == null ? null : () => onOpen!(r),
+                          child: SmallReportCard(
+                            title: r.location.isNotEmpty ? r.location : 'Found report',
+                            imageUrl: img,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -109,21 +127,18 @@ class _InfoBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.info_outline),
-            const SizedBox(width: 8),
-            Expanded(child: Text(text, style: theme.textTheme.bodyMedium)),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.info_outline),
+          const SizedBox(width: 8),
+          Expanded(child: Text(text, style: theme.textTheme.bodyMedium)),
+        ],
       ),
     );
   }
