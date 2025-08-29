@@ -61,8 +61,9 @@ class ReportService {
     if (lng != null) data['lng'] = lng;
 
     data['foundAlertSubscription'] = {
-      'enabled': true,
+      'enabled': receiveFoundAlerts,
       'area': alertArea ?? '',
+      'areaKey': _normalizeArea(alertArea ?? ''),
       'lat': alertLat,
       'lng': alertLng,
     };
@@ -77,6 +78,17 @@ class ReportService {
   Future<void> updateReport(String id, Map<String, dynamic> partial) async {
     partial.remove('userId');
     partial.remove('createdAt');
+
+    // keep areaKey in sync if the area is present in partial
+    if (partial.containsKey('foundAlertSubscription.area')) {
+      final a = (partial['foundAlertSubscription.area'] ?? '').toString();
+      if (a.isEmpty) {
+        partial['foundAlertSubscription.areaKey'] = FieldValue.delete();
+      } else {
+        partial['foundAlertSubscription.areaKey'] = _normalizeArea(a);
+      }
+    }
+    
     partial['updatedAt'] = FieldValue.serverTimestamp();
     await _reportsCol.doc(id).update(partial);
   }
@@ -100,5 +112,45 @@ class ReportService {
               .map((d) => report.Report.fromFirestore(d.id, d.data()))
               .toList(),
         );
+  }
+
+  // rewrites chosen area so they all match the same style (lowercase, without "diacritice", etc.)
+  String _normalizeArea(String input) {
+    final lower = input.toLowerCase();
+    const map = {
+      'ă': 'a',
+      'â': 'a',
+      'á': 'a',
+      'à': 'a',
+      'ä': 'a',
+      'ã': 'a',
+      'î': 'i',
+      'í': 'i',
+      'ì': 'i',
+      'ï': 'i',
+      'ș': 's',
+      'ş': 's',
+      'ț': 't',
+      'ţ': 't',
+      'é': 'e',
+      'è': 'e',
+      'ë': 'e',
+      'ó': 'o',
+      'ò': 'o',
+      'ö': 'o',
+      'õ': 'o',
+      'ú': 'u',
+      'ù': 'u',
+      'ü': 'u',
+    };
+    final buf = StringBuffer();
+    for (final ch in lower.runes.map((r) => String.fromCharCode(r))) {
+      buf.write(map[ch] ?? ch);
+    }
+    return buf
+        .toString()
+        .replaceAll(RegExp(r'[^a-z0-9\\s]'), ' ')
+        .replaceAll(RegExp(r'\\s+'), ' ')
+        .trim();
   }
 }
