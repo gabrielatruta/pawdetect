@@ -1,12 +1,14 @@
+// lib/views/reports/widgets/area_reports/reports_from_area_section.dart
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_service.dart';
+import 'package:pawdetect/views/reports/widgets/area_reports/small_report_card.dart';
 
 class ReportsFromAreaSection extends StatelessWidget {
   const ReportsFromAreaSection({
     super.key,
-    required this.filtersByAnimal, // {AnimalType.dog: ['Cluj', ...], ...}
+    required this.filtersByAnimal,   // {AnimalType.dog: ['Cluj', ...], ...}
     this.limit = 10,
     this.serviceOverride,
     this.onOpen,
@@ -31,8 +33,9 @@ class ReportsFromAreaSection extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
+
         if (filtersByAnimal.isEmpty)
-          const _NoReportsInAreaMessage(text: 'No alerts/areas selected yet.')
+          const _InfoBox('No alerts/areas selected yet.')
         else
           StreamBuilder<List<QueryDocumentSnapshot<Map<String, dynamic>>>>(
             stream: service.watchFoundReportsByAnimalAreaFilters(
@@ -54,8 +57,8 @@ class ReportsFromAreaSection extends StatelessWidget {
 
               final docs = snapshot.data ?? const [];
               if (docs.isEmpty) {
-                return const _NoReportsInAreaMessage(
-                  text: 'No found reports in your selected area yet.',
+                return const _InfoBox(
+                  'No found reports in your selected area yet.',
                 );
               }
 
@@ -64,33 +67,33 @@ class ReportsFromAreaSection extends StatelessWidget {
                   .toList();
 
               final count = items.length < limit ? items.length : limit;
-              return ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: count,
-                separatorBuilder: (_, __) => const Divider(height: 1),
-                itemBuilder: (_, i) {
-                  final r = items[i];
-                  final subtitle = [
-                    r.animal.name,
-                    if (r.gender.name.isNotEmpty) r.gender.name,
-                  ].join(' • ');
 
-                  return ListTile(
-                    leading: const Icon(Icons.pets),
-                    title: Text(
-                      r.location.isNotEmpty ? r.location : 'Found report',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(
-                      subtitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    onTap: onOpen == null ? null : () => onOpen!(r),
-                  );
-                },
+              // Horizontal list of SmallReportCard
+              return SizedBox(
+                height: 180, // room for image + fixed footer in the card
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  itemCount: count,
+                  separatorBuilder: (_, __) => const SizedBox(width: 12),
+                  itemBuilder: (_, i) {
+                    final r = items[i];
+                    final img =
+                        (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
+
+                    return GestureDetector(
+                      onTap: onOpen == null ? null : () => onOpen!(r),
+                      child: SmallReportCard(
+                        title: r.location.isNotEmpty
+                            ? r.location
+                            : 'Found report',
+                        imageUrl: img,
+                        // placeholder handled internally by SmallReportCard via AppAssets
+                      ),
+                    );
+                  },
+                ),
               );
             },
           ),
@@ -99,8 +102,8 @@ class ReportsFromAreaSection extends StatelessWidget {
   }
 }
 
-class _NoReportsInAreaMessage extends StatelessWidget {
-  const _NoReportsInAreaMessage({required this.text});
+class _InfoBox extends StatelessWidget {
+  const _InfoBox(this.text);
   final String text;
 
   @override

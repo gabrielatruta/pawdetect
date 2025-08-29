@@ -1,70 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/views/shared/reports_image.dart';
-import '/styles/app_colors.dart';
+import 'package:pawdetect/styles/app_assets.dart' show AppAssets; 
 
 class SmallReportCard extends StatelessWidget {
   const SmallReportCard({
     super.key,
     required this.title,
     required this.imageUrl,
-    this.isNew = true,
-    this.onTap,
+    this.reportImagePath, 
   });
 
   final String title;
   final String imageUrl;
-  final bool isNew;
-  final VoidCallback? onTap;
+  final String? reportImagePath; 
+
+  static const double _footerHeight = 56; 
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = isNew ? AppColors.orange : AppColors.border;
-    final titleColor = isNew ? AppColors.orange : AppColors.grey;
+    final theme = Theme.of(context);
+    // Default to the app's placeholder image path from AppAssets
+    final ph = reportImagePath ?? AppAssets.reportImagePath;
+
     return SizedBox(
-      width: 180,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            border: Border.all(color: borderColor),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(14),
-                  topRight: Radius.circular(14),
-                ),
-                child: Container(
-                  height: 104,
-                  width: double.infinity,
-                  color: AppColors.surface,
-                  alignment: Alignment.center,
-                  child: ReportsImage(),
+      width: 170,
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: theme.shadowColor.withOpacity(0.08),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // image on top fills remaining height
+            Expanded(
+              child: _ImageBox(
+                imageUrl: imageUrl,
+                reportImagePath: ph,
+              ),
+            ),
+
+            // fixed-height footer so all cards line up
+            Container(
+              height: _footerHeight,
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+              alignment: Alignment.topLeft,
+              child: Text(
+                title.isNotEmpty ? title : 'Found report',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Center(
-                  child: Text(
-                    title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: titleColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class _ImageBox extends StatelessWidget {
+  const _ImageBox({
+    required this.imageUrl,
+    required this.reportImagePath,
+  });
+
+  final String imageUrl;
+  final String reportImagePath;
+
+  bool _isNetwork(String url) =>
+      url.startsWith('http://') || url.startsWith('https://');
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
+      child: _isNetwork(imageUrl) && imageUrl.trim().isNotEmpty
+          ? Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) =>
+                  Image.asset(reportImagePath, fit: BoxFit.cover),
+            )
+          : Image.asset(
+              reportImagePath,
+              fit: BoxFit.cover,
+            ),
     );
   }
 }
