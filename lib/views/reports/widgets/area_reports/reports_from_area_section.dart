@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_service.dart';
-import 'package:pawdetect/views/reports/report_details_screen.dart';
-import 'package:pawdetect/views/reports/widgets/area_reports/small_report_card.dart';
-import 'package:pawdetect/views/shared/report_card_load_more.dart';
+import 'package:pawdetect/views/reports/widgets/area_reports/load_more_area_reports.dart';
+import 'package:pawdetect/views/reports/widgets/area_reports/no_area_reports.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
 class ReportsFromAreaSection extends StatefulWidget {
@@ -32,14 +31,13 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
   // Keep one stable stream; do paging only in the widget.
   Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>? _stream;
 
-  // Simple leave/return logic (no RouteObserver)
+  // Simple leave/return logic for load more card
   bool _leavingToDetails = false;
   bool _wasCurrent = true;
   bool _shouldResetOnResume = false;
 
   static const double _kRowHeight = 190;
   static const double _kSmallCardWidth = 170;
-  static const double _kLoadMoreWidth = _kSmallCardWidth / 2; // 85
 
   @override
   void initState() {
@@ -48,7 +46,7 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
     _buildStreamFor(widget.filtersByAnimal);
   }
 
-  // Only rebuild the stream when filters actually change.
+  // Only rebuild the stream when filters actually change
   @override
   void didUpdateWidget(covariant ReportsFromAreaSection oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -66,15 +64,14 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
       return;
     }
     final service = widget.serviceOverride ?? ReportService();
-    // IMPORTANT: keep the stream stable: don't pass limit here.
     _stream = service.watchFoundReportsByAnimalAreaFilters(
       filters: filters,
       limit: null,
     );
-    setState(() {}); // trigger rebuild with the new (stable) stream
+    setState(() {}); // trigger rebuild with the new stream
   }
 
-  // Minimal route watch to reset like your All Reports (no global observer)
+  // Minimal route watch to reset pagination
   void _postBuildRouteWatch() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final route = ModalRoute.of(context);
@@ -116,11 +113,11 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Text(
-                'Found reports in your area',
+                'Reports in your chosen area(s)',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.orange,
-                    ),
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.orange,
+                ),
               ),
             ),
             const Divider(height: 16, thickness: 0.6),
@@ -128,17 +125,19 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
             if (widget.filtersByAnimal.isEmpty)
               const Padding(
                 padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: _InfoBox('No alerts/areas selected yet.'),
+                child: NoAreaReports('No alerts/areas selected yet.'),
               )
             else
               StreamBuilder<List<QueryDocumentSnapshot<Map<String, dynamic>>>>(
                 stream: _stream,
                 builder: (context, snapshot) {
-                  // Avoid flashing on "load more" by not showing a spinner once we’ve ever had data.
                   if (!snapshot.hasData &&
                       snapshot.connectionState == ConnectionState.waiting) {
                     return const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       child: LinearProgressIndicator(),
                     );
                   }
@@ -146,7 +145,9 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
                   if (docs.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: _InfoBox('No found reports in your selected area yet.'),
+                      child: NoAreaReports(
+                        'No found reports in your selected area yet.',
+                      ),
                     );
                   }
 
@@ -158,89 +159,25 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
                   final visible = math.min(_visibleCount, total);
                   final hasMore = visible < total;
 
-                  return SizedBox(
-                    height: _kRowHeight,
-                    child: ListView.separated(
-                      key: const PageStorageKey('areaReportsList'),
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.all(16),
-                      itemCount: visible + (hasMore ? 1 : 0),
-                      separatorBuilder: (_, __) => const SizedBox(width: 12),
-                      itemBuilder: (_, i) {
-                        // Half-width Load More tile
-                        if (hasMore && i == visible) {
-                          return SizedBox(
-                            width: _kLoadMoreWidth,
-                            child: InkWell(
-                              onTap: () =>
-                                  setState(() => _visibleCount += widget.limit),
-                              child: const ReportCardLoadMore(),
-                            ),
-                          );
-                        }
-
-                        final r = items[i];
-                        final img =
-                            (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
-
-                        return GestureDetector(
-                          onTap: () {
-                            if (widget.onOpen != null) {
-                              widget.onOpen!(r);
-                              return;
-                            }
-                            final id = r.id ?? '';
-                            if (id.isEmpty) return;
-
-                            _leavingToDetails = true;
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(
-                                  builder: (_) =>
-                                      ReportDetailsScreen(reportId: id),
-                                ))
-                                .then((_) => _leavingToDetails = false);
-                          },
-                          child: SizedBox(
-                            width: _kSmallCardWidth, // match SmallReportCard width
-                            child: SmallReportCard(
-                              title: r.location.isNotEmpty
-                                  ? r.location
-                                  : 'Found report',
-                              imageUrl: img,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                  return LoadMoreAreaReports(
+                    rowHeight: _kRowHeight,
+                    smallCardWidth: _kSmallCardWidth, // e.g. 170
+                    loadMoreWidth:
+                        _kSmallCardWidth / 2, // e.g. 85 (half-width tile)
+                    items: items,
+                    visible: visible,
+                    hasMore: hasMore,
+                    onLoadMore: () =>
+                        setState(() => _visibleCount += widget.limit),
+                    onOpen: widget.onOpen, // optional
+                    onBeforeOpenDetails: () => _leavingToDetails = true,
+                    onAfterCloseDetails: () => _leavingToDetails = false,
+                    pageStorageKey: 'areaReportsList',
                   );
                 },
               ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _InfoBox extends StatelessWidget {
-  const _InfoBox(this.text);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.info_outline),
-          const SizedBox(width: 8),
-          Expanded(child: Text(text, style: theme.textTheme.bodyMedium)),
-        ],
       ),
     );
   }
