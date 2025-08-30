@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
@@ -28,27 +29,75 @@ class ReportsFromAreaSection extends StatefulWidget {
 class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
   late int _visibleCount;
 
+  // Keep one stable stream; do paging only in the widget.
+  Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>? _stream;
+
+  // Simple leave/return logic (no RouteObserver)
+  bool _leavingToDetails = false;
+  bool _wasCurrent = true;
+  bool _shouldResetOnResume = false;
+
+  static const double _kRowHeight = 190;
+  static const double _kSmallCardWidth = 170;
+  static const double _kLoadMoreWidth = _kSmallCardWidth / 2; // 85
+
   @override
   void initState() {
     super.initState();
-    _visibleCount = widget.limit; // start with one "page"
+    _visibleCount = widget.limit;
+    _buildStreamFor(widget.filtersByAnimal);
   }
 
-  // if filters change (user changed selected areas/animals), reset paging
+  // Only rebuild the stream when filters actually change.
   @override
   void didUpdateWidget(covariant ReportsFromAreaSection oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.filtersByAnimal != widget.filtersByAnimal ||
-        oldWidget.limit != widget.limit) {
-      setState(() {
-        _visibleCount = widget.limit;
-      });
+    if (oldWidget.filtersByAnimal != widget.filtersByAnimal) {
+      _visibleCount = widget.limit;
+      _buildStreamFor(widget.filtersByAnimal);
+    } else if (oldWidget.limit != widget.limit) {
+      setState(() => _visibleCount = widget.limit);
     }
+  }
+
+  void _buildStreamFor(Map<report.AnimalType, List<String>> filters) {
+    if (filters.isEmpty) {
+      setState(() => _stream = Stream.value(const []));
+      return;
+    }
+    final service = widget.serviceOverride ?? ReportService();
+    // IMPORTANT: keep the stream stable: don't pass limit here.
+    _stream = service.watchFoundReportsByAnimalAreaFilters(
+      filters: filters,
+      limit: null,
+    );
+    setState(() {}); // trigger rebuild with the new (stable) stream
+  }
+
+  // Minimal route watch to reset like your All Reports (no global observer)
+  void _postBuildRouteWatch() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final route = ModalRoute.of(context);
+      final isCurrent = route?.isCurrent ?? true;
+
+      // Became covered by another page
+      if (_wasCurrent && !isCurrent) {
+        _shouldResetOnResume = !_leavingToDetails;
+      }
+      // Became visible again
+      if (!_wasCurrent && isCurrent) {
+        if (_shouldResetOnResume) {
+          setState(() => _visibleCount = widget.limit);
+          _shouldResetOnResume = false;
+        }
+      }
+      _wasCurrent = isCurrent;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final service = widget.serviceOverride ?? ReportService();
+    _postBuildRouteWatch();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -62,15 +111,15 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Header (same spacing as AllReportsForm)
+            // Header
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Text(
                 'Found reports in your area',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.orange,
-                ),
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.orange,
+                    ),
               ),
             ),
             const Divider(height: 16, thickness: 0.6),
@@ -81,37 +130,22 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
                 child: _InfoBox('No alerts/areas selected yet.'),
               )
             else
-              // Bind the Firestore page size to _visibleCount so the stream
-              // delivers 4, then 8, then 12… and auto-refreshes via snapshots().
               StreamBuilder<List<QueryDocumentSnapshot<Map<String, dynamic>>>>(
-                stream: service.watchFoundReportsByAnimalAreaFilters(
-                  filters: widget.filtersByAnimal,
-                  limit: _visibleCount,
-                ),
+                stream: _stream,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+                  // Avoid flashing on "load more" by not showing a spinner once we’ve ever had data.
+                  if (!snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.waiting) {
                     return const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: LinearProgressIndicator(),
                     );
                   }
-                  if (snapshot.hasError) {
-                    return const Padding(
-                      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: _InfoBox('Failed to load area reports.'),
-                    );
-                  }
-
                   final docs = snapshot.data ?? const [];
                   if (docs.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: _InfoBox(
-                        'No found reports in your selected area yet.',
-                      ),
+                      child: _InfoBox('No found reports in your selected area yet.'),
                     );
                   }
 
@@ -119,34 +153,35 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
                       .map((d) => report.Report.fromFirestore(d.id, d.data()))
                       .toList();
 
-                  // If Firestore returned exactly the requested amount,
-                  // assume there *may* be more available and show the Load More card.
-                  final hasMore = items.length == _visibleCount;
+                  final total = items.length;
+                  final visible = math.min(_visibleCount, total);
+                  final hasMore = visible < total;
 
                   return SizedBox(
-                    height: 190, // room for image + footer in SmallReportCard
+                    height: _kRowHeight,
                     child: ListView.separated(
+                      key: const PageStorageKey('areaReportsList'),
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.all(16),
-                      itemCount: items.length + (hasMore ? 1 : 0),
+                      itemCount: visible + (hasMore ? 1 : 0),
                       separatorBuilder: (_, __) => const SizedBox(width: 12),
                       itemBuilder: (_, i) {
-                        // trailing "Load more" tile
-                        if (hasMore && i == items.length) {
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                _visibleCount += widget.limit; // request +4
-                              });
-                            },
-                            child: const ReportCardLoadMore(),
+                        // Half-width Load More tile
+                        if (hasMore && i == visible) {
+                          return SizedBox(
+                            width: _kLoadMoreWidth,
+                            child: InkWell(
+                              onTap: () =>
+                                  setState(() => _visibleCount += widget.limit),
+                              child: const ReportCardLoadMore(),
+                            ),
                           );
                         }
 
                         final r = items[i];
-                        final img = (r.photoUrls.isNotEmpty)
-                            ? r.photoUrls.first
-                            : '';
+                        final img =
+                            (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
+
                         return GestureDetector(
                           onTap: () {
                             if (widget.onOpen != null) {
@@ -155,18 +190,23 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
                             }
                             final id = r.id ?? '';
                             if (id.isEmpty) return;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    ReportDetailsScreen(reportId: id),
-                              ),
-                            );
+
+                            _leavingToDetails = true;
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(
+                                  builder: (_) =>
+                                      ReportDetailsScreen(reportId: id),
+                                ))
+                                .then((_) => _leavingToDetails = false);
                           },
-                          child: SmallReportCard(
-                            title: r.location.isNotEmpty
-                                ? r.location
-                                : 'Found report',
-                            imageUrl: img,
+                          child: SizedBox(
+                            width: _kSmallCardWidth, // match SmallReportCard width
+                            child: SmallReportCard(
+                              title: r.location.isNotEmpty
+                                  ? r.location
+                                  : 'Found report',
+                              imageUrl: img,
+                            ),
                           ),
                         );
                       },
