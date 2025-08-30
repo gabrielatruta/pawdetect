@@ -1,3 +1,4 @@
+// lib/views/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,38 +19,6 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, bool? useLocation})
       : useLocation = useLocation ?? false;
 
-  // Build filters {AnimalType: [areas]} from the user's LOST reports with alerts on
-  Future<Map<report.AnimalType, List<String>>> _loadMyAlertFilters() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return {};
-
-    final qs = await FirebaseFirestore.instance
-        .collection('reports')
-        .where('userId', isEqualTo: user.uid)
-        .where('type', isEqualTo: report.ReportType.lost.value) // 'Lost'
-        .where('foundAlertSubscription.enabled', isEqualTo: true)
-        .get();
-
-    final Map<report.AnimalType, Set<String>> temp = {};
-    for (final d in qs.docs) {
-      final data = d.data();
-
-      final rawAnimal = (data['animal'] ?? '').toString(); // 'Dog'/'Cat'/...
-      final animal = report.AnimalType.values.firstWhere(
-        (a) => a.value.toLowerCase() == rawAnimal.toLowerCase(),
-        orElse: () => report.AnimalType.other,
-      );
-
-      final fs = data['foundAlertSubscription'];
-      final area = (fs is Map ? (fs['area'] ?? '') : '').toString().trim();
-      if (area.isEmpty) continue;
-
-      temp.putIfAbsent(animal, () => <String>{}).add(area);
-    }
-
-    return {for (final e in temp.entries) e.key: e.value.toList()..sort()};
-  }
-
   @override
   Widget build(BuildContext context) {
     context.watch<HomeViewModel>(); // keep if used elsewhere
@@ -66,21 +35,58 @@ class HomeScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
 
-              // ONE aggregated section ABOVE the map
-              FutureBuilder<Map<report.AnimalType, List<String>>>(
-                future: _loadMyAlertFilters(),
-                builder: (context, snap) {
-                  if (snap.connectionState == ConnectionState.waiting) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: LinearProgressIndicator(),
-                    );
+              // Aggregated "Found in your area" section ABOVE the map — now reactive via StreamBuilder
+              Builder(
+                builder: (context) {
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user == null) {
+                    return const SizedBox.shrink();
                   }
-                  final filters =
-                      snap.data ?? <report.AnimalType, List<String>>{};
-                  return ReportsFromAreaSection(
-                    filtersByAnimal: filters,
-                    limit: 8,
+
+                  final alertsStream = FirebaseFirestore.instance
+                      .collection('reports')
+                      .where('userId', isEqualTo: user.uid)
+                      .where('type', isEqualTo: report.ReportType.lost.value) // LOST reports
+                      .where('foundAlertSubscription.enabled', isEqualTo: true)
+                      .snapshots();
+
+                  return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    stream: alertsStream,
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.waiting) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: LinearProgressIndicator(),
+                        );
+                      }
+
+                      final Map<report.AnimalType, Set<String>> buckets = {};
+                      for (final d in (snap.data?.docs ?? const [])) {
+                        final data = d.data();
+
+                        // 'animal' stored as 'Dog'/'Cat'/... -> map to enum
+                        final rawAnimal = (data['animal'] ?? '').toString();
+                        final animal = report.AnimalType.values.firstWhere(
+                          (a) => a.value.toLowerCase() == rawAnimal.toLowerCase(),
+                          orElse: () => report.AnimalType.other,
+                        );
+
+                        final fs = data['foundAlertSubscription'];
+                        final area = (fs is Map ? (fs['area'] ?? '') : '').toString().trim();
+                        if (area.isEmpty) continue;
+
+                        buckets.putIfAbsent(animal, () => <String>{}).add(area);
+                      }
+
+                      final filters = {
+                        for (final e in buckets.entries) e.key: e.value.toList()..sort()
+                      };
+
+                      return ReportsFromAreaSection(
+                        filtersByAnimal: filters,
+                        limit: 4, // show 4, then Load More (+4)
+                      );
+                    },
                   );
                 },
               ),

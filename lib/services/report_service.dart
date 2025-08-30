@@ -78,8 +78,9 @@ class ReportService {
     // keep areaKey in sync
     if (partial.containsKey('foundAlertSubscription.area')) {
       final a = (partial['foundAlertSubscription.area'] ?? '').toString();
-      partial['foundAlertSubscription.areaKey'] =
-          a.isEmpty ? FieldValue.delete() : _normalize(a);
+      partial['foundAlertSubscription.areaKey'] = a.isEmpty
+          ? FieldValue.delete()
+          : _normalize(a);
     } else if (partial['foundAlertSubscription'] is Map) {
       final fs = Map<String, dynamic>.from(partial['foundAlertSubscription']);
       final a = (fs['area'] ?? '').toString();
@@ -103,26 +104,30 @@ class ReportService {
     return _reportsCol
         .where('lat', isGreaterThan: -90)
         .snapshots()
-        .map((qs) => qs.docs
-            .map((d) => report.Report.fromFirestore(d.id, d.data()))
-            .toList());
+        .map(
+          (qs) => qs.docs
+              .map((d) => report.Report.fromFirestore(d.id, d.data()))
+              .toList(),
+        );
   }
 
   // --- AREA FILTERS: single animal ------------------------------------------
   Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
-      watchFoundReportsByAnimalAndAreas({
+  watchFoundReportsByAnimalAndAreas({
     required String animalType, // 'dog' / 'cat' / 'other'
     required List<String> areas,
   }) {
-    final storedAnimal = _animalStoredValue(animalType); 
+    final storedAnimal = _animalStoredValue(animalType);
 
     final query = _firestore
         .collection('reports')
-        .where('type', isEqualTo: report.ReportType.found.value) 
-        .where('animal', isEqualTo: storedAnimal);              
+        .where('type', isEqualTo: report.ReportType.found.value)
+        .where('animal', isEqualTo: storedAnimal);
 
-    final normalized =
-        areas.map(_normalize).where((e) => e.isNotEmpty).toList();
+    final normalized = areas
+        .map(_normalize)
+        .where((e) => e.isNotEmpty)
+        .toList();
     final matchAll = normalized.isEmpty || normalized.contains('romania');
 
     return query.snapshots().map((snap) {
@@ -144,8 +149,9 @@ class ReportService {
 
   // --- AREA FILTERS: multiple animals --------------------------
   Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
-      watchFoundReportsByAnimalAreaFilters({
+  watchFoundReportsByAnimalAreaFilters({
     required Map<report.AnimalType, List<String>> filters,
+    int? limit, // page size for your "load more" (+4 each tap)
   }) {
     if (filters.isEmpty) return Stream.value(const []);
 
@@ -155,15 +161,18 @@ class ReportService {
         e.key.name: e.value.map(_normalize).where((s) => s.isNotEmpty).toList(),
     };
 
+    // NOTE: we DO NOT use orderBy here to avoid the composite index requirement.
     final q = _firestore
         .collection('reports')
         .where('type', isEqualTo: report.ReportType.found.value);
 
     return q.snapshots().map((snap) {
-      final docs = snap.docs.where((doc) {
+      // client-side filter by selected animal + area text
+      final docs = <QueryDocumentSnapshot<Map<String, dynamic>>>[];
+      for (final doc in snap.docs) {
         final data = doc.data();
 
-        // Firestore value normalize to 'dog'/'cat'/'other'
+        // 'animal' may be stored as 'Dog'/'Cat' or enum index; normalize to 'dog'/'cat'
         final animalStr = (() {
           final raw = data['animal'];
           if (raw is String) return raw.toLowerCase();
@@ -173,29 +182,42 @@ class ReportService {
           return '';
         })();
 
-        final areas = normalizedByAnimal[animalStr];
-        if (areas == null || areas.isEmpty) return false;
+        final areasForAnimal = normalizedByAnimal[animalStr];
+        if (areasForAnimal == null || areasForAnimal.isEmpty) continue;
 
-        if (areas.contains('romania')) return true;
+        // country-wide shortcut used elsewhere
+        if (areasForAnimal.contains('romania')) {
+          docs.add(doc);
+          continue;
+        }
 
         final addrNorm = _normalize(_extractAddress(data));
-        return areas.any((a) => addrNorm.contains(a));
-      }).toList();
+        if (areasForAnimal.any((a) => addrNorm.contains(a))) {
+          docs.add(doc);
+        }
+      }
 
+      // sort newest first (client-side, since we dropped orderBy)
       docs.sort((a, b) {
         final ta = a.data()['createdAt'];
         final tb = b.data()['createdAt'];
-        if (ta is Timestamp && tb is Timestamp) return tb.compareTo(ta);
-        return 0;
+        final tsa = ta is Timestamp ? ta : Timestamp(0, 0);
+        final tsb = tb is Timestamp ? tb : Timestamp(0, 0);
+        return tsb.compareTo(tsa);
       });
+
+      // apply the page size after filtering
+      if (limit != null && docs.length > limit) {
+        return docs.sublist(0, limit);
+      }
       return docs;
     });
   }
-
   // --- HELPERS ---------------------------------------------------------------
 
   String _extractAddress(Map<String, dynamic> data) {
-    final v = data['location'] ??
+    final v =
+        data['location'] ??
         data['fullAddress'] ??
         data['address'] ??
         data['addressText'] ??
@@ -215,13 +237,30 @@ class ReportService {
   String _normalize(String input) {
     final lower = input.toLowerCase();
     const map = {
-      'ă': 'a', 'â': 'a', 'á': 'a', 'à': 'a', 'ä': 'a', 'ã': 'a',
-      'î': 'i', 'í': 'i', 'ì': 'i', 'ï': 'i',
-      'ș': 's', 'ş': 's',
-      'ț': 't', 'ţ': 't',
-      'é': 'e', 'è': 'e', 'ë': 'e',
-      'ó': 'o', 'ò': 'o', 'ö': 'o', 'õ': 'o',
-      'ú': 'u', 'ù': 'u', 'ü': 'u',
+      'ă': 'a',
+      'â': 'a',
+      'á': 'a',
+      'à': 'a',
+      'ä': 'a',
+      'ã': 'a',
+      'î': 'i',
+      'í': 'i',
+      'ì': 'i',
+      'ï': 'i',
+      'ș': 's',
+      'ş': 's',
+      'ț': 't',
+      'ţ': 't',
+      'é': 'e',
+      'è': 'e',
+      'ë': 'e',
+      'ó': 'o',
+      'ò': 'o',
+      'ö': 'o',
+      'õ': 'o',
+      'ú': 'u',
+      'ù': 'u',
+      'ü': 'u',
     };
     final buf = StringBuffer();
     for (final ch in lower.runes.map((r) => String.fromCharCode(r))) {

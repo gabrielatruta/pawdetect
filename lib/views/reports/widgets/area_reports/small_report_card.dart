@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/styles/app_assets.dart' show AppAssets; 
+import 'package:pawdetect/styles/app_assets.dart' show AppAssets;
+import 'package:pawdetect/styles/app_colors.dart'; 
 
 class SmallReportCard extends StatelessWidget {
   const SmallReportCard({
@@ -50,6 +51,7 @@ class SmallReportCard extends StatelessWidget {
             // fixed-height footer so all cards line up
             Container(
               height: _footerHeight,
+              color: AppColors.white,
               padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
               alignment: Alignment.topLeft,
               child: Text(

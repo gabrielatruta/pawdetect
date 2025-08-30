@@ -1,36 +1,58 @@
-// lib/views/reports/widgets/area_reports/reports_from_area_section.dart
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_service.dart';
+import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/reports/widgets/area_reports/small_report_card.dart';
+import 'package:pawdetect/views/shared/report_card_load_more.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
-class ReportsFromAreaSection extends StatelessWidget {
+class ReportsFromAreaSection extends StatefulWidget {
   const ReportsFromAreaSection({
     super.key,
-    required this.filtersByAnimal, // {AnimalType.dog: ['Cluj', ...], ...}
-    this.limit = 10,
+    required this.filtersByAnimal,
+    this.limit = 4,
     this.serviceOverride,
     this.onOpen,
   });
 
   final Map<report.AnimalType, List<String>> filtersByAnimal;
-  final int limit;
+  final int limit; // page size
   final ReportService? serviceOverride;
   final void Function(report.Report report)? onOpen;
 
   @override
+  State<ReportsFromAreaSection> createState() => _ReportsFromAreaSectionState();
+}
+
+class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
+  late int _visibleCount;
+
+  @override
+  void initState() {
+    super.initState();
+    _visibleCount = widget.limit; // start with one "page"
+  }
+
+  // if filters change (user changed selected areas/animals), reset paging
+  @override
+  void didUpdateWidget(covariant ReportsFromAreaSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.filtersByAnimal != widget.filtersByAnimal ||
+        oldWidget.limit != widget.limit) {
+      setState(() {
+        _visibleCount = widget.limit;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final service = serviceOverride ?? ReportService();
+    final service = widget.serviceOverride ?? ReportService();
 
     return Padding(
-      // Match AllReportsForm outer padding
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Card(
-        // Match AllReportsForm Card style exactly
-        margin: EdgeInsets.zero,
-        elevation: 3,
         shadowColor: AppColors.orange600,
         color: AppColors.white,
         shape: RoundedRectangleBorder(
@@ -46,34 +68,40 @@ class ReportsFromAreaSection extends StatelessWidget {
               child: Text(
                 'Found reports in your area',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.orange,
-                    ),
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.orange,
+                ),
               ),
             ),
             const Divider(height: 16, thickness: 0.6),
 
-            if (filtersByAnimal.isEmpty)
+            if (widget.filtersByAnimal.isEmpty)
               const Padding(
                 padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                 child: _InfoBox('No alerts/areas selected yet.'),
               )
             else
+              // Bind the Firestore page size to _visibleCount so the stream
+              // delivers 4, then 8, then 12… and auto-refreshes via snapshots().
               StreamBuilder<List<QueryDocumentSnapshot<Map<String, dynamic>>>>(
                 stream: service.watchFoundReportsByAnimalAreaFilters(
-                  filters: filtersByAnimal,
+                  filters: widget.filtersByAnimal,
+                  limit: _visibleCount,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       child: LinearProgressIndicator(),
                     );
                   }
                   if (snapshot.hasError) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: Text('Error: ${snapshot.error}'),
+                    return const Padding(
+                      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: _InfoBox('Failed to load area reports.'),
                     );
                   }
 
@@ -81,30 +109,63 @@ class ReportsFromAreaSection extends StatelessWidget {
                   if (docs.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: _InfoBox('No found reports in your selected area yet.'),
+                      child: _InfoBox(
+                        'No found reports in your selected area yet.',
+                      ),
                     );
                   }
 
                   final items = docs
                       .map((d) => report.Report.fromFirestore(d.id, d.data()))
                       .toList();
-                  final count = items.length < limit ? items.length : limit;
 
-                  // Content padding matches AllReportsForm (uses EdgeInsets.all(16))
+                  // If Firestore returned exactly the requested amount,
+                  // assume there *may* be more available and show the Load More card.
+                  final hasMore = items.length == _visibleCount;
+
                   return SizedBox(
-                    height: 190, // room for image + fixed footer in SmallReportCard
+                    height: 190, // room for image + footer in SmallReportCard
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.all(16),
-                      itemCount: count,
+                      itemCount: items.length + (hasMore ? 1 : 0),
                       separatorBuilder: (_, __) => const SizedBox(width: 12),
                       itemBuilder: (_, i) {
+                        // trailing "Load more" tile
+                        if (hasMore && i == items.length) {
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                _visibleCount += widget.limit; // request +4
+                              });
+                            },
+                            child: const ReportCardLoadMore(),
+                          );
+                        }
+
                         final r = items[i];
-                        final img = (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
+                        final img = (r.photoUrls.isNotEmpty)
+                            ? r.photoUrls.first
+                            : '';
                         return GestureDetector(
-                          onTap: onOpen == null ? null : () => onOpen!(r),
+                          onTap: () {
+                            if (widget.onOpen != null) {
+                              widget.onOpen!(r);
+                              return;
+                            }
+                            final id = r.id ?? '';
+                            if (id.isEmpty) return;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    ReportDetailsScreen(reportId: id),
+                              ),
+                            );
+                          },
                           child: SmallReportCard(
-                            title: r.location.isNotEmpty ? r.location : 'Found report',
+                            title: r.location.isNotEmpty
+                                ? r.location
+                                : 'Found report',
                             imageUrl: img,
                           ),
                         );
