@@ -100,8 +100,9 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
     _postBuildRouteWatch();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Card(
+        margin: EdgeInsets.zero,
         shadowColor: AppColors.orange600,
         color: AppColors.white,
         shape: RoundedRectangleBorder(
