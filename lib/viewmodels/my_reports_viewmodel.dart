@@ -4,20 +4,69 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pawdetect/services/report_service.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 
-class Report {
+class MyReportItem {
   final String id;
   final String reportType;
   final String petType;
   final String description;
   final String location;
+  final report.ReportStatus status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
-  Report({
+  MyReportItem({
     required this.id,
     required this.reportType,
     required this.petType,
     required this.description,
     required this.location,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
   });
+
+  static DateTime? _toDate(dynamic v) {
+    if (v is Timestamp) return v.toDate();
+    if (v is DateTime) return v;
+    return null;
+  }
+
+  static report.ReportStatus _parseStatus(dynamic raw) {
+    if (raw is report.ReportStatus) return raw;
+
+    if (raw is String) {
+      final s = raw.toLowerCase();
+      // handles "solved", "ReportStatus.solved", etc.
+      for (final e in report.ReportStatus.values) {
+        if (e.name.toLowerCase() == s) return e;
+        if ('${e.runtimeType}.$s' == e.toString().toLowerCase()) return e;
+        if (e.toString().toLowerCase().endsWith('.$s')) return e;
+      }
+    }
+
+    if (raw is int) {
+      final idx = raw;
+      if (idx >= 0 && idx < report.ReportStatus.values.length) {
+        return report.ReportStatus.values[idx];
+      }
+    }
+
+    // safe default (unsolved)
+    return report.ReportStatus.values.first;
+  }
+
+  factory MyReportItem.fromFirestore(String id, Map<String, dynamic> data) {
+    return MyReportItem(
+      id: id,
+      reportType: (data['type'] ?? '').toString(),
+      petType: (data['animal'] ?? '').toString(),
+      description: (data['additionalInfo'] ?? '').toString(),
+      location: (data['location'] ?? '').toString(),
+      status: _parseStatus(data['status']),
+      createdAt: _toDate(data['createdAt']),
+      updatedAt: _toDate(data['updatedAt']),
+    );
+  }
 }
 
 class MyReportsViewModel extends ChangeNotifier {
@@ -29,14 +78,14 @@ class MyReportsViewModel extends ChangeNotifier {
   String? errorMessage;
 
   // Full result set already filtered for the current user
-  List<Report> reports = [];
+  List<MyReportItem> reports = [];
 
   // Simple paging to display 4 results at a time
   static const int _pageSize = 4;
   int visibleCount = 0;
 
   bool get hasMore => visibleCount < reports.length;
-  List<Report> get visibleReports => reports.take(visibleCount).toList();
+  List<MyReportItem> get visibleReports => reports.take(visibleCount).toList();
 
   // Details state
   bool isDetailsLoading = false;
@@ -67,16 +116,9 @@ class MyReportsViewModel extends ChangeNotifier {
           .orderBy('createdAt', descending: true)
           .get();
 
-      reports = qs.docs.map((d) {
-        final data = d.data();
-        return Report(
-          id: d.id,
-          reportType: (data['type'] ?? '').toString(),
-          petType: (data['animal'] ?? '').toString(),
-          description: (data['additionalInfo'] ?? '').toString(),
-          location: (data['location'] ?? '').toString(),
-        );
-      }).toList();
+      reports = qs.docs
+          .map((d) => MyReportItem.fromFirestore(d.id, d.data()))
+          .toList();
 
       visibleCount = reports.isEmpty
           ? 0
@@ -108,11 +150,8 @@ class MyReportsViewModel extends ChangeNotifier {
     openedReportId = id;
     notifyListeners();
     try {
-      // report details
       openedReport = await _reportSvc.getReportById(id);
 
-      // receive notifications preferences
-      // raw snapshot for the nested map
       final snap = await FirebaseFirestore.instance
           .collection('reports')
           .doc(id)

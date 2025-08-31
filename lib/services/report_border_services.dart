@@ -1,43 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/models/report_model.dart' as models;
 
-/// Rules:
-/// - Solved -> green
-/// - Not opened yet OR updated since last open -> orange
-/// - Opened and not updated -> grey
 class ReportBorderService {
   ReportBorderService._();
   static final instance = ReportBorderService._();
 
   String _key(String uid, String id) => 'seen:$uid:$id';
 
-  Future<Color> colorFor(models.Report r) async {
-    // Solved wins
-    if (r.status == models.ReportStatus.solved) return AppColors.successGreen;
+  DateTime? _toDate(dynamic v) {
+    if (v is DateTime) return v;
+    if (v is Timestamp) return v.toDate();
+    return null;
+  }
 
+  Future<Color> colorFor(Object r) async {
+    final dyn = r as dynamic;
+
+    // --- required fields pulled via dynamic ---
+    final String? id = dyn.id as String?;
+    final models.ReportStatus? status = dyn.status as models.ReportStatus?;
+    final DateTime? updatedAt = _toDate(dyn.updatedAt);
+    final DateTime? createdAt = _toDate(dyn.createdAt);
+
+    // 1) SOLVED ALWAYS WINS (enum from report_model.dart)
+    if (status == models.ReportStatus.solved) {
+      return AppColors.successGreen;
+    }
+
+    // 2) New/updated since last open → ORANGE
     final uid = FirebaseAuth.instance.currentUser?.uid;
-    final id = r.id ?? '';
-    if (uid == null || id.isEmpty) return AppColors.border;
+    if (uid == null || (id ?? '').isEmpty) return AppColors.border;
 
     final prefs = await SharedPreferences.getInstance();
-    final seenIso = prefs.getString(_key(uid, id));
-    final lastOpened = seenIso == null ? null : DateTime.tryParse(seenIso);
+    final seenIso = prefs.getString(_key(uid, id!));
+    final DateTime? lastOpened = seenIso == null
+        ? null
+        : DateTime.tryParse(seenIso);
+
     final lastChange =
-        (r.updatedAt ?? r.createdAt) ?? DateTime.fromMillisecondsSinceEpoch(0);
+        (updatedAt ?? createdAt) ?? DateTime.fromMillisecondsSinceEpoch(0);
 
     if (lastOpened == null || lastChange.isAfter(lastOpened)) {
-      return AppColors.orange; // new or updated
+      return AppColors.orange;
     }
-    return AppColors.border; // opened and not updated
+
+    // 3) Opened and not updated → GREY
+    return AppColors.border;
   }
 
   Future<void> markOpened(String reportId) async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null || reportId.isEmpty) return;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_key(uid, reportId), DateTime.now().toIso8601String());
+    await prefs.setString(
+      _key(uid, reportId),
+      DateTime.now().toIso8601String(),
+    );
   }
 }
