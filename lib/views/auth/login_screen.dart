@@ -5,6 +5,7 @@ import 'package:pawdetect/views/auth/widgets/login/login_form.dart';
 import 'package:pawdetect/views/auth/widgets/login/login_subtitle.dart';
 import 'package:pawdetect/views/shared/app_logo.dart';
 import 'package:pawdetect/views/shared/appname_title.dart';
+import 'package:pawdetect/views/welcome/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import '../../styles/app_colors.dart';
 
@@ -26,23 +27,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: const CustomAppBar(title: "Log in"),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            children: const [
-              SizedBox(height: 20),
-              AppLogo(),
-              SizedBox(height: 16),
-              AppnNameTitle(),
-              SizedBox(height: 8),
-              LoginSubtitle(),
-              SizedBox(height: 24),
-              LoginForm(),
-            ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+        );
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: const CustomAppBar(title: "Log in"),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: const [
+                SizedBox(height: 20),
+                AppLogo(),
+                SizedBox(height: 16),
+                AppnNameTitle(),
+                SizedBox(height: 8),
+                LoginSubtitle(),
+                SizedBox(height: 24),
+                LoginForm(),
+              ],
+            ),
           ),
         ),
       ),
