@@ -99,14 +99,16 @@ class ReportService {
     return report.Report.fromFirestore(snap.id, snap.data()!);
   }
 
-  // --- STREAM with locations --------------------------------------------------
+  // --- STREAM with reports with location that are unsolved -------------------------------------------
   Stream<List<report.Report>> streamReportsWithLocation() {
     return _reportsCol
-        .where('lat', isGreaterThan: -90)
+        .where('status', isEqualTo: report.ReportStatus.unsolved.value)
         .snapshots()
         .map(
           (qs) => qs.docs
               .map((d) => report.Report.fromFirestore(d.id, d.data()))
+              // keep only items that actually have coordinates
+              .where((r) => r.lat != null && r.lng != null)
               .toList(),
         );
   }

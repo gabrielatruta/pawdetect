@@ -1,7 +1,5 @@
-// viewmodels/map_viewmodel.dart
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -10,8 +8,12 @@ import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_service.dart';
 
 class MapViewModel extends ChangeNotifier {
-  MapViewModel(this._reportService);
-  final ReportService _reportService;
+  // Create once, keep a stable stream instance
+  MapViewModel(ReportService reportService)
+      : reports$ = reportService.streamReportsWithLocation();
+
+  // Single shared stream used by the UI
+  final Stream<List<report.Report>> reports$;
 
   // map camera
   LatLng center = const LatLng(46.7712, 23.6236); // Cluj fallback
@@ -52,10 +54,6 @@ class MapViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // stream of reports with coordinates
-  Stream<List<report.Report>> get reports$ =>
-      _reportService.streamReportsWithLocation();
 
   Future<void> init({required bool useLocation}) async {
     if (!useLocation) return;
