@@ -161,15 +161,15 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
 
                   return LoadMoreAreaReports(
                     rowHeight: _kRowHeight,
-                    smallCardWidth: _kSmallCardWidth, // e.g. 170
+                    smallCardWidth: _kSmallCardWidth,
                     loadMoreWidth:
-                        _kSmallCardWidth / 2, // e.g. 85 (half-width tile)
+                        _kSmallCardWidth / 2, 
                     items: items,
                     visible: visible,
                     hasMore: hasMore,
                     onLoadMore: () =>
                         setState(() => _visibleCount += widget.limit),
-                    onOpen: widget.onOpen, // optional
+                    onOpen: widget.onOpen,
                     onBeforeOpenDetails: () => _leavingToDetails = true,
                     onAfterCloseDetails: () => _leavingToDetails = false,
                     pageStorageKey: 'areaReportsList',
