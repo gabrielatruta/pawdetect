@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/services/report_border_services.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/reports/widgets/area_reports/small_report_card.dart';
 import 'package:pawdetect/views/reports/widgets/shared/report_card_load_more.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 
-class LoadMoreAreaReports extends StatelessWidget {
+class LoadMoreAreaReports extends StatefulWidget {
   const LoadMoreAreaReports({
     super.key,
     required this.rowHeight,
@@ -48,53 +50,74 @@ class LoadMoreAreaReports extends StatelessWidget {
   final String pageStorageKey;
 
   @override
+  State<LoadMoreAreaReports> createState() => _LoadMoreAreaReportsState();
+}
+
+class _LoadMoreAreaReportsState extends State<LoadMoreAreaReports> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: rowHeight,
+      height: widget.rowHeight,
       child: ListView.separated(
-        key: PageStorageKey(pageStorageKey),
+        key: PageStorageKey(widget.pageStorageKey),
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.all(16),
-        itemCount: visible + (hasMore ? 1 : 0),
+        itemCount: widget.visible + (widget.hasMore ? 1 : 0),
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (_, i) {
           // Trailing "Load more" tile (half width)
-          if (hasMore && i == visible) {
+          if (widget.hasMore && i == widget.visible) {
             return SizedBox(
-              width: loadMoreWidth,
+              width: widget.loadMoreWidth,
               child: InkWell(
-                onTap: onLoadMore,
+                onTap: widget.onLoadMore,
                 child: const ReportCardLoadMore(),
               ),
             );
           }
 
-          final r = items[i];
+          final r = widget.items[i];
           final img = (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
 
           return GestureDetector(
-            onTap: () {
-              if (onOpen != null) {
-                onOpen!(r);
+            onTap: () async {
+              if (widget.onOpen != null) {
+                // If parent overrides navigation, let it handle everything.
+                widget.onOpen!(r);
                 return;
               }
+
               final id = r.id ?? '';
               if (id.isEmpty) return;
 
-              onBeforeOpenDetails?.call();
-              Navigator.of(context)
-                  .push(
-                    MaterialPageRoute(
-                      builder: (_) => ReportDetailsScreen(reportId: id),
-                    ),
-                  )
-                  .then((_) => onAfterCloseDetails?.call());
+              widget.onBeforeOpenDetails?.call();
+
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ReportDetailsScreen(reportId: id),
+                ),
+              );
+
+              // Mark as opened so borders can flip orange -> grey (if no new updates)
+              await ReportBorderService.instance.markOpened(id);
+
+              // Rebuild this list so the FutureBuilder below re-runs and color updates
+              if (mounted) setState(() {});
+
+              widget.onAfterCloseDetails?.call();
             },
             child: SizedBox(
-              width: smallCardWidth,
-              child: SmallReportCard(
-                title: r.location.isNotEmpty ? r.location : 'Found report',
-                imageUrl: img,
+              width: widget.smallCardWidth,
+              child: FutureBuilder<Color>(
+                future: ReportBorderService.instance.colorFor(r),
+                builder: (context, snap) {
+                  final borderColor = snap.data ?? AppColors.border;
+                  return SmallReportCard(
+                    title: r.location.isNotEmpty ? r.location : 'Found report',
+                    imageUrl: img,
+                    borderColor: borderColor,
+                  );
+                },
               ),
             ),
           );
