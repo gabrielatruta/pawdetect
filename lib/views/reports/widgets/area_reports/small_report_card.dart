@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/styles/app_assets.dart' show AppAssets;
+import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
 class SmallReportCard extends StatelessWidget {
@@ -8,7 +8,7 @@ class SmallReportCard extends StatelessWidget {
     required this.title,
     required this.imageUrl,
     this.reportImagePath,
-    this.borderColor,
+    this.borderColor, // override from caller
   });
 
   final String title;
@@ -16,22 +16,23 @@ class SmallReportCard extends StatelessWidget {
   final String? reportImagePath;
   final Color? borderColor;
 
-  static const double _footerHeight = 56;
+  static const double _footerHeight = 42;
+  static const double _kBorderWidth = 2;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Default to the app's placeholder image path from AppAssets
     final ph = reportImagePath ?? AppAssets.reportImagePath;
+    final radius = BorderRadius.circular(12);
 
     return SizedBox(
       width: 170,
       child: Container(
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: radius,
           border: Border.all(
-            width: 2,
+            width: _kBorderWidth,
             color: borderColor ?? AppColors.border,
           ),
           boxShadow: [
@@ -42,31 +43,37 @@ class SmallReportCard extends StatelessWidget {
             ),
           ],
         ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // image on top fills remaining height
-            Expanded(
-              child: _ImageBox(imageUrl: imageUrl, reportImagePath: ph),
-            ),
+        // Reserve space for the border so children don't cover it
+        padding: const EdgeInsets.all(_kBorderWidth),
+        // Don’t clip here—clip the *inner* content to keep the border visible
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12 - _kBorderWidth),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // image on top fills remaining height
+              Expanded(
+                child: _ImageBox(imageUrl: imageUrl, reportImagePath: ph),
+              ),
 
-            // fixed-height footer so all cards line up
-            Container(
-              height: _footerHeight,
-              color: AppColors.white,
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
-              alignment: Alignment.topLeft,
-              child: Text(
-                title.isNotEmpty ? title : 'Found report',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+              // fixed-height footer so all cards line up
+              Container(
+                height: _footerHeight,
+                color: AppColors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                alignment: Alignment.center,
+                child: Text(
+                  title.isNotEmpty ? title : 'Found report',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -79,21 +86,11 @@ class _ImageBox extends StatelessWidget {
   final String imageUrl;
   final String reportImagePath;
 
-  bool _isNetwork(String url) =>
-      url.startsWith('http://') || url.startsWith('https://');
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
-      child: _isNetwork(imageUrl) && imageUrl.trim().isNotEmpty
-          ? Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) =>
-                  Image.asset(reportImagePath, fit: BoxFit.cover),
-            )
+    return SizedBox.expand(
+      child: imageUrl.isNotEmpty
+          ? Image.network(imageUrl, fit: BoxFit.cover)
           : Image.asset(reportImagePath, fit: BoxFit.cover),
     );
   }
