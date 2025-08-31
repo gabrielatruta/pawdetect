@@ -32,6 +32,7 @@ class AppColors {
   // Surfaces & borders
   static const Color surface = Color(0xFFF7F7F7);
   static const Color border = Color(0xFFE6E6E6);
+  static const Color successGreen = Color(0xFF2E7D32);
   static Color lightBackground = Color(0xFFF5F5F5);
 
   // Semantic / overlays
