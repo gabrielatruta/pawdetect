@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/views/reports/guest_add_new_report_screen.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 
 class GuestBottomButtons extends StatelessWidget {
@@ -10,9 +11,14 @@ class GuestBottomButtons extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
         child: PrimaryButton(
-          text: "Add new found report",
-          onPressed: () async {
-            // TODO: allow the user to only create found report
+          text: "Report a found animal",
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const GuestAddNewReportScreen(),
+              ),
+            );
           },
         ),
       ),

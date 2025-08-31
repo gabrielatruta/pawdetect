@@ -6,10 +6,11 @@ import 'package:pawdetect/viewmodels/home_viewmodel.dart';
 import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
 import 'package:pawdetect/viewmodels/profile_viewmodel.dart';
 import 'package:pawdetect/views/auth/forgot_password_screen.dart';
-import 'package:pawdetect/views/guest/widgets/guest_bottom_buttons.dart';
+import 'package:pawdetect/views/guest/guest_home_screen.dart';
 import 'package:pawdetect/views/home/home_screen.dart';
 import 'package:pawdetect/views/home/profile_screen.dart';
 import 'package:pawdetect/views/reports/add_new_report_screen.dart';
+import 'package:pawdetect/views/reports/guest_add_new_report_screen.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/navigation.dart';
@@ -72,7 +73,8 @@ class PawDetectApp extends StatelessWidget {
           "/profile": (_) => const ProfileScreen(),
           "/myreports": (_) => const MyReportsScreen(),
           "/add_report": (_) => const AddNewReportScreen(),
-          "/guest-home": (_) => const GuestBottomButtons(),
+          "/guest-home": (_) => const GuestHomeScreen(),
+          "/guest-add-found-report": (_) => const GuestAddNewReportScreen(),
         },
         navigatorKey: appNavigatorKey,
       ),
