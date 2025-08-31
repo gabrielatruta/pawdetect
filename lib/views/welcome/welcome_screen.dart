@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
-import 'package:pawdetect/views/shared/appname_title.dart';
-import '../shared/app_logo.dart';
+import 'package:pawdetect/views/auth/widgets/shared/app_logo.dart';
+import 'package:pawdetect/views/auth/widgets/shared/appname_title.dart';
 import 'widgets/welcome_title.dart';
 import 'widgets/welcome_description.dart';
 import 'widgets/welcome_form.dart';

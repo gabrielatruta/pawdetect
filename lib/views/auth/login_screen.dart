@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/viewmodels/login_viewmodel.dart';
+import 'package:pawdetect/views/auth/widgets/shared/app_logo.dart';
+import 'package:pawdetect/views/auth/widgets/shared/appname_title.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/views/auth/widgets/login/login_form.dart';
 import 'package:pawdetect/views/auth/widgets/login/login_subtitle.dart';
-import 'package:pawdetect/views/shared/app_logo.dart';
-import 'package:pawdetect/views/shared/appname_title.dart';
 import 'package:pawdetect/views/welcome/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import '../../styles/app_colors.dart';

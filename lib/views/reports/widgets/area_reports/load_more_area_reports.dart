@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/reports/widgets/area_reports/small_report_card.dart';
-import 'package:pawdetect/views/shared/report_card_load_more.dart';
+import 'package:pawdetect/views/reports/widgets/shared/report_card_load_more.dart';
 
 class LoadMoreAreaReports extends StatelessWidget {
   const LoadMoreAreaReports({

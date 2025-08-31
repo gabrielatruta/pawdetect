@@ -9,9 +9,9 @@ import 'package:pawdetect/views/reports/widgets/shared/pet_color_dropdown.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_gender_dropdown.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_type_dropdown.dart';
 import 'package:pawdetect/views/reports/widgets/shared/photo_picker.dart';
+import 'package:pawdetect/views/reports/widgets/shared/receive_notifications_card.dart';
 import 'package:pawdetect/views/reports/widgets/shared/report_type_field.dart';
 import 'package:pawdetect/views/shared/phone_field.dart';
-import 'package:pawdetect/views/shared/receive_notifications_card.dart';
 import 'package:provider/provider.dart';
 
 class MyReportEditForm extends StatefulWidget {
