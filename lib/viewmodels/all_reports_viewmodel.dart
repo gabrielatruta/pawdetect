@@ -133,4 +133,6 @@ class AllReportsViewModel extends ChangeNotifier {
     _sub?.cancel();
     super.dispose();
   }
+
+  void refresh() => notifyListeners();
 }

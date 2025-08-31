@@ -6,8 +6,14 @@ import 'package:pawdetect/views/reports/widgets/shared/reports_image.dart';
 class ReportCardStretched extends StatelessWidget {
   final String title;
   final ImageProvider? image;
+  final Color? borderColor;
 
-  const ReportCardStretched({super.key, required this.title, this.image});
+  const ReportCardStretched({
+    super.key,
+    required this.title,
+    this.image,
+    this.borderColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +24,11 @@ class ReportCardStretched extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border.all(color: AppColors.orange, width: 1.4),
-        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          width: 2,
+          color: borderColor ?? AppColors.border,
+        ),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [

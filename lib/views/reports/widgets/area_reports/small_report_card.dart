@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_assets.dart' show AppAssets;
-import 'package:pawdetect/styles/app_colors.dart'; 
+import 'package:pawdetect/styles/app_colors.dart';
 
 class SmallReportCard extends StatelessWidget {
   const SmallReportCard({
     super.key,
     required this.title,
     required this.imageUrl,
-    this.reportImagePath, 
+    this.reportImagePath,
+    this.borderColor,
   });
 
   final String title;
   final String imageUrl;
-  final String? reportImagePath; 
+  final String? reportImagePath;
+  final Color? borderColor;
 
-  static const double _footerHeight = 56; 
+  static const double _footerHeight = 56;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +29,14 @@ class SmallReportCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            width: 2,
+            color: borderColor ?? AppColors.border,
+          ),
           boxShadow: [
             BoxShadow(
-              color: theme.shadowColor.withOpacity(0.08),
+              color: AppColors.blackAlpha06,
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -42,10 +48,7 @@ class SmallReportCard extends StatelessWidget {
           children: [
             // image on top fills remaining height
             Expanded(
-              child: _ImageBox(
-                imageUrl: imageUrl,
-                reportImagePath: ph,
-              ),
+              child: _ImageBox(imageUrl: imageUrl, reportImagePath: ph),
             ),
 
             // fixed-height footer so all cards line up
@@ -71,10 +74,7 @@ class SmallReportCard extends StatelessWidget {
 }
 
 class _ImageBox extends StatelessWidget {
-  const _ImageBox({
-    required this.imageUrl,
-    required this.reportImagePath,
-  });
+  const _ImageBox({required this.imageUrl, required this.reportImagePath});
 
   final String imageUrl;
   final String reportImagePath;
@@ -94,10 +94,7 @@ class _ImageBox extends StatelessWidget {
               errorBuilder: (_, __, ___) =>
                   Image.asset(reportImagePath, fit: BoxFit.cover),
             )
-          : Image.asset(
-              reportImagePath,
-              fit: BoxFit.cover,
-            ),
+          : Image.asset(reportImagePath, fit: BoxFit.cover),
     );
   }
 }

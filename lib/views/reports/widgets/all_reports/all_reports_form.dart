@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/models/report_model.dart';
+import 'package:pawdetect/models/report_model.dart' as models;
+import 'package:pawdetect/services/report_border_services.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_button.dart';
-import 'package:pawdetect/views/reports/widgets/shared/report_card_load_more.dart';
-import 'package:pawdetect/views/reports/widgets/shared/report_card_stretched.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+import 'package:pawdetect/views/reports/widgets/shared/report_card_load_more.dart';
+import 'package:pawdetect/views/reports/widgets/shared/report_card_stretched.dart';
 import 'package:pawdetect/views/shared/error_message.dart';
 
 class AllReportsForm extends StatelessWidget {
@@ -81,6 +82,7 @@ class AllReportsForm extends StatelessWidget {
                 }
 
                 final item = items[index];
+
                 return InkWell(
                   borderRadius: BorderRadius.circular(18),
                   onTap: () async {
@@ -98,9 +100,23 @@ class AllReportsForm extends StatelessWidget {
                         builder: (_) => ReportDetailsScreen(reportId: id),
                       ),
                     );
+
+                    // mark as opened so border flips orange -> grey if unchanged
+                    await ReportBorderService.instance.markOpened(id);
+                    vm.refresh();
                   },
-                  child: ReportCardStretched(
-                    title: "${item.type.value} ${item.animal.value}",
+                  child: FutureBuilder<Color>(
+                    // compute the border color for this report
+                    future: ReportBorderService.instance.colorFor(item),
+                    builder: (context, snap) {
+                      final borderColor =
+                          snap.data ?? AppColors.grey300; // safe default
+                      return ReportCardStretched(
+                        title: "${item.type.value} ${item.animal.value}",
+                        // pass computed color into the card
+                        borderColor: borderColor,
+                      );
+                    },
                   ),
                 );
               },
