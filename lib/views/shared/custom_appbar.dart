@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+import 'package:pawdetect/views/guest/widgets/guest_profile_replacement.dart';
 import 'package:pawdetect/views/home/profile_screen.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +17,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showProfileIcon = false,
   });
 
+  bool _isLoggedIn() {
+    final user = FirebaseAuth.instance.currentUser;
+    return user != null && !(user.isAnonymous);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn = _isLoggedIn();
+
     return AppBar(
       backgroundColor: AppColors.orange,
       title: Text(
@@ -35,18 +44,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               icon: const Icon(Icons.person_outline),
               color: AppColors.white,
-              tooltip: 'My profile',
+              tooltip: isLoggedIn ? 'My profile' : 'Guest profile',
               onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ProfileScreen()),
-                );
-                
+                final route = isLoggedIn
+                    ? MaterialPageRoute(builder: (_) => ProfileScreen())
+                    : MaterialPageRoute(
+                        builder: (_) => const GuestProfileReplacement(),
+                      );
+                await Navigator.push(context, route);
+
                 if (!context.mounted) return;
-                  // Safely try to reset pagination in all reports
-                  try {
-                    context.read<AllReportsViewModel>().resetPagination();
-                  } catch (_) {}
+                try {
+                  context.read<AllReportsViewModel>().resetPagination();
+                } catch (_) {}
               },
             )
           : null,
@@ -55,8 +65,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       elevation: 0,
 
-      // my reports icon
-      actions: showProfileIcon
+      // my reports icon visible only for logged-in users
+      actions: showProfileIcon && isLoggedIn
           ? [
               IconButton(
                 icon: const Icon(Icons.assignment_outlined),
