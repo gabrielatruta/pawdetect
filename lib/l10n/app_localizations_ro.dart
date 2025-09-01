@@ -202,11 +202,20 @@ class AppLocalizationsRo extends AppLocalizations {
   String get report_edit => 'Editează raportul';
 
   @override
+  String get report_edit_my => 'Editează raportul meu';
+
+  @override
   String get report_no_personal =>
       'Niciun raport personal. Începe să raportezi!';
 
   @override
   String get report_my_reports => 'Rapoartele mele';
+
+  @override
+  String get report_mark_as_solved => 'Soluționează';
+
+  @override
+  String get report_update_report => 'Actualizează';
 
   @override
   String get report_solved => 'Soluționat';
@@ -221,6 +230,36 @@ class AppLocalizationsRo extends AppLocalizations {
   String get report_found => 'Găsit';
 
   @override
+  String get report_type => 'Tipul raportului';
+
+  @override
+  String get report_type_empty => 'Selectează un tip de raport';
+
+  @override
+  String get report_not_filled => 'Completează toate câmpurile obligatorii.';
+
+  @override
+  String get alerts_receive => 'Primește alerte';
+
+  @override
+  String get alerts_subtitle =>
+      'Primești notificări când apare un raport „Găsit” într-o zonă aleasă de tine.';
+
+  @override
+  String get alerts_helper =>
+      'Sfat: Alege cât de amplă vrei să fie aria alertelor:\n• Întreaga țară (de ex., România)\n• Oraș (de ex., Cluj-Napoca)\n• Cartier (de ex., Mănăștur)';
+
+  @override
+  String get alerts_area => 'Arie de alertare';
+
+  @override
+  String get alerts_empty_area =>
+      'Alege o arie de alertare pentru a activa alertele';
+
+  @override
+  String get animal => 'Animal';
+
+  @override
   String get animal_type_dog => 'Câine';
 
   @override
@@ -230,10 +269,13 @@ class AppLocalizationsRo extends AppLocalizations {
   String get animal_type_other => 'Altceva';
 
   @override
-  String get gender => 'Gen';
+  String get animal_empty => 'Selectează un animal';
 
   @override
   String get colors => 'Culori';
+
+  @override
+  String get colors_empty => 'Selectează o culoare';
 
   @override
   String get location => 'Locație';
@@ -243,6 +285,15 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get pick_photo => 'Alege poză';
+
+  @override
+  String get pick_photo_gallery => 'Galerie';
+
+  @override
+  String get pick_photo_camera => 'Cameră';
+
+  @override
+  String get pick_photo_change => 'Schimbă poza';
 
   @override
   String get last_updated => 'Ultima actualizare';
@@ -255,6 +306,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get gender_unknown => '?';
+
+  @override
+  String get gender => 'Gen';
+
+  @override
+  String get gender_empty => 'Selectează un gen';
 
   @override
   String get color_black => 'Negru';
@@ -294,4 +351,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get color_mixed => 'Multicolor';
+
+  @override
+  String get color_spotted => 'Vărgat';
 }

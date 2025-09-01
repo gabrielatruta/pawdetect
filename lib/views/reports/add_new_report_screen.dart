@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:provider/provider.dart';
@@ -10,11 +11,13 @@ class AddNewReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!; // localized strings
+
     return ChangeNotifierProvider(
       create: (_) => AddReportViewModel(),
       child: Scaffold(
         backgroundColor: AppColors.white,
-        appBar: CustomAppBar(title: "Add new report"),
+        appBar: CustomAppBar(title: loc.report_add_new),
         body: const SafeArea(
           child: Padding(
             padding: EdgeInsets.all(16.0),

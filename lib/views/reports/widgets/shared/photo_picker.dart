@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
 class PhotoPicker extends StatefulWidget {
-  final ValueChanged<XFile?>? onChanged; // optional callback to parent
-
+  final ValueChanged<XFile?>? onChanged;
   const PhotoPicker({super.key, this.onChanged});
 
   @override
@@ -15,9 +15,10 @@ class PhotoPicker extends StatefulWidget {
 class _PhotoPickerState extends State<PhotoPicker> {
   final _picker = ImagePicker();
   Uint8List? _bytes; // for preview
-  String? _name;
 
   Future<void> _pick() async {
+    final loc = AppLocalizations.of(context)!; // localized strings
+
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
       builder: (_) => SafeArea(
@@ -26,12 +27,12 @@ class _PhotoPickerState extends State<PhotoPicker> {
           children: [
             ListTile(
               leading: const Icon(Icons.photo),
-              title: const Text('Gallery'),
+              title: Text(loc.pick_photo_gallery),
               onTap: () => Navigator.pop(context, ImageSource.gallery),
             ),
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
+              title: Text(loc.pick_photo_camera),
               onTap: () => Navigator.pop(context, ImageSource.camera),
             ),
           ],
@@ -48,13 +49,14 @@ class _PhotoPickerState extends State<PhotoPicker> {
     final bytes = await file.readAsBytes();
     setState(() {
       _bytes = bytes;
-      _name = file.name;
     });
     widget.onChanged?.call(file);
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!; // localized strings
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -75,9 +77,7 @@ class _PhotoPickerState extends State<PhotoPicker> {
           child: OutlinedButton.icon(
             icon: const Icon(Icons.photo),
             label: Text(
-              _bytes == null
-                  ? 'Pick Photo'
-                  : 'Change Photo${_name != null ? " ($_name)" : ""}',
+              _bytes == null ? loc.pick_photo : loc.pick_photo_change,
             ),
             onPressed: _pick,
             style: OutlinedButton.styleFrom(

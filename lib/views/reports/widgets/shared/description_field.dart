@@ -1,6 +1,8 @@
-// lib/pawdetect/views/shared/description_field.dart
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class DescriptionField extends StatelessWidget {
   final TextEditingController controller;
@@ -9,6 +11,10 @@ class DescriptionField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     return TextFormField(
       controller: controller,
       textCapitalization: TextCapitalization.sentences,
@@ -17,7 +23,7 @@ class DescriptionField extends StatelessWidget {
       maxLines: 5,
       style: const TextStyle(color: AppColors.black),
       decoration: InputDecoration(
-        labelText: 'Description',
+        labelText: loc.description,
         labelStyle: const TextStyle(color: AppColors.black),
         filled: true,
         fillColor: AppColors.lightBackground,

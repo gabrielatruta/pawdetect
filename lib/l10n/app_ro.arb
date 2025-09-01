@@ -74,21 +74,41 @@
   "report_not_found": "Raport nu a fost găsit",
   "report_error_generic": "A apărut o problemă",
   "report_edit": "Editează raportul",
+  "report_edit_my": "Editează raportul meu",
   "report_no_personal": "Niciun raport personal. Începe să raportezi!",
   "report_my_reports": "Rapoartele mele",
-
+  "report_mark_as_solved": "Soluționează",
+  "report_update_report": "Actualizează",
   "report_solved": "Soluționat",
   "report_unsolved": "Nesoluționat",
   "report_lost": "Pierdut",
   "report_found": "Găsit",
+  "report_type": "Tipul raportului",
+  "report_type_empty": "Selectează un tip de raport",
+  "report_not_filled": "Completează toate câmpurile obligatorii.",
+
+  "alerts_receive": "Primește alerte",
+  "alerts_subtitle": "Primești notificări când apare un raport „Găsit” într-o zonă aleasă de tine.",
+  "alerts_helper": "Sfat: Alege cât de amplă vrei să fie aria alertelor:\n• Întreaga țară (de ex., România)\n• Oraș (de ex., Cluj-Napoca)\n• Cartier (de ex., Mănăștur)",
+  "alerts_area": "Arie de alertare",
+  "alerts_empty_area": "Alege o arie de alertare pentru a activa alertele",
+
+  "animal": "Animal",
   "animal_type_dog": "Câine",
   "animal_type_cat": "Pisică",
   "animal_type_other": "Altceva",
+  "animal_empty": "Selectează un animal",
+
   "gender": "Gen",
-  "colors": "Culori",
+  "gender_empty": "Selectează un gen",
+
   "location": "Locație",
   "description": "Descriere",
+
   "pick_photo": "Alege poză",
+  "pick_photo_gallery": "Galerie",
+  "pick_photo_camera": "Cameră",
+  "pick_photo_change": "Schimbă poza",
 
   "last_updated": "Ultima actualizare",
 
@@ -96,6 +116,8 @@
   "gender_female": "F",
   "gender_unknown": "?",
 
+  "colors": "Culori",
+  "colors_empty": "Selectează o culoare",
   "color_black": "Negru",
   "color_white": "Alb",
   "color_brown": "Maro",
@@ -108,5 +130,6 @@
   "color_cream": "Crem",
   "color_golden": "Auriu",
   "color_brindle": "Tigrat",
-  "color_mixed": "Multicolor"
+  "color_mixed": "Multicolor",
+  "color_spotted": "Vărgat"
 }

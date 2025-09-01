@@ -2,20 +2,21 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
 class LocationField extends StatefulWidget {
   final TextEditingController controller;
   final void Function(String address, double lat, double lng) onSelected;
   final String? country;
-  final String labelText;
+  final String? labelText;
 
   const LocationField({
     super.key,
     required this.controller,
     required this.onSelected,
     this.country,
-    this.labelText = 'Location',
+    this.labelText,
   });
 
   @override
@@ -100,6 +101,8 @@ class _LocationFieldState extends State<LocationField> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         TextFormField(
@@ -110,7 +113,7 @@ class _LocationFieldState extends State<LocationField> {
           decoration: InputDecoration(
             label: RichText(
               text: TextSpan(
-                text: widget.labelText,
+                text: loc.location,
                 style: const TextStyle(color: AppColors.black),
                 children: const [
                   TextSpan(

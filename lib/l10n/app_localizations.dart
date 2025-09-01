@@ -470,6 +470,12 @@ abstract class AppLocalizations {
   /// **'Edit report'**
   String get report_edit;
 
+  /// No description provided for @report_edit_my.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit my report'**
+  String get report_edit_my;
+
   /// No description provided for @report_no_personal.
   ///
   /// In en, this message translates to:
@@ -481,6 +487,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My reports'**
   String get report_my_reports;
+
+  /// No description provided for @report_mark_as_solved.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as solved'**
+  String get report_mark_as_solved;
+
+  /// No description provided for @report_update_report.
+  ///
+  /// In en, this message translates to:
+  /// **'Update report'**
+  String get report_update_report;
 
   /// No description provided for @report_solved.
   ///
@@ -506,6 +524,60 @@ abstract class AppLocalizations {
   /// **'Found'**
   String get report_found;
 
+  /// No description provided for @report_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Report type'**
+  String get report_type;
+
+  /// No description provided for @report_type_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a report type'**
+  String get report_type_empty;
+
+  /// No description provided for @report_not_filled.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill all required fields.'**
+  String get report_not_filled;
+
+  /// No description provided for @alerts_receive.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive found alerts'**
+  String get alerts_receive;
+
+  /// No description provided for @alerts_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get notified when a new \'Found\' report appears in a chosen area.'**
+  String get alerts_subtitle;
+
+  /// No description provided for @alerts_helper.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: Choose how broad you want alerts to be:\n• Whole country (e.g., Romania)\n\'• City (e.g., Cluj-Napoca)\n\'• Neighbourhood (e.g., Mănăștur)'**
+  String get alerts_helper;
+
+  /// No description provided for @alerts_area.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert area'**
+  String get alerts_area;
+
+  /// No description provided for @alerts_empty_area.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose an alert area before enabling notifications.'**
+  String get alerts_empty_area;
+
+  /// No description provided for @animal.
+  ///
+  /// In en, this message translates to:
+  /// **'Animal'**
+  String get animal;
+
   /// No description provided for @animal_type_dog.
   ///
   /// In en, this message translates to:
@@ -524,17 +596,23 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get animal_type_other;
 
-  /// No description provided for @gender.
+  /// No description provided for @animal_empty.
   ///
   /// In en, this message translates to:
-  /// **'Gender'**
-  String get gender;
+  /// **'Please select an animal'**
+  String get animal_empty;
 
   /// No description provided for @colors.
   ///
   /// In en, this message translates to:
   /// **'Colors'**
   String get colors;
+
+  /// No description provided for @colors_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a color'**
+  String get colors_empty;
 
   /// No description provided for @location.
   ///
@@ -553,6 +631,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pick Photo'**
   String get pick_photo;
+
+  /// No description provided for @pick_photo_gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get pick_photo_gallery;
+
+  /// No description provided for @pick_photo_camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get pick_photo_camera;
+
+  /// No description provided for @pick_photo_change.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Photo'**
+  String get pick_photo_change;
 
   /// No description provided for @last_updated.
   ///
@@ -577,6 +673,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'?'**
   String get gender_unknown;
+
+  /// No description provided for @gender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get gender;
+
+  /// No description provided for @gender_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a gender'**
+  String get gender_empty;
 
   /// No description provided for @color_black.
   ///
@@ -655,6 +763,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mixed'**
   String get color_mixed;
+
+  /// No description provided for @color_spotted.
+  ///
+  /// In en, this message translates to:
+  /// **'Spotted'**
+  String get color_spotted;
 }
 
 class _AppLocalizationsDelegate

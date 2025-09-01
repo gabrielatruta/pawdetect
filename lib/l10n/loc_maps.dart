@@ -128,6 +128,8 @@ class LocMaps {
       case 'multicolor':
       case 'multi':
         return l.color_mixed;
+      case 'spotted':
+        return l.color_spotted;
       default:
         return v;
     }

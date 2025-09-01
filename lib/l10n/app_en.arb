@@ -74,21 +74,41 @@
   "report_not_found": "Report not found",
   "report_error_generic": "Something went wrong",
   "report_edit": "Edit report",
+  "report_edit_my": "Edit my report",
   "report_no_personal": "No reports to display. Start reporting!",
   "report_my_reports": "My reports",
-
+  "report_mark_as_solved": "Mark as solved",
+  "report_update_report": "Update report",
   "report_solved": "Solved",
   "report_unsolved": "Unsolved",
   "report_lost": "Lost",
   "report_found": "Found",
+  "report_type": "Report type",
+  "report_type_empty": "Please select a report type",
+  "report_not_filled": "Please fill all required fields.",
+
+  "alerts_receive": "Receive found alerts",
+  "alerts_subtitle": "Get notified when a new 'Found' report appears in a chosen area.",
+  "alerts_helper": "Tip: Choose how broad you want alerts to be:\n• Whole country (e.g., Romania)\n'• City (e.g., Cluj-Napoca)\n'• Neighbourhood (e.g., Mănăștur)",
+  "alerts_area": "Alert area",
+  "alerts_empty_area": "Please choose an alert area before enabling notifications.",
+
+  "animal": "Animal",
   "animal_type_dog": "Dog",
   "animal_type_cat": "Cat",
   "animal_type_other": "Other",
-  "gender": "Gender",
+  "animal_empty": "Please select an animal",
+
   "colors": "Colors",
+  "colors_empty": "Please select a color",
+
   "location": "Location",
   "description": "Description",
+
   "pick_photo": "Pick Photo",
+  "pick_photo_gallery": "Gallery",
+  "pick_photo_camera": "Camera",
+  "pick_photo_change": "Change Photo",
 
   "last_updated": "Last updated",
   
@@ -96,6 +116,8 @@
   "gender_female": "F",
   "gender_unknown": "?",
 
+  "gender": "Gender",
+  "gender_empty": "Please select a gender",
   "color_black": "Black",
   "color_white": "White",
   "color_brown": "Brown",
@@ -108,5 +130,6 @@
   "color_cream": "Cream",
   "color_golden": "Golden",
   "color_brindle": "Brindle",
-  "color_mixed": "Mixed"
+  "color_mixed": "Mixed",
+  "color_spotted": "Spotted"
 }

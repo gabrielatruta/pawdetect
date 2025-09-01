@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/views/reports/widgets/shared/receive_notifications_card.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
@@ -58,6 +59,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
   Widget build(BuildContext context) {
     final addReportViewModel = context.watch<AddReportViewModel>();
     final isPhone1Required = _reportType == report.ReportType.lost;
+    final loc = AppLocalizations.of(context)!; // localized strings
 
     return Column(
       children: [
@@ -142,7 +144,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
             // cancel
             Expanded(
               child: SecondaryButton(
-                text: "Cancel",
+                text: loc.cancel,
                 onPressed: () {
                   if (addReportViewModel.isLoading) return; // just ignore tap
                   Navigator.pop(context);
@@ -154,7 +156,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
             // create report
             Expanded(
               child: PrimaryButton(
-                text: "Create report",
+                text: loc.report_create,
                 onPressed: () async {
                   if (addReportViewModel.isLoading) {
                     return; // ignore taps while saving
@@ -170,9 +172,7 @@ class _AddNewReportFormState extends State<AddNewReportForm> {
                       _locationCtrl.text.trim().isEmpty ||
                       (requiresPhone1 && _phone1Ctrl.text.trim().isEmpty)) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill all required fields.'),
-                      ),
+                      SnackBar(content: Text(loc.report_not_filled)),
                     );
 
                     return;

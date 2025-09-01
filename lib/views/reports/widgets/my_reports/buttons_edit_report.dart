@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/navigation.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
@@ -44,12 +45,14 @@ class ButtonsEditReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!; // localized strings
+
     return Row(
       children: [
         // Mark as solved
         Expanded(
           child: SecondaryButton(
-            text: "Mark as solved",
+            text: loc.report_mark_as_solved,
             onPressed: () async {
               if (myReportViewModel.isLoading == true) return;
 
@@ -68,15 +71,15 @@ class ButtonsEditReport extends StatelessWidget {
         // Update report
         Expanded(
           child: PrimaryButton(
-            text: "Update report",
+            text: loc.report_update_report,
             onPressed: () async {
               if (myReportViewModel.isLoading == true) return;
 
               // Use effective (current) type if the user didn't change it.
-              final currentType = (reportTypeValue ??
-                      myReportViewModel.openedReport?.type)
-                  ?.toString()
-                  .toLowerCase();
+              final currentType =
+                  (reportTypeValue ?? myReportViewModel.openedReport?.type)
+                      ?.toString()
+                      .toLowerCase();
               final isLost = currentType == 'lost';
 
               // Require an area (and coords) if enabling alerts on a lost report.
@@ -84,50 +87,41 @@ class ButtonsEditReport extends StatelessWidget {
                 final area = alertAreaCtrl.text.trim();
                 if (area.isEmpty || alertLat == null || alertLng == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Please choose an alert area before enabling notifications.',
-                      ),
-                    ),
+                    SnackBar(content: Text(loc.alerts_empty_area)),
                   );
                   return; // prevent save
                 }
               }
 
-              final partial = <String, dynamic>{
-                if (reportTypeValue != null) 'type': reportTypeValue,
-                if (animalTypeValue != null) 'animal': animalTypeValue,
-                if (genderValue != null) 'gender': genderValue,
-                if (furColorValue != null) 'colors': [furColorValue],
-                'location': locationCtrl.text,
-                'additionalInfo': descriptionCtrl.text,
-                'phoneNumber1': phone1Ctrl.text,
-                'phoneNumber2': phone2Ctrl.text,
-              }..removeWhere(
-                  (k, v) =>
-                      v == null ||
-                      (v is String && v.trim().isEmpty),
-                );
+              final partial =
+                  <String, dynamic>{
+                    if (reportTypeValue != null) 'type': reportTypeValue,
+                    if (animalTypeValue != null) 'animal': animalTypeValue,
+                    if (genderValue != null) 'gender': genderValue,
+                    if (furColorValue != null) 'colors': [furColorValue],
+                    'location': locationCtrl.text,
+                    'additionalInfo': descriptionCtrl.text,
+                    'phoneNumber1': phone1Ctrl.text,
+                    'phoneNumber2': phone2Ctrl.text,
+                  }..removeWhere(
+                    (k, v) => v == null || (v is String && v.trim().isEmpty),
+                  );
 
               if (isLost) {
                 partial['foundAlertSubscription.enabled'] = receiveFoundAlerts;
 
                 if (receiveFoundAlerts) {
                   partial.addAll({
-                    'foundAlertSubscription.area':
-                        alertAreaCtrl.text.trim(),
+                    'foundAlertSubscription.area': alertAreaCtrl.text.trim(),
                     'foundAlertSubscription.lat': alertLat,
                     'foundAlertSubscription.lng': alertLng,
                   });
                 } else {
                   // disabling → clear the extras
                   partial.addAll({
-                    'foundAlertSubscription.area':
-                        fs.FieldValue.delete(),
-                    'foundAlertSubscription.lat':
-                        fs.FieldValue.delete(),
-                    'foundAlertSubscription.lng':
-                        fs.FieldValue.delete(),
+                    'foundAlertSubscription.area': fs.FieldValue.delete(),
+                    'foundAlertSubscription.lat': fs.FieldValue.delete(),
+                    'foundAlertSubscription.lng': fs.FieldValue.delete(),
                   });
                 }
               } else {

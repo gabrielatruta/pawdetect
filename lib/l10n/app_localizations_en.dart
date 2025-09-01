@@ -200,10 +200,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get report_edit => 'Edit report';
 
   @override
+  String get report_edit_my => 'Edit my report';
+
+  @override
   String get report_no_personal => 'No reports to display. Start reporting!';
 
   @override
   String get report_my_reports => 'My reports';
+
+  @override
+  String get report_mark_as_solved => 'Mark as solved';
+
+  @override
+  String get report_update_report => 'Update report';
 
   @override
   String get report_solved => 'Solved';
@@ -218,6 +227,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get report_found => 'Found';
 
   @override
+  String get report_type => 'Report type';
+
+  @override
+  String get report_type_empty => 'Please select a report type';
+
+  @override
+  String get report_not_filled => 'Please fill all required fields.';
+
+  @override
+  String get alerts_receive => 'Receive found alerts';
+
+  @override
+  String get alerts_subtitle =>
+      'Get notified when a new \'Found\' report appears in a chosen area.';
+
+  @override
+  String get alerts_helper =>
+      'Tip: Choose how broad you want alerts to be:\n• Whole country (e.g., Romania)\n\'• City (e.g., Cluj-Napoca)\n\'• Neighbourhood (e.g., Mănăștur)';
+
+  @override
+  String get alerts_area => 'Alert area';
+
+  @override
+  String get alerts_empty_area =>
+      'Please choose an alert area before enabling notifications.';
+
+  @override
+  String get animal => 'Animal';
+
+  @override
   String get animal_type_dog => 'Dog';
 
   @override
@@ -227,10 +266,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get animal_type_other => 'Other';
 
   @override
-  String get gender => 'Gender';
+  String get animal_empty => 'Please select an animal';
 
   @override
   String get colors => 'Colors';
+
+  @override
+  String get colors_empty => 'Please select a color';
 
   @override
   String get location => 'Location';
@@ -240,6 +282,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pick_photo => 'Pick Photo';
+
+  @override
+  String get pick_photo_gallery => 'Gallery';
+
+  @override
+  String get pick_photo_camera => 'Camera';
+
+  @override
+  String get pick_photo_change => 'Change Photo';
 
   @override
   String get last_updated => 'Last updated';
@@ -252,6 +303,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gender_unknown => '?';
+
+  @override
+  String get gender => 'Gender';
+
+  @override
+  String get gender_empty => 'Please select a gender';
 
   @override
   String get color_black => 'Black';
@@ -291,4 +348,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get color_mixed => 'Mixed';
+
+  @override
+  String get color_spotted => 'Spotted';
 }
