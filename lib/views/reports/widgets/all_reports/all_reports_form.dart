@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/l10n/app_localizations.dart';
+import 'package:pawdetect/l10n/loc_maps.dart';
 import 'package:pawdetect/models/report_model.dart' as models;
 import 'package:pawdetect/services/report_border_services.dart';
 import 'package:pawdetect/styles/app_colors.dart';
@@ -117,7 +118,8 @@ class AllReportsForm extends StatelessWidget {
                       final borderColor =
                           snap.data ?? AppColors.grey300; // safe default
                       return ReportCardStretched(
-                        title: "${item.type.value} ${item.animal.value}",
+                        title:
+                            '${LocMaps.type(item.type.value, loc)} ${LocMaps.animal(item.animal.value, loc)}',
                         // pass computed color into the card
                         borderColor: borderColor,
                       );
