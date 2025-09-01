@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/viewmodels/auth/signup_viewmodel.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/widgets/shared/app_logo.dart';
 import 'package:pawdetect/views/auth/widgets/shared/appname_title.dart';
@@ -26,6 +28,10 @@ class __SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     return PopScope(
       canPop: false, //prevent default back pop
       onPopInvokedWithResult: (didPop, result) {
@@ -37,8 +43,8 @@ class __SignUpScreenState extends State<SignUpScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.white,
-        appBar: CustomAppBar(title: "Sign Up"),
-        body: const SingleChildScrollView(
+        appBar: CustomAppBar(title: loc.signup),
+        body: SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Column(
             children: [
@@ -47,7 +53,7 @@ class __SignUpScreenState extends State<SignUpScreen> {
               AppnNameTitle(),
               SizedBox(height: 20),
               Text(
-                "Create your account to access all functionalities.",
+                loc.signup_description,
                 style: TextStyle(fontSize: 16, color: AppColors.black),
                 textAlign: TextAlign.center,
               ),

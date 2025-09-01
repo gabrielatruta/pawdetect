@@ -27,7 +27,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String get username => 'Nume utilizator';
 
   @override
+  String get username_empty => 'Te rog introdu un nume de utilizator!';
+
+  @override
   String get phone => 'Număr telefon';
+
+  @override
+  String get phone_empty => 'Te rog introdu un număr de telefon!';
+
+  @override
+  String get phone_invalid => 'Te rog introdu un număr de telefon valid!';
 
   @override
   String get email => 'Email';
@@ -52,6 +61,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get password_reset => 'Resetează parola';
 
   @override
+  String get password_confirm => 'Confirmă Parola';
+
+  @override
+  String get password_no_match => 'Parolele nu corespund';
+
+  @override
   String get login_forgot_password => 'Ai uitat parola?';
 
   @override
@@ -59,6 +74,13 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get login_subtitle => 'Bine ai revenit! Conectează-te ca să continui.';
+
+  @override
+  String get signup_description =>
+      'Creează-ți propriul cont pentru a accesa toate funcționalitățile.';
+
+  @override
+  String get singup_create_account => 'Crează contul';
 
   @override
   String get location_consent_question =>

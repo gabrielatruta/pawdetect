@@ -27,7 +27,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get username => 'Username';
 
   @override
+  String get username_empty => 'Please enter your username!';
+
+  @override
   String get phone => 'Phone';
+
+  @override
+  String get phone_empty => 'Please enter your phone number!';
+
+  @override
+  String get phone_invalid => 'Enter a valid phone number';
 
   @override
   String get email => 'Email';
@@ -52,6 +61,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password_reset => 'Reset password';
 
   @override
+  String get password_confirm => 'Confirm Password';
+
+  @override
+  String get password_no_match => 'Passwords do not match';
+
+  @override
   String get login_forgot_password => 'Forgot Password?';
 
   @override
@@ -59,6 +74,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_subtitle => 'Welcome back! Please log in to continue.';
+
+  @override
+  String get signup_description =>
+      'Create your account to access all functionalities.';
+
+  @override
+  String get singup_create_account => 'Create Account';
 
   @override
   String get location_consent_question => 'Allow location for this account?';

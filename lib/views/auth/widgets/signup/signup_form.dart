@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:provider/provider.dart';
@@ -39,13 +41,16 @@ class _SignupFormState extends State<SignupForm> {
   Widget build(BuildContext context) {
     final signupViewModel = context.watch<SignupViewModel>();
 
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     return Form(
       key: _formKey,
       child: Column(
         children: [
           NameField(controller: _name),
           const SizedBox(height: 16),
-          PhoneField(controller: _phone, isRequired: false,),
+          PhoneField(controller: _phone, isRequired: false),
           const SizedBox(height: 16),
           EmailField(controller: _email),
           const SizedBox(height: 16),
@@ -62,7 +67,7 @@ class _SignupFormState extends State<SignupForm> {
           const SizedBox(height: 16),
 
           PrimaryButton(
-            text: "Create Account",
+            text: loc.singup_create_account,
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 await signupViewModel.signUp(

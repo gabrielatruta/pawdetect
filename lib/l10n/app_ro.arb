@@ -6,8 +6,13 @@
   "signup": "Înregistrare",
   "save": "Salvează",
   "cancel": "Anulează",
+
   "username": "Nume utilizator",
+  "username_empty": "Te rog introdu un nume de utilizator!",
+
   "phone": "Număr telefon",
+  "phone_empty": "Te rog introdu un număr de telefon!",
+  "phone_invalid": "Te rog introdu un număr de telefon valid!",
 
   "email": "Email",
   "email_empty": "Te rog introdu adresa de email!",
@@ -16,12 +21,16 @@
   "password": "Parolă",
   "password_empty": "Te rog introdu parola!",
   "password_regex": "Parola trebuie să aibă minim 8 caractere, să includă \no majusculă, un număr și un simbol.",
-
   "password_reset": "Resetează parola",
+  "password_confirm": "Confirmă Parola",
+  "password_no_match": "Parolele nu corespund",
 
   "login_forgot_password": "Ai uitat parola?",
   "login_no_account": "Nu ai cont? ",
   "login_subtitle": "Bine ai revenit! Conectează-te ca să continui.",
+
+  "signup_description": "Creează-ți propriul cont pentru a accesa toate funcționalitățile.",
+  "singup_create_account": "Crează contul",
 
   "location_consent_question": "Permiteți accesul la locație pentru acest cont?",
   "location_consent_description": "Folosim locația ta doar pentru a centra mapa în jurul tău.\n Poți schimba ulterior această preferință în setări.",

@@ -134,11 +134,29 @@ abstract class AppLocalizations {
   /// **'Username'**
   String get username;
 
+  /// No description provided for @username_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your username!'**
+  String get username_empty;
+
   /// No description provided for @phone.
   ///
   /// In en, this message translates to:
   /// **'Phone'**
   String get phone;
+
+  /// No description provided for @phone_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your phone number!'**
+  String get phone_empty;
+
+  /// No description provided for @phone_invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid phone number'**
+  String get phone_invalid;
 
   /// No description provided for @email.
   ///
@@ -182,6 +200,18 @@ abstract class AppLocalizations {
   /// **'Reset password'**
   String get password_reset;
 
+  /// No description provided for @password_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get password_confirm;
+
+  /// No description provided for @password_no_match.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get password_no_match;
+
   /// No description provided for @login_forgot_password.
   ///
   /// In en, this message translates to:
@@ -199,6 +229,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Welcome back! Please log in to continue.'**
   String get login_subtitle;
+
+  /// No description provided for @signup_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account to access all functionalities.'**
+  String get signup_description;
+
+  /// No description provided for @singup_create_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get singup_create_account;
 
   /// No description provided for @location_consent_question.
   ///
