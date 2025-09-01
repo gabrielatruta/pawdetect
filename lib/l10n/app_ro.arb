@@ -73,6 +73,9 @@
   "report_create": "Crează raport",
   "report_not_found": "Raport nu a fost găsit",
   "report_error_generic": "A apărut o problemă",
+  "report_edit": "Editează raportul",
+  "report_no_personal": "Niciun raport personal. Începe să raportezi!",
+  "report_my_reports": "Rapoartele mele",
 
   "report_solved": "Soluționat",
   "report_unsolved": "Nesoluționat",

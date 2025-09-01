@@ -73,6 +73,9 @@
   "report_create": "Create report",
   "report_not_found": "Report not found",
   "report_error_generic": "Something went wrong",
+  "report_edit": "Edit report",
+  "report_no_personal": "No reports to display. Start reporting!",
+  "report_my_reports": "My reports",
 
   "report_solved": "Solved",
   "report_unsolved": "Unsolved",

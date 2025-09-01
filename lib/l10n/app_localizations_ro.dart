@@ -199,6 +199,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String get report_error_generic => 'A apărut o problemă';
 
   @override
+  String get report_edit => 'Editează raportul';
+
+  @override
+  String get report_no_personal =>
+      'Niciun raport personal. Începe să raportezi!';
+
+  @override
+  String get report_my_reports => 'Rapoartele mele';
+
+  @override
   String get report_solved => 'Soluționat';
 
   @override

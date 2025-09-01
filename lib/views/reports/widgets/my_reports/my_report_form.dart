@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
+import 'package:pawdetect/l10n/loc_maps.dart';
 import 'package:pawdetect/services/report_border_services.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/reports/my_reports_edit_screen.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/reports/widgets/shared/report_card_load_more.dart';
@@ -17,10 +20,11 @@ class MyReportsForm extends StatelessWidget {
     final vm = context.watch<MyReportsViewModel>();
     final myReports = vm.reports;
 
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     if (myReports.isEmpty) {
-      return const Center(
-        child: Text("No reports to display. Start reporting!"),
-      );
+      return Center(child: Text(loc.report_no_personal));
     }
 
     if (vm.isLoading && vm.reports.isEmpty) {
@@ -75,7 +79,8 @@ class MyReportsForm extends StatelessWidget {
                 builder: (context, snap) {
                   final c = snap.data ?? AppColors.grey300;
                   return ReportCardStretched(
-                    title: "${item.reportType} ${item.petType}",
+                    title:
+                        '${LocMaps.type(item.reportType, loc)} ${LocMaps.animal(item.petType, loc)}',
                     borderColor: c,
                   );
                 },
@@ -89,7 +94,7 @@ class MyReportsForm extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.edit),
                 color: AppColors.darkOrange,
-                tooltip: 'Edit report',
+                tooltip: loc.report_edit,
                 onPressed: () {
                   Navigator.push(
                     context,

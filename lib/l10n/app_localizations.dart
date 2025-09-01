@@ -464,6 +464,24 @@ abstract class AppLocalizations {
   /// **'Something went wrong'**
   String get report_error_generic;
 
+  /// No description provided for @report_edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit report'**
+  String get report_edit;
+
+  /// No description provided for @report_no_personal.
+  ///
+  /// In en, this message translates to:
+  /// **'No reports to display. Start reporting!'**
+  String get report_no_personal;
+
+  /// No description provided for @report_my_reports.
+  ///
+  /// In en, this message translates to:
+  /// **'My reports'**
+  String get report_my_reports;
+
   /// No description provided for @report_solved.
   ///
   /// In en, this message translates to:

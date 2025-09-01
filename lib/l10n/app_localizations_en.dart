@@ -197,6 +197,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get report_error_generic => 'Something went wrong';
 
   @override
+  String get report_edit => 'Edit report';
+
+  @override
+  String get report_no_personal => 'No reports to display. Start reporting!';
+
+  @override
+  String get report_my_reports => 'My reports';
+
+  @override
   String get report_solved => 'Solved';
 
   @override
