@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
+import 'package:pawdetect/l10n/loc_maps.dart';
+import 'package:pawdetect/models/report_model.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/report_details/report_details_card.dart';
 import 'package:pawdetect/views/reports/widgets/report_details/report_header_card.dart';
 import 'package:provider/provider.dart';
@@ -13,11 +17,14 @@ class ReportDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     return ChangeNotifierProvider(
       create: (_) => ReportDetailsViewModel(ReportService())..load(reportId),
       child: Scaffold(
         backgroundColor: AppColors.surface,
-        appBar: CustomAppBar(title: "Report"),
+        appBar: CustomAppBar(title: loc.report),
         body: Consumer<ReportDetailsViewModel>(
           builder: (_, vm, __) {
             if (vm.isLoading) {
@@ -25,7 +32,30 @@ class ReportDetailsScreen extends StatelessWidget {
                 child: CircularProgressIndicator(color: AppColors.orange),
               );
             }
-            if (vm.error != null) return Center(child: Text(vm.error!));
+            if (vm.error != null) {
+              final msg = vm.error == 'Report not found'
+                  ? loc.report_not_found
+                  : loc.report_error_generic;
+              return Center(child: Text(msg));
+            }
+
+            final r = vm.reportData!;
+
+            // Title
+            final base =
+                '${LocMaps.type(r.type.value, loc)} ${LocMaps.animal(r.animal.value, loc)}';
+            final status = LocMaps.status(vm.statusLabel, loc);
+            final titleText = status.isEmpty ? base : '$base ($status)';
+
+            // Details (labels + selected values)
+            final localizedItems = vm.detailFields
+                .map(
+                  (e) => MapEntry(
+                    LocMaps.detailLabel(e.key, loc),
+                    LocMaps.detailValue(e.key, e.value, loc),
+                  ),
+                )
+                .toList();
 
             return SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -33,11 +63,11 @@ class ReportDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Header: title + image
-                  ReportHeaderCard(title: vm.titleWithStatus, imageUrl: vm.imageUrl),
+                  ReportHeaderCard(title: titleText, imageUrl: vm.imageUrl),
                   const SizedBox(height: 12),
 
                   // Details
-                  ReportDetailsCard(items: vm.detailFields),
+                  ReportDetailsCard(items: localizedItems),
                 ],
               ),
             );

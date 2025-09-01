@@ -151,25 +151,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filter_animal_hint => 'Select Animal';
 
   @override
-  String get filter_dog => 'Dog';
-
-  @override
-  String get filter_cat => 'Cat';
-
-  @override
-  String get filter_other => 'Other';
-
-  @override
   String get filter_report_type => 'Report Type';
 
   @override
   String get filter_report_hint => 'Lost or Found';
-
-  @override
-  String get filter_report_lost => 'Lost';
-
-  @override
-  String get filter_report_found => 'Found';
 
   @override
   String get filter_clear_all => 'Clear all';
@@ -198,4 +183,103 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get report_no_id => 'Missing report id';
+
+  @override
+  String get report => 'Report';
+
+  @override
+  String get report_create => 'Create report';
+
+  @override
+  String get report_not_found => 'Report not found';
+
+  @override
+  String get report_error_generic => 'Something went wrong';
+
+  @override
+  String get report_solved => 'Solved';
+
+  @override
+  String get report_unsolved => 'Unsolved';
+
+  @override
+  String get report_lost => 'Lost';
+
+  @override
+  String get report_found => 'Found';
+
+  @override
+  String get animal_type_dog => 'Dog';
+
+  @override
+  String get animal_type_cat => 'Cat';
+
+  @override
+  String get animal_type_other => 'Other';
+
+  @override
+  String get gender => 'Gender';
+
+  @override
+  String get colors => 'Colors';
+
+  @override
+  String get location => 'Location';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get pick_photo => 'Pick Photo';
+
+  @override
+  String get last_updated => 'Last updated';
+
+  @override
+  String get gender_male => 'M';
+
+  @override
+  String get gender_female => 'F';
+
+  @override
+  String get gender_unknown => '?';
+
+  @override
+  String get color_black => 'Black';
+
+  @override
+  String get color_white => 'White';
+
+  @override
+  String get color_brown => 'Brown';
+
+  @override
+  String get color_gray => 'Gray';
+
+  @override
+  String get color_orange => 'Orange';
+
+  @override
+  String get color_yellow => 'Yellow';
+
+  @override
+  String get color_red => 'Red';
+
+  @override
+  String get color_tan => 'Tan';
+
+  @override
+  String get color_beige => 'Beige';
+
+  @override
+  String get color_cream => 'Cream';
+
+  @override
+  String get color_golden => 'Golden';
+
+  @override
+  String get color_brindle => 'Brindle';
+
+  @override
+  String get color_mixed => 'Mixed';
 }

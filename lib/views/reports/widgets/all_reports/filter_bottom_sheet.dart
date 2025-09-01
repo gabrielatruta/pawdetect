@@ -56,11 +56,11 @@ class FilterBottomSheet extends StatelessWidget {
                 display: (code) {
                   switch (code) {
                     case 'Dog':
-                      return loc.filter_dog;
+                      return loc.animal_type_dog;
                     case 'Cat':
-                      return loc.filter_cat;
+                      return loc.animal_type_cat;
                     default:
-                      return loc.filter_other;
+                      return loc.animal_type_other;
                   }
                 },
                 onChanged: viewModel.setAnimalFilter,
@@ -80,9 +80,9 @@ class FilterBottomSheet extends StatelessWidget {
                 display: (code) {
                   switch (code) {
                     case 'Lost':
-                      return loc.filter_report_lost;
+                      return loc.report_lost;
                     case 'Found':
-                      return loc.filter_report_found;
+                      return loc.report_found;
                     default:
                       return code;
                   }

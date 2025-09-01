@@ -374,24 +374,6 @@ abstract class AppLocalizations {
   /// **'Select Animal'**
   String get filter_animal_hint;
 
-  /// No description provided for @filter_dog.
-  ///
-  /// In en, this message translates to:
-  /// **'Dog'**
-  String get filter_dog;
-
-  /// No description provided for @filter_cat.
-  ///
-  /// In en, this message translates to:
-  /// **'Cat'**
-  String get filter_cat;
-
-  /// No description provided for @filter_other.
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get filter_other;
-
   /// No description provided for @filter_report_type.
   ///
   /// In en, this message translates to:
@@ -403,18 +385,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lost or Found'**
   String get filter_report_hint;
-
-  /// No description provided for @filter_report_lost.
-  ///
-  /// In en, this message translates to:
-  /// **'Lost'**
-  String get filter_report_lost;
-
-  /// No description provided for @filter_report_found.
-  ///
-  /// In en, this message translates to:
-  /// **'Found'**
-  String get filter_report_found;
 
   /// No description provided for @filter_clear_all.
   ///
@@ -469,6 +439,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Missing report id'**
   String get report_no_id;
+
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
+
+  /// No description provided for @report_create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create report'**
+  String get report_create;
+
+  /// No description provided for @report_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'Report not found'**
+  String get report_not_found;
+
+  /// No description provided for @report_error_generic.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get report_error_generic;
+
+  /// No description provided for @report_solved.
+  ///
+  /// In en, this message translates to:
+  /// **'Solved'**
+  String get report_solved;
+
+  /// No description provided for @report_unsolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsolved'**
+  String get report_unsolved;
+
+  /// No description provided for @report_lost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get report_lost;
+
+  /// No description provided for @report_found.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get report_found;
+
+  /// No description provided for @animal_type_dog.
+  ///
+  /// In en, this message translates to:
+  /// **'Dog'**
+  String get animal_type_dog;
+
+  /// No description provided for @animal_type_cat.
+  ///
+  /// In en, this message translates to:
+  /// **'Cat'**
+  String get animal_type_cat;
+
+  /// No description provided for @animal_type_other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get animal_type_other;
+
+  /// No description provided for @gender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get gender;
+
+  /// No description provided for @colors.
+  ///
+  /// In en, this message translates to:
+  /// **'Colors'**
+  String get colors;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @pick_photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Photo'**
+  String get pick_photo;
+
+  /// No description provided for @last_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated'**
+  String get last_updated;
+
+  /// No description provided for @gender_male.
+  ///
+  /// In en, this message translates to:
+  /// **'M'**
+  String get gender_male;
+
+  /// No description provided for @gender_female.
+  ///
+  /// In en, this message translates to:
+  /// **'F'**
+  String get gender_female;
+
+  /// No description provided for @gender_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'?'**
+  String get gender_unknown;
+
+  /// No description provided for @color_black.
+  ///
+  /// In en, this message translates to:
+  /// **'Black'**
+  String get color_black;
+
+  /// No description provided for @color_white.
+  ///
+  /// In en, this message translates to:
+  /// **'White'**
+  String get color_white;
+
+  /// No description provided for @color_brown.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown'**
+  String get color_brown;
+
+  /// No description provided for @color_gray.
+  ///
+  /// In en, this message translates to:
+  /// **'Gray'**
+  String get color_gray;
+
+  /// No description provided for @color_orange.
+  ///
+  /// In en, this message translates to:
+  /// **'Orange'**
+  String get color_orange;
+
+  /// No description provided for @color_yellow.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow'**
+  String get color_yellow;
+
+  /// No description provided for @color_red.
+  ///
+  /// In en, this message translates to:
+  /// **'Red'**
+  String get color_red;
+
+  /// No description provided for @color_tan.
+  ///
+  /// In en, this message translates to:
+  /// **'Tan'**
+  String get color_tan;
+
+  /// No description provided for @color_beige.
+  ///
+  /// In en, this message translates to:
+  /// **'Beige'**
+  String get color_beige;
+
+  /// No description provided for @color_cream.
+  ///
+  /// In en, this message translates to:
+  /// **'Cream'**
+  String get color_cream;
+
+  /// No description provided for @color_golden.
+  ///
+  /// In en, this message translates to:
+  /// **'Golden'**
+  String get color_golden;
+
+  /// No description provided for @color_brindle.
+  ///
+  /// In en, this message translates to:
+  /// **'Brindle'**
+  String get color_brindle;
+
+  /// No description provided for @color_mixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed'**
+  String get color_mixed;
 }
 
 class _AppLocalizationsDelegate

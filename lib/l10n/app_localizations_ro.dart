@@ -152,25 +152,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get filter_animal_hint => 'Selectează animalul';
 
   @override
-  String get filter_dog => 'Câine';
-
-  @override
-  String get filter_cat => 'Pisică';
-
-  @override
-  String get filter_other => 'Altceva';
-
-  @override
   String get filter_report_type => 'Tip Raport';
 
   @override
   String get filter_report_hint => 'Pierdut sau Găsit';
-
-  @override
-  String get filter_report_lost => 'Pierdut';
-
-  @override
-  String get filter_report_found => 'Găsit';
 
   @override
   String get filter_clear_all => 'Resetează filtrele';
@@ -200,4 +185,103 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get report_no_id => 'Lipsește ID-ul raportului.';
+
+  @override
+  String get report => 'Raport';
+
+  @override
+  String get report_create => 'Crează raport';
+
+  @override
+  String get report_not_found => 'Raport nu a fost găsit';
+
+  @override
+  String get report_error_generic => 'A apărut o problemă';
+
+  @override
+  String get report_solved => 'Soluționat';
+
+  @override
+  String get report_unsolved => 'Nesoluționat';
+
+  @override
+  String get report_lost => 'Pierdut';
+
+  @override
+  String get report_found => 'Găsit';
+
+  @override
+  String get animal_type_dog => 'Câine';
+
+  @override
+  String get animal_type_cat => 'Pisică';
+
+  @override
+  String get animal_type_other => 'Altceva';
+
+  @override
+  String get gender => 'Gen';
+
+  @override
+  String get colors => 'Culori';
+
+  @override
+  String get location => 'Locație';
+
+  @override
+  String get description => 'Descriere';
+
+  @override
+  String get pick_photo => 'Alege poză';
+
+  @override
+  String get last_updated => 'Ultima actualizare';
+
+  @override
+  String get gender_male => 'M';
+
+  @override
+  String get gender_female => 'F';
+
+  @override
+  String get gender_unknown => '?';
+
+  @override
+  String get color_black => 'Negru';
+
+  @override
+  String get color_white => 'Alb';
+
+  @override
+  String get color_brown => 'Maro';
+
+  @override
+  String get color_gray => 'Gri';
+
+  @override
+  String get color_orange => 'Portocaliu';
+
+  @override
+  String get color_yellow => 'Galben';
+
+  @override
+  String get color_red => 'Roșu';
+
+  @override
+  String get color_tan => 'Cafeniu';
+
+  @override
+  String get color_beige => 'Bej';
+
+  @override
+  String get color_cream => 'Crem';
+
+  @override
+  String get color_golden => 'Auriu';
+
+  @override
+  String get color_brindle => 'Tigrat';
+
+  @override
+  String get color_mixed => 'Multicolor';
 }
