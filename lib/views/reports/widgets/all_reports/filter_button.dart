@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
@@ -7,7 +9,6 @@ import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
 class FilterButton extends StatelessWidget {
   const FilterButton({super.key});
 
-  // Helper method to count active filters
   int _getActiveFilterCount(AllReportsViewModel viewModel) {
     int count = 0;
     if (viewModel.selectedAnimal != null) count++;
@@ -32,8 +33,10 @@ class FilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use context.watch to get the ViewModel
     final viewModel = context.watch<AllReportsViewModel>();
+
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
 
     return Container(
       decoration: BoxDecoration(
@@ -54,7 +57,7 @@ class FilterButton extends StatelessWidget {
                 Icon(Icons.tune, color: AppColors.orange700, size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  'Filter',
+                  loc.filter,
                   style: TextStyle(
                     color: AppColors.orange700,
                     fontWeight: FontWeight.w500,

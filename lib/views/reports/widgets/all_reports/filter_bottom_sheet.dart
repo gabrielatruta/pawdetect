@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_action_buttons.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_dropdown.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,9 @@ class FilterBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -31,7 +36,7 @@ class FilterBottomSheet extends StatelessWidget {
 
           // Title
           Text(
-            'Filter Reports',
+            loc.filter,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -44,10 +49,20 @@ class FilterBottomSheet extends StatelessWidget {
           Consumer<AllReportsViewModel>(
             builder: (context, viewModel, child) {
               return FilterDropdown(
-                label: 'Animal Type',
-                hint: 'Select Animal',
+                label: loc.filter_animal_type,
+                hint: loc.filter_animal_hint,
                 value: viewModel.selectedAnimal,
-                items: const ["Dog", "Cat", "Other"],
+                items: ["Dog", "Cat", "Other"],
+                display: (code) {
+                  switch (code) {
+                    case 'Dog':
+                      return loc.filter_dog;
+                    case 'Cat':
+                      return loc.filter_cat;
+                    default:
+                      return loc.filter_other;
+                  }
+                },
                 onChanged: viewModel.setAnimalFilter,
               );
             },
@@ -58,10 +73,20 @@ class FilterBottomSheet extends StatelessWidget {
           Consumer<AllReportsViewModel>(
             builder: (context, viewModel, child) {
               return FilterDropdown(
-                label: 'Report Type',
-                hint: 'Lost or Found',
+                label: loc.filter_report_type,
+                hint: loc.filter_report_hint,
                 value: viewModel.selectedStatus,
                 items: const ["Lost", "Found"],
+                display: (code) {
+                  switch (code) {
+                    case 'Lost':
+                      return loc.filter_report_lost;
+                    case 'Found':
+                      return loc.filter_report_found;
+                    default:
+                      return code;
+                  }
+                },
                 onChanged: viewModel.setStatusFilter,
               );
             },

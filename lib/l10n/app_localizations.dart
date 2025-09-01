@@ -350,6 +350,84 @@ abstract class AppLocalizations {
   /// **'Search place'**
   String get map_search;
 
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// No description provided for @filter_bottom_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter Reports'**
+  String get filter_bottom_title;
+
+  /// No description provided for @filter_animal_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Animal Type'**
+  String get filter_animal_type;
+
+  /// No description provided for @filter_animal_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Animal'**
+  String get filter_animal_hint;
+
+  /// No description provided for @filter_dog.
+  ///
+  /// In en, this message translates to:
+  /// **'Dog'**
+  String get filter_dog;
+
+  /// No description provided for @filter_cat.
+  ///
+  /// In en, this message translates to:
+  /// **'Cat'**
+  String get filter_cat;
+
+  /// No description provided for @filter_other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get filter_other;
+
+  /// No description provided for @filter_report_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Type'**
+  String get filter_report_type;
+
+  /// No description provided for @filter_report_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost or Found'**
+  String get filter_report_hint;
+
+  /// No description provided for @filter_report_lost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get filter_report_lost;
+
+  /// No description provided for @filter_report_found.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get filter_report_found;
+
+  /// No description provided for @filter_clear_all.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get filter_clear_all;
+
+  /// No description provided for @filter_apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get filter_apply;
+
   /// No description provided for @report_add_new.
   ///
   /// In en, this message translates to:
@@ -373,6 +451,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No found reports in your selected area yet.'**
   String get report_in_area_empty;
+
+  /// No description provided for @report_all_not_available.
+  ///
+  /// In en, this message translates to:
+  /// **'No reports available'**
+  String get report_all_not_available;
+
+  /// No description provided for @report_all.
+  ///
+  /// In en, this message translates to:
+  /// **'All reports'**
+  String get report_all;
+
+  /// No description provided for @report_no_id.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing report id'**
+  String get report_no_id;
 }
 
 class _AppLocalizationsDelegate

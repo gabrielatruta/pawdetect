@@ -140,6 +140,45 @@ class AppLocalizationsRo extends AppLocalizations {
   String get map_search => 'Caută o locație';
 
   @override
+  String get filter => 'Filtreză';
+
+  @override
+  String get filter_bottom_title => 'Filtrează Rapoarte';
+
+  @override
+  String get filter_animal_type => 'Tip Animal';
+
+  @override
+  String get filter_animal_hint => 'Selectează animalul';
+
+  @override
+  String get filter_dog => 'Câine';
+
+  @override
+  String get filter_cat => 'Pisică';
+
+  @override
+  String get filter_other => 'Altceva';
+
+  @override
+  String get filter_report_type => 'Tip Raport';
+
+  @override
+  String get filter_report_hint => 'Pierdut sau Găsit';
+
+  @override
+  String get filter_report_lost => 'Pierdut';
+
+  @override
+  String get filter_report_found => 'Găsit';
+
+  @override
+  String get filter_clear_all => 'Resetează filtrele';
+
+  @override
+  String get filter_apply => 'Aplică filtrele';
+
+  @override
   String get report_add_new => 'Creează un raport nou';
 
   @override
@@ -152,4 +191,13 @@ class AppLocalizationsRo extends AppLocalizations {
   @override
   String get report_in_area_empty =>
       'Niciun raport găsit în zona selectată momentan.';
+
+  @override
+  String get report_all_not_available => 'Nu există niciun raport creat.';
+
+  @override
+  String get report_all => 'Toate rapoartele';
+
+  @override
+  String get report_no_id => 'Lipsește ID-ul raportului.';
 }

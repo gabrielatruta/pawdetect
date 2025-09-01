@@ -139,6 +139,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get map_search => 'Search place';
 
   @override
+  String get filter => 'Filter';
+
+  @override
+  String get filter_bottom_title => 'Filter Reports';
+
+  @override
+  String get filter_animal_type => 'Animal Type';
+
+  @override
+  String get filter_animal_hint => 'Select Animal';
+
+  @override
+  String get filter_dog => 'Dog';
+
+  @override
+  String get filter_cat => 'Cat';
+
+  @override
+  String get filter_other => 'Other';
+
+  @override
+  String get filter_report_type => 'Report Type';
+
+  @override
+  String get filter_report_hint => 'Lost or Found';
+
+  @override
+  String get filter_report_lost => 'Lost';
+
+  @override
+  String get filter_report_found => 'Found';
+
+  @override
+  String get filter_clear_all => 'Clear all';
+
+  @override
+  String get filter_apply => 'Apply';
+
+  @override
   String get report_add_new => 'Add new report';
 
   @override
@@ -150,4 +189,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get report_in_area_empty =>
       'No found reports in your selected area yet.';
+
+  @override
+  String get report_all_not_available => 'No reports available';
+
+  @override
+  String get report_all => 'All reports';
+
+  @override
+  String get report_no_id => 'Missing report id';
 }

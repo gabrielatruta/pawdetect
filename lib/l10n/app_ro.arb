@@ -53,9 +53,25 @@
   "welcome_continue_as_guest": "Continuă fără cont",
 
   "map_search": "Caută o locație",
+  "filter": "Filtreză",
+  "filter_bottom_title": "Filtrează Rapoarte",
+  "filter_animal_type": "Tip Animal",
+  "filter_animal_hint": "Selectează animalul",
+  "filter_dog": "Câine",
+  "filter_cat": "Pisică",
+  "filter_other": "Altceva",
+  "filter_report_type": "Tip Raport",
+  "filter_report_hint": "Pierdut sau Găsit",
+  "filter_report_lost": "Pierdut",
+  "filter_report_found": "Găsit",
+  "filter_clear_all": "Resetează filtrele",
+  "filter_apply": "Aplică filtrele",
 
   "report_add_new": "Creează un raport nou",
   "report_in_area": "Rapoarte în zonele selectate",
   "report_no_area_selected": "Nicio zonă de căutare activată momentan.",
-  "report_in_area_empty": "Niciun raport găsit în zona selectată momentan."
+  "report_in_area_empty": "Niciun raport găsit în zona selectată momentan.",
+  "report_all_not_available": "Nu există niciun raport creat.",
+  "report_all": "Toate rapoartele",
+  "report_no_id": "Lipsește ID-ul raportului."
 }

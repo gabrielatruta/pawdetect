@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/styles/app_colors.dart';
 
 class FilterDropdown extends StatelessWidget {
   final String label;
   final String hint;
-  final String? value;
-  final List<String> items;
+  final String? value;                 // canonical code: 'dog' | 'cat' | 'other'
+  final List<String> items;            // canonical codes
   final ValueChanged<String?> onChanged;
+  final String Function(String value)? display;  // maps code -> UI label
 
   const FilterDropdown({
     super.key,
@@ -15,6 +15,7 @@ class FilterDropdown extends StatelessWidget {
     required this.value,
     required this.items,
     required this.onChanged,
+    this.display,
   });
 
   @override
@@ -22,32 +23,18 @@ class FilterDropdown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: AppColors.grey700,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.grey300),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: DropdownButton<String>(
-            isExpanded: true,
-            value: value,
-            hint: Text(hint),
-            underline: const SizedBox(),
-            items: items
-                .map((item) => DropdownMenuItem(value: item, child: Text(item)))
-                .toList(),
-            onChanged: onChanged,
-          ),
+        Text(label),
+        DropdownButton<String>(
+          value: value,
+          hint: Text(hint),
+          isExpanded: true,
+          items: items
+              .map((code) => DropdownMenuItem<String>(
+                    value: code,
+                    child: Text(display?.call(code) ?? code),
+                  ))
+              .toList(),
+          onChanged: onChanged,
         ),
       ],
     );

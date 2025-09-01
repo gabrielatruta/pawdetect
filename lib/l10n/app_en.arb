@@ -53,9 +53,25 @@
   "welcome_continue_as_guest": "Continue without an account",
 
   "map_search": "Search place",
+  "filter": "Filter",
+  "filter_bottom_title": "Filter Reports",
+  "filter_animal_type": "Animal Type",
+  "filter_animal_hint": "Select Animal",
+  "filter_dog": "Dog",
+  "filter_cat": "Cat",
+  "filter_other": "Other",
+  "filter_report_type": "Report Type",
+  "filter_report_hint": "Lost or Found",
+  "filter_report_lost": "Lost",
+  "filter_report_found": "Found",
+  "filter_clear_all": "Clear all",
+  "filter_apply": "Apply",
 
   "report_add_new": "Add new report",
   "report_in_area": "Reports in your chosen area(s)",
   "report_no_area_selected": "No alerts/areas selected yet.",
-  "report_in_area_empty": "No found reports in your selected area yet."
+  "report_in_area_empty": "No found reports in your selected area yet.",
+  "report_all_not_available": "No reports available",
+  "report_all": "All reports",
+  "report_no_id": "Missing report id"
 }

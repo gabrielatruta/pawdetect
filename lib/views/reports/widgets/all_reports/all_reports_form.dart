@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/models/report_model.dart' as models;
 import 'package:pawdetect/services/report_border_services.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_button.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,9 @@ class AllReportsForm extends StatelessWidget {
     final vm = context.watch<AllReportsViewModel>();
     final all = vm.reports;
 
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     if (vm.isLoading && all.isEmpty) {
       return const Center(
         child: CircularProgressIndicator(color: AppColors.orange),
@@ -27,7 +32,7 @@ class AllReportsForm extends StatelessWidget {
       return Center(child: ErrorMessage(message: vm.errorMessage!));
     }
     if (all.isEmpty) {
-      return const Center(child: Text("No reports available"));
+      return Center(child: Text(loc.report_all_not_available));
     }
 
     final items = vm.visibleReports;
@@ -52,7 +57,7 @@ class AllReportsForm extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'All reports',
+                    loc.report_all,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
                       color: AppColors.orange,
@@ -88,9 +93,9 @@ class AllReportsForm extends StatelessWidget {
                   onTap: () async {
                     final id = item.id;
                     if (id == null || id.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Missing report id')),
-                      );
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(loc.report_no_id)));
                       return;
                     }
 

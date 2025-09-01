@@ -61,7 +61,6 @@ class HomeScreen extends StatelessWidget {
                       for (final d in (snap.data?.docs ?? const [])) {
                         final data = d.data();
 
-                        // 'animal' stored as 'Dog'/'Cat'/... -> map to enum
                         final rawAnimal = (data['animal'] ?? '').toString();
                         final animal = report.AnimalType.values.firstWhere(
                           (a) => a.value.toLowerCase() == rawAnimal.toLowerCase(),
@@ -81,7 +80,7 @@ class HomeScreen extends StatelessWidget {
 
                       return ReportsFromAreaSection(
                         filtersByAnimal: filters,
-                        limit: 4, // show 4, then Load More (+4)
+                        limit: 4,
                       );
                     },
                   );
