@@ -33,6 +33,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get email => 'Email';
 
   @override
+  String get email_empty => 'Please enter your email!';
+
+  @override
+  String get email_not_valid => 'Email address is not valid!';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get password_empty => 'Please enter your password!';
+
+  @override
+  String get password_regex =>
+      'Password must be at least 8 characters, include \nan uppercase letter, number and symbol.';
+
+  @override
+  String get login_forgot_password => 'Forgot Password?';
+
+  @override
+  String get login_no_account => 'Don\'t have an account? ';
+
+  @override
+  String get login_subtitle => 'Welcome back! Please log in to continue.';
+
+  @override
+  String get location_consent_question => 'Allow location for this account?';
+
+  @override
+  String get location_consent_description =>
+      'We use your location only to center the home map near you.\n You can change this anytime in Settings.';
+
+  @override
+  String get location_consent_allow => 'Allow';
+
+  @override
+  String get location_consent_not_now => 'Not now';
+
+  @override
   String get profile_title => 'My profile';
 
   @override

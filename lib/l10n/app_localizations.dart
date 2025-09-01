@@ -146,6 +146,78 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get email;
 
+  /// No description provided for @email_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email!'**
+  String get email_empty;
+
+  /// No description provided for @email_not_valid.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address is not valid!'**
+  String get email_not_valid;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @password_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password!'**
+  String get password_empty;
+
+  /// No description provided for @password_regex.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters, include \nan uppercase letter, number and symbol.'**
+  String get password_regex;
+
+  /// No description provided for @login_forgot_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password?'**
+  String get login_forgot_password;
+
+  /// No description provided for @login_no_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? '**
+  String get login_no_account;
+
+  /// No description provided for @login_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back! Please log in to continue.'**
+  String get login_subtitle;
+
+  /// No description provided for @location_consent_question.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location for this account?'**
+  String get location_consent_question;
+
+  /// No description provided for @location_consent_description.
+  ///
+  /// In en, this message translates to:
+  /// **'We use your location only to center the home map near you.\n You can change this anytime in Settings.'**
+  String get location_consent_description;
+
+  /// No description provided for @location_consent_allow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get location_consent_allow;
+
+  /// No description provided for @location_consent_not_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get location_consent_not_now;
+
   /// No description provided for @profile_title.
   ///
   /// In en, this message translates to:

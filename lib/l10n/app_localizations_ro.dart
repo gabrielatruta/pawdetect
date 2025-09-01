@@ -33,6 +33,45 @@ class AppLocalizationsRo extends AppLocalizations {
   String get email => 'Email';
 
   @override
+  String get email_empty => 'Te rog introdu adresa de email!';
+
+  @override
+  String get email_not_valid => 'Adresa de email invalidă!';
+
+  @override
+  String get password => 'Parolă';
+
+  @override
+  String get password_empty => 'Te rog introdu parola!';
+
+  @override
+  String get password_regex =>
+      'Parola trebuie să aibă minim 8 caractere, să includă \no majusculă, un număr și un simbol.';
+
+  @override
+  String get login_forgot_password => 'Ai uitat parola?';
+
+  @override
+  String get login_no_account => 'Nu ai cont? ';
+
+  @override
+  String get login_subtitle => 'Bine ai revenit! Conectează-te ca să continui.';
+
+  @override
+  String get location_consent_question =>
+      'Permiteți accesul la locație pentru acest cont?';
+
+  @override
+  String get location_consent_description =>
+      'Folosim locația ta doar pentru a centra mapa în jurul tău.\n Poți schimba ulterior această preferință în setări.';
+
+  @override
+  String get location_consent_allow => 'Permite';
+
+  @override
+  String get location_consent_not_now => 'Nu acum';
+
+  @override
   String get profile_title => 'Profilul meu';
 
   @override

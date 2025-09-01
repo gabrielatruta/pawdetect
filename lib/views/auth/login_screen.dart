@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/viewmodels/auth/login_viewmodel.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/auth/widgets/shared/app_logo.dart';
 import 'package:pawdetect/views/auth/widgets/shared/appname_title.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
@@ -27,6 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -38,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.white,
-        appBar: const CustomAppBar(title: "Log in"),
+        appBar: CustomAppBar(title: loc.login),
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),

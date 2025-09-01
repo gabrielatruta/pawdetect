@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
+import 'package:provider/provider.dart';
 
 Future<bool> showLocationConsentPopUp(BuildContext context) async {
   final result = await showDialog<bool>(
     context: context,
     barrierDismissible: false, // force an explicit choice
     builder: (ctx) {
+      final loc = AppLocalizations.of(context)!; // localized strings
+      context.watch<LocalizationViewModel>(); // current language
+
       return Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
@@ -42,9 +48,9 @@ Future<bool> showLocationConsentPopUp(BuildContext context) async {
                         child: const Icon(Icons.my_location_rounded),
                       ),
                       const SizedBox(width: 12),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'Allow location for this account?',
+                          loc.location_consent_question,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
@@ -54,26 +60,25 @@ Future<bool> showLocationConsentPopUp(BuildContext context) async {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'We use your location only to center the home map near you. '
-                    'You can change this anytime in Settings.',
+                  Text(
+                    loc.location_consent_description,
                     style: TextStyle(height: 1.3),
                   ),
                   const SizedBox(height: 16),
 
-                  // Actions: Secondary (Not now) LEFT, Primary (Allow) RIGHT
+                  // Actions
                   Row(
                     children: [
                       Expanded(
                         child: SecondaryButton(
-                          text: 'Not now',
+                          text: loc.location_consent_not_now,
                           onPressed: () => Navigator.pop(ctx, false),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: PrimaryButton(
-                          text: 'Allow',
+                          text: loc.location_consent_allow,
                           onPressed: () => Navigator.pop(ctx, true),
                         ),
                       ),

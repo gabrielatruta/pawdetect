@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/shared/custom_input_field.dart';
+import 'package:provider/provider.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
@@ -19,8 +22,11 @@ class _PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     return CustomInputField(
-      label: "Password",
+      label: loc.password,
       controller: widget.controller,
       obscureText: _obscure,
       suffixIcon: IconButton(
@@ -29,12 +35,12 @@ class _PasswordFieldState extends State<PasswordField> {
       ),
       validator: (v) {
         final value = v?.trim() ?? '';
-        if (value.isEmpty) return "Please enter your password!";
+        if (value.isEmpty) return loc.password_empty;
         final regex = RegExp(
           r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
         );
         if (!regex.hasMatch(value) && !widget.isLogin) {
-          return "Password must be at least 8 characters, include \nan uppercase letter, number and symbol.";
+          return loc.password_regex;
         }
         return null;
       },

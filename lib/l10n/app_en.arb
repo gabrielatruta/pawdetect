@@ -8,8 +8,23 @@
   "cancel": "Cancel",
   "username": "Username",
   "phone": "Phone",
-  "email": "Email",
 
+  "email": "Email",
+  "email_empty": "Please enter your email!",
+  "email_not_valid": "Email address is not valid!",
+
+  "password": "Password",
+  "password_empty": "Please enter your password!",
+  "password_regex": "Password must be at least 8 characters, include \nan uppercase letter, number and symbol.",
+
+  "login_forgot_password": "Forgot Password?",
+  "login_no_account": "Don't have an account? ",
+  "login_subtitle": "Welcome back! Please log in to continue.",
+
+  "location_consent_question": "Allow location for this account?",
+  "location_consent_description": "We use your location only to center the home map near you.\n You can change this anytime in Settings.",
+  "location_consent_allow": "Allow",
+  "location_consent_not_now": "Not now",
 
   "profile_title": "My profile",
   "profile_update": "Update Profile",

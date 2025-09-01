@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/services/location_consent.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/auth/forgot_password_screen.dart';
 import 'package:pawdetect/views/auth/signup_screen.dart';
 import 'package:pawdetect/views/auth/widgets/login/location_consent_popup.dart';
@@ -28,6 +30,9 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final loginViewModel = Provider.of<LoginViewModel>(context);
+
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
 
     return Form(
       key: _formKey,
@@ -68,8 +73,8 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 );
               },
-              child: const Text(
-                "Forgot Password?",
+              child: Text(
+                loc.login_forgot_password,
                 style: TextStyle(color: AppColors.grey),
               ),
             ),
@@ -79,7 +84,7 @@ class _LoginFormState extends State<LoginForm> {
 
           // Login button
           PrimaryButton(
-            text: "Login",
+            text: loc.login,
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 final success = await loginViewModel.login(
@@ -117,7 +122,7 @@ class _LoginFormState extends State<LoginForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("Don’t have an account? "),
+              Text(loc.login_no_account),
               TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -125,8 +130,8 @@ class _LoginFormState extends State<LoginForm> {
                     MaterialPageRoute(builder: (_) => const SignUpScreen()),
                   );
                 },
-                child: const Text(
-                  "Sign Up",
+                child: Text(
+                  loc.signup,
                   style: TextStyle(color: AppColors.orange),
                 ),
               ),

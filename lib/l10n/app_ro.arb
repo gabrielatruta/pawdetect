@@ -8,8 +8,23 @@
   "cancel": "Anulează",
   "username": "Nume utilizator",
   "phone": "Număr telefon",
-  "email": "Email",
 
+  "email": "Email",
+  "email_empty": "Te rog introdu adresa de email!",
+  "email_not_valid": "Adresa de email invalidă!",
+
+  "password": "Parolă",
+  "password_empty": "Te rog introdu parola!",
+  "password_regex": "Parola trebuie să aibă minim 8 caractere, să includă \no majusculă, un număr și un simbol.",
+
+  "login_forgot_password": "Ai uitat parola?",
+  "login_no_account": "Nu ai cont? ",
+  "login_subtitle": "Bine ai revenit! Conectează-te ca să continui.",
+
+  "location_consent_question": "Permiteți accesul la locație pentru acest cont?",
+  "location_consent_description": "Folosim locația ta doar pentru a centra mapa în jurul tău.\n Poți schimba ulterior această preferință în setări.",
+  "location_consent_allow": "Permite",
+  "location_consent_not_now": "Nu acum",
 
   "profile_title": "Profilul meu",
   "profile_update": "Actualizează profilul",
