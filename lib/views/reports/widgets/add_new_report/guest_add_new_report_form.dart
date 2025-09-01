@@ -4,7 +4,7 @@ import 'package:pawdetect/views/guest/guest_home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
-import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/add_report_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/shared/location_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/description_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/pet_gender_dropdown.dart';

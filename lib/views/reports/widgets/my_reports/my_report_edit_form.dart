@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
-import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/my_reports_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/my_reports/buttons_edit_report.dart';
 import 'package:pawdetect/views/reports/widgets/shared/description_field.dart';
 import 'package:pawdetect/views/reports/widgets/shared/location_field.dart';

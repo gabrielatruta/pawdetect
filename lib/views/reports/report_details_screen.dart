@@ -4,7 +4,7 @@ import 'package:pawdetect/views/reports/widgets/report_details/report_header_car
 import 'package:provider/provider.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:pawdetect/styles/app_colors.dart';
-import 'package:pawdetect/viewmodels/report_details_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/report_details_viewmodel.dart';
 import 'package:pawdetect/services/report_service.dart';
 
 class ReportDetailsScreen extends StatelessWidget {

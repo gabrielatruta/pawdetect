@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:provider/provider.dart';
-import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
 
 class FilterActionButtons extends StatelessWidget {
   const FilterActionButtons({super.key});

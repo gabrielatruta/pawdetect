@@ -5,7 +5,7 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_button.dart';
 import 'package:provider/provider.dart';
-import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/shared/report_card_load_more.dart';
 import 'package:pawdetect/views/reports/widgets/shared/report_card_stretched.dart';
 import 'package:pawdetect/views/shared/error_message.dart';

@@ -3,7 +3,7 @@ import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_action_buttons.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_dropdown.dart';
 import 'package:provider/provider.dart';
-import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
 
 class FilterBottomSheet extends StatelessWidget {
   const FilterBottomSheet({super.key});

@@ -5,7 +5,7 @@ import 'package:pawdetect/views/home/widgets/map/map_search_bar.dart';
 import 'package:pawdetect/views/home/widgets/map/map_suggestions.dart';
 import 'package:pawdetect/views/home/widgets/map/map_zoom_controls.dart';
 import 'package:provider/provider.dart';
-import 'package:pawdetect/viewmodels/map_viewmodel.dart';
+import 'package:pawdetect/viewmodels/home/map_viewmodel.dart';
 import 'package:pawdetect/services/report_service.dart';
 
 class HomeMapCard extends StatelessWidget {

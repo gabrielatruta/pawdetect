@@ -1,0 +1,20 @@
+{
+  "@@locale": "ro",
+
+  "logout": "Deconectare",
+  "save": "Salvează",
+  "cancel": "Anulează",
+  "username": "Nume utilizator",
+  "phone": "Număr telefon",
+  "email": "Email",
+
+
+  "profile_title": "Profilul meu",
+  "profile_update": "Actualizează profilul",
+  "profile_unavailable": "Niciun profil disponibil",
+  "profile_updated_s": "Profil actualizat cu succes",
+  "profile_account_info": "Informații cont",
+  "profile_preferences": "Preferințe",
+  "profile_turn_notifications": "Dezactivează notificările",
+  "profile_switch_to_romanian": "Schimbă pe română"
+}

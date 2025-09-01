@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/models/user_model.dart';
-import 'package:pawdetect/viewmodels/profile_viewmodel.dart';
+import 'package:pawdetect/viewmodels/home/profile_viewmodel.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/home/widgets/profile/profile_information.dart';
 import 'package:pawdetect/views/home/widgets/profile/profile_preferences.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
@@ -18,9 +20,8 @@ class _ProfileFormState extends State<ProfileForm> {
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
 
-  bool _romanianLanguage = false;
-
   String? _lastUid;
+
   void _sync(UserModel? u) {
     if (u == null) {
       if (_lastUid != null) {
@@ -66,8 +67,11 @@ class _ProfileFormState extends State<ProfileForm> {
     final user = profileViewModel.profileUser;
     _sync(profileViewModel.profileUser);
 
+    final loc = AppLocalizations.of(context)!; // localized strings
+    final localeVm = context.watch<LocalizationViewModel>(); // current language
+
     if (user == null) {
-      return const Center(child: Text("No user profile available"));
+      return Center(child: Text(loc.profile_unavailable));
     }
 
     return Column(
@@ -86,17 +90,15 @@ class _ProfileFormState extends State<ProfileForm> {
 
         // Preferences section
         PreferencesForm(
-          romanianLanguage: _romanianLanguage,
-          onLanguageChanged: (val) {
-            setState(() => _romanianLanguage = val);
-          },
+          romanianLanguage: localeVm.isRomanian,
+          onLanguageChanged: (val) => localeVm.toggleRomanian(val),
         ),
 
         const SizedBox(height: 40),
 
         // Update profile
         SecondaryButton(
-          text: "Update profile",
+          text: loc.profile_update,
           onPressed: () async {
             await profileViewModel.updateProfile(
               _nameController.text,
@@ -104,9 +106,9 @@ class _ProfileFormState extends State<ProfileForm> {
               _emailController.text,
             );
             if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Profile updated successfully")),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(loc.profile_updated_s)));
             }
           },
         ),

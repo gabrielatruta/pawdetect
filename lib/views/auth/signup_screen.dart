@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pawdetect/viewmodels/signup_viewmodel.dart';
+import 'package:pawdetect/viewmodels/auth/signup_viewmodel.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/auth/widgets/shared/app_logo.dart';
 import 'package:pawdetect/views/auth/widgets/shared/appname_title.dart';

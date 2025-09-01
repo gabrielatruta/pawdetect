@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:provider/provider.dart';
-import 'package:pawdetect/viewmodels/add_report_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/add_report_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/add_new_report/add_new_report_form.dart';
 
 class AddNewReportScreen extends StatelessWidget {

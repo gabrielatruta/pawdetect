@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
-import 'package:pawdetect/viewmodels/map_viewmodel.dart';
+import 'package:pawdetect/viewmodels/home/map_viewmodel.dart';
 
 class MapZoomControls extends StatelessWidget {
   final MapViewModel mapViewModel;

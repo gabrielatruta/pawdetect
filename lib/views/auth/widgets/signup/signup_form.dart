@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/views/auth/login_screen.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:provider/provider.dart';
-import '../../../../viewmodels/signup_viewmodel.dart';
+import '../../../../viewmodels/auth/signup_viewmodel.dart';
 import '../../../shared/error_message.dart';
 import 'name_field.dart';
 import '../../../shared/phone_field.dart';

@@ -6,7 +6,7 @@ import 'package:pawdetect/views/guest/guest_home_screen.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:provider/provider.dart';
-import '../../../../viewmodels/welcome_viewmodel.dart';
+import '../../../viewmodels/auth/welcome_viewmodel.dart';
 
 class WelcomeActions extends StatelessWidget {
   const WelcomeActions({super.key});

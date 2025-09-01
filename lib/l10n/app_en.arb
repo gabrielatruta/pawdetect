@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+  
+  "logout": "Log out",
+  "save": "Save",
+  "cancel": "Cancel",
+  "username": "Username",
+  "phone": "Phone",
+  "email": "Email",
+
+
+  "profile_title": "My profile",
+  "profile_update": "Update Profile",
+  "profile_unavailable": "No user profile available",
+  "profile_updated_s": "Profile updated successfully",
+  "profile_account_info": "Account Information",
+  "profile_preferences": "Preferences",
+  "profile_turn_notifications": "Turn off push notifications",
+  "profile_switch_to_romanian": "Switch to Romanian"
+}

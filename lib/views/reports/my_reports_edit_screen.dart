@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
-import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/my_reports_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/my_reports/my_report_edit_form.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:provider/provider.dart';

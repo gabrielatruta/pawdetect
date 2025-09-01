@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/filter_bottom_sheet.dart';
 import 'package:provider/provider.dart';
-import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
 
 class FilterButton extends StatelessWidget {
   const FilterButton({super.key});

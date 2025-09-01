@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:pawdetect/styles/app_colors.dart';
-import 'package:pawdetect/viewmodels/map_viewmodel.dart';
+import 'package:pawdetect/viewmodels/home/map_viewmodel.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/views/home/widgets/map/map_report_preview.dart';
 

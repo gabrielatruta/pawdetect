@@ -11,7 +11,7 @@ import 'package:pawdetect/views/home/home_screen.dart';
 import 'package:pawdetect/views/shared/error_message.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:provider/provider.dart';
-import '../../../../viewmodels/login_viewmodel.dart';
+import '../../../../viewmodels/auth/login_viewmodel.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

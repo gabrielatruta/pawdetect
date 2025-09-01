@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pawdetect/viewmodels/all_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
 import 'package:pawdetect/views/guest/widgets/guest_profile_replacement.dart';
 import 'package:pawdetect/views/home/profile_screen.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';

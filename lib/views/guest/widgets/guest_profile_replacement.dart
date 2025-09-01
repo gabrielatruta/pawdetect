@@ -6,7 +6,7 @@ import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:pawdetect/views/welcome/welcome_screen.dart';
 import 'package:provider/provider.dart';
-import '../../../viewmodels/profile_viewmodel.dart';
+import '../../../viewmodels/home/profile_viewmodel.dart';
 
 class GuestProfileReplacement extends StatelessWidget {
   const GuestProfileReplacement({super.key});
