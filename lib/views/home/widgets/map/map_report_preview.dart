@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/home/widgets/map/map_preview_item.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
+import 'package:provider/provider.dart';
 
 class MapReportPreview extends StatelessWidget {
   final String reportId;
@@ -29,6 +32,9 @@ class MapReportPreview extends StatelessWidget {
       data.phoneNumber1.isNotEmpty ? data.phoneNumber1 : data.phoneNumber2,
     );
     final info = _text(data.additionalInfo);
+
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
 
     return AlertDialog(
       backgroundColor: AppColors.white,
@@ -90,7 +96,7 @@ class MapReportPreview extends StatelessWidget {
                   child: SizedBox(
                     height: 44,
                     child: SecondaryButton(
-                      text: "Close",
+                      text: loc.close,
                       onPressed: () {
                         Navigator.of(context).pop();
                         onClosed();
@@ -103,7 +109,7 @@ class MapReportPreview extends StatelessWidget {
                   child: SizedBox(
                     height: 44,
                     child: PrimaryButton(
-                      text: "Open",
+                      text: loc.open,
                       onPressed: () {
                         Navigator.of(context).pop();
                         onClosed();

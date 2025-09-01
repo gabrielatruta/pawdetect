@@ -24,6 +24,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get close => 'Close';
+
+  @override
+  String get open => 'Open';
+
+  @override
   String get username => 'Username';
 
   @override
@@ -128,4 +134,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcome_continue_as_guest => 'Continue without an account';
+
+  @override
+  String get map_search => 'Search place';
 }

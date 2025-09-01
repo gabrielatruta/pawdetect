@@ -24,6 +24,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get cancel => 'Anulează';
 
   @override
+  String get close => 'Închide';
+
+  @override
+  String get open => 'Deschide';
+
+  @override
   String get username => 'Nume utilizator';
 
   @override
@@ -129,4 +135,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get welcome_continue_as_guest => 'Continuă fără cont';
+
+  @override
+  String get map_search => 'Caută o locație';
 }

@@ -6,6 +6,8 @@
   "signup": "Înregistrare",
   "save": "Salvează",
   "cancel": "Anulează",
+  "close": "Închide",
+  "open": "Deschide",
 
   "username": "Nume utilizator",
   "username_empty": "Te rog introdu un nume de utilizator!",
@@ -48,5 +50,7 @@
 
   "welcome_title": "Bunvenit pe PawDetect!",
   "welcome_subtitle": "Detectivul tău în timp real, pe urmele animalului de companie dispărut!",
-  "welcome_continue_as_guest": "Continuă fără cont"
+  "welcome_continue_as_guest": "Continuă fără cont",
+
+  "map_search": "Caută o locație"
 }

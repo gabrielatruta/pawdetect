@@ -128,6 +128,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get open;
+
   /// No description provided for @username.
   ///
   /// In en, this message translates to:
@@ -331,6 +343,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue without an account'**
   String get welcome_continue_as_guest;
+
+  /// No description provided for @map_search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search place'**
+  String get map_search;
 }
 
 class _AppLocalizationsDelegate

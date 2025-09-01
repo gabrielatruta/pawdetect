@@ -6,6 +6,8 @@
   "signup": "Sign Up",
   "save": "Save",
   "cancel": "Cancel",
+  "close": "Close",
+  "open": "Open",
 
   "username": "Username",
   "username_empty": "Please enter your username!",
@@ -48,5 +50,8 @@
 
   "welcome_title": "Welcome to PawDetect!",
   "welcome_subtitle": "Your real-time investigator searching for your lost pet!",
-  "welcome_continue_as_guest": "Continue without an account"
+  "welcome_continue_as_guest": "Continue without an account",
+
+  "map_search": "Search place"
+
 }
