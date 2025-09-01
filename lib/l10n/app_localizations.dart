@@ -349,6 +349,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search place'**
   String get map_search;
+
+  /// No description provided for @report_add_new.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new report'**
+  String get report_add_new;
+
+  /// No description provided for @report_in_area.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports in your chosen area(s)'**
+  String get report_in_area;
+
+  /// No description provided for @report_no_area_selected.
+  ///
+  /// In en, this message translates to:
+  /// **'No alerts/areas selected yet.'**
+  String get report_no_area_selected;
+
+  /// No description provided for @report_in_area_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No found reports in your selected area yet.'**
+  String get report_in_area_empty;
 }
 
 class _AppLocalizationsDelegate

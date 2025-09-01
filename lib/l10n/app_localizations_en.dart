@@ -137,4 +137,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get map_search => 'Search place';
+
+  @override
+  String get report_add_new => 'Add new report';
+
+  @override
+  String get report_in_area => 'Reports in your chosen area(s)';
+
+  @override
+  String get report_no_area_selected => 'No alerts/areas selected yet.';
+
+  @override
+  String get report_in_area_empty =>
+      'No found reports in your selected area yet.';
 }

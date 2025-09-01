@@ -138,4 +138,18 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get map_search => 'Caută o locație';
+
+  @override
+  String get report_add_new => 'Creează un raport nou';
+
+  @override
+  String get report_in_area => 'Rapoarte în zonele selectate';
+
+  @override
+  String get report_no_area_selected =>
+      'Nicio zonă de căutare activată momentan.';
+
+  @override
+  String get report_in_area_empty =>
+      'Niciun raport găsit în zona selectată momentan.';
 }

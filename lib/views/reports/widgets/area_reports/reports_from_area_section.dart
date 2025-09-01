@@ -1,11 +1,14 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_service.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/area_reports/load_more_area_reports.dart';
 import 'package:pawdetect/views/reports/widgets/area_reports/no_area_reports.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:provider/provider.dart';
 
 class ReportsFromAreaSection extends StatefulWidget {
   const ReportsFromAreaSection({
@@ -17,7 +20,7 @@ class ReportsFromAreaSection extends StatefulWidget {
   });
 
   final Map<report.AnimalType, List<String>> filtersByAnimal;
-  final int limit; // page size
+  final int limit;
   final ReportService? serviceOverride;
   final void Function(report.Report report)? onOpen;
 
@@ -28,10 +31,8 @@ class ReportsFromAreaSection extends StatefulWidget {
 class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
   late int _visibleCount;
 
-  // Keep one stable stream; do paging only in the widget.
   Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>? _stream;
 
-  // Simple leave/return logic for load more card
   bool _leavingToDetails = false;
   bool _wasCurrent = true;
   bool _shouldResetOnResume = false;
@@ -46,7 +47,6 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
     _buildStreamFor(widget.filtersByAnimal);
   }
 
-  // Only rebuild the stream when filters actually change
   @override
   void didUpdateWidget(covariant ReportsFromAreaSection oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -68,20 +68,18 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
       filters: filters,
       limit: null,
     );
-    setState(() {}); // trigger rebuild with the new stream
+    setState(() {});
   }
 
-  // Minimal route watch to reset pagination
   void _postBuildRouteWatch() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final route = ModalRoute.of(context);
       final isCurrent = route?.isCurrent ?? true;
 
-      // Became covered by another page
       if (_wasCurrent && !isCurrent) {
         _shouldResetOnResume = !_leavingToDetails;
       }
-      // Became visible again
+
       if (!_wasCurrent && isCurrent) {
         if (_shouldResetOnResume) {
           setState(() => _visibleCount = widget.limit);
@@ -95,6 +93,9 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
   @override
   Widget build(BuildContext context) {
     _postBuildRouteWatch();
+
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -113,7 +114,7 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Text(
-                'Reports in your chosen area(s)',
+                loc.report_in_area,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w800,
                   color: AppColors.orange,
@@ -123,9 +124,9 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
             const Divider(height: 16, thickness: 0.6),
 
             if (widget.filtersByAnimal.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: NoAreaReports('No alerts/areas selected yet.'),
+                child: NoAreaReports(loc.report_no_area_selected),
               )
             else
               StreamBuilder<List<QueryDocumentSnapshot<Map<String, dynamic>>>>(
@@ -143,11 +144,9 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
                   }
                   final docs = snapshot.data ?? const [];
                   if (docs.isEmpty) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: NoAreaReports(
-                        'No found reports in your selected area yet.',
-                      ),
+                      child: NoAreaReports(loc.report_in_area_empty),
                     );
                   }
 
@@ -162,8 +161,7 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
                   return LoadMoreAreaReports(
                     rowHeight: _kRowHeight,
                     smallCardWidth: _kSmallCardWidth,
-                    loadMoreWidth:
-                        _kSmallCardWidth / 2, 
+                    loadMoreWidth: _kSmallCardWidth / 2,
                     items: items,
                     visible: visible,
                     hasMore: hasMore,

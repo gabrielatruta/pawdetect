@@ -52,5 +52,10 @@
   "welcome_subtitle": "Detectivul tău în timp real, pe urmele animalului de companie dispărut!",
   "welcome_continue_as_guest": "Continuă fără cont",
 
-  "map_search": "Caută o locație"
+  "map_search": "Caută o locație",
+
+  "report_add_new": "Creează un raport nou",
+  "report_in_area": "Rapoarte în zonele selectate",
+  "report_no_area_selected": "Nicio zonă de căutare activată momentan.",
+  "report_in_area_empty": "Niciun raport găsit în zona selectată momentan."
 }

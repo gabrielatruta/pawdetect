@@ -52,6 +52,10 @@
   "welcome_subtitle": "Your real-time investigator searching for your lost pet!",
   "welcome_continue_as_guest": "Continue without an account",
 
-  "map_search": "Search place"
+  "map_search": "Search place",
 
+  "report_add_new": "Add new report",
+  "report_in_area": "Reports in your chosen area(s)",
+  "report_no_area_selected": "No alerts/areas selected yet.",
+  "report_in_area_empty": "No found reports in your selected area yet."
 }

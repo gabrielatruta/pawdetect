@@ -1,9 +1,7 @@
-// lib/views/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
 import 'package:pawdetect/viewmodels/home/home_viewmodel.dart';
 import 'package:pawdetect/views/home/home_map.dart';
@@ -21,7 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<HomeViewModel>(); // keep if used elsewhere
+    context.watch<HomeViewModel>();
 
     return ChangeNotifierProvider(
       create: (_) => AllReportsViewModel()..fetchReports(),
@@ -35,7 +33,6 @@ class HomeScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
 
-              // Aggregated "Found in your area" section ABOVE the map — now reactive via StreamBuilder
               Builder(
                 builder: (context) {
                   final user = FirebaseAuth.instance.currentUser;
@@ -46,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                   final alertsStream = FirebaseFirestore.instance
                       .collection('reports')
                       .where('userId', isEqualTo: user.uid)
-                      .where('type', isEqualTo: report.ReportType.lost.value) // LOST reports
+                      .where('type', isEqualTo: report.ReportType.lost.value)
                       .where('foundAlertSubscription.enabled', isEqualTo: true)
                       .snapshots();
 
