@@ -49,6 +49,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Password must be at least 8 characters, include \nan uppercase letter, number and symbol.';
 
   @override
+  String get password_reset => 'Reset password';
+
+  @override
   String get login_forgot_password => 'Forgot Password?';
 
   @override

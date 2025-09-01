@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'Password must be at least 8 characters, include \nan uppercase letter, number and symbol.'**
   String get password_regex;
 
+  /// No description provided for @password_reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get password_reset;
+
   /// No description provided for @login_forgot_password.
   ///
   /// In en, this message translates to:

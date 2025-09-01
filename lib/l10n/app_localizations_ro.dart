@@ -49,6 +49,9 @@ class AppLocalizationsRo extends AppLocalizations {
       'Parola trebuie să aibă minim 8 caractere, să includă \no majusculă, un număr și un simbol.';
 
   @override
+  String get password_reset => 'Resetează parola';
+
+  @override
   String get login_forgot_password => 'Ai uitat parola?';
 
   @override

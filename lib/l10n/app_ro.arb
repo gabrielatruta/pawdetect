@@ -17,6 +17,8 @@
   "password_empty": "Te rog introdu parola!",
   "password_regex": "Parola trebuie să aibă minim 8 caractere, să includă \no majusculă, un număr și un simbol.",
 
+  "password_reset": "Resetează parola",
+
   "login_forgot_password": "Ai uitat parola?",
   "login_no_account": "Nu ai cont? ",
   "login_subtitle": "Bine ai revenit! Conectează-te ca să continui.",
