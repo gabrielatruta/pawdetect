@@ -104,6 +104,18 @@ abstract class AppLocalizations {
   /// **'Log out'**
   String get logout;
 
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get login;
+
+  /// No description provided for @signup.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signup;
+
   /// No description provided for @save.
   ///
   /// In en, this message translates to:
@@ -181,6 +193,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Switch to Romanian'**
   String get profile_switch_to_romanian;
+
+  /// No description provided for @welcome_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to PawDetect!'**
+  String get welcome_title;
+
+  /// No description provided for @welcome_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your real-time investigator searching for your lost pet!'**
+  String get welcome_subtitle;
+
+  /// No description provided for @welcome_continue_as_guest.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue without an account'**
+  String get welcome_continue_as_guest;
 }
 
 class _AppLocalizationsDelegate

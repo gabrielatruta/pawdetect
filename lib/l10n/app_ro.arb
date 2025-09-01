@@ -2,6 +2,8 @@
   "@@locale": "ro",
 
   "logout": "Deconectare",
+  "login": "Conectare",
+  "signup": "Înregistrare",
   "save": "Salvează",
   "cancel": "Anulează",
   "username": "Nume utilizator",
@@ -16,5 +18,9 @@
   "profile_account_info": "Informații cont",
   "profile_preferences": "Preferințe",
   "profile_turn_notifications": "Dezactivează notificările",
-  "profile_switch_to_romanian": "Schimbă pe română"
+  "profile_switch_to_romanian": "Schimbă pe română",
+
+  "welcome_title": "Bunvenit pe PawDetect!",
+  "welcome_subtitle": "Detectivul tău în timp real, pe urmele animalului de companie dispărut!",
+  "welcome_continue_as_guest": "Continuă fără cont"
 }

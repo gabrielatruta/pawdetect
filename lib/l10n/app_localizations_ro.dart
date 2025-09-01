@@ -12,6 +12,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get logout => 'Deconectare';
 
   @override
+  String get login => 'Conectare';
+
+  @override
+  String get signup => 'Înregistrare';
+
+  @override
   String get save => 'Salvează';
 
   @override
@@ -49,4 +55,14 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get profile_switch_to_romanian => 'Schimbă pe română';
+
+  @override
+  String get welcome_title => 'Bunvenit pe PawDetect!';
+
+  @override
+  String get welcome_subtitle =>
+      'Detectivul tău în timp real, pe urmele animalului de companie dispărut!';
+
+  @override
+  String get welcome_continue_as_guest => 'Continuă fără cont';
 }
