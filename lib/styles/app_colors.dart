@@ -4,7 +4,7 @@ class AppColors {
   AppColors._();
 
   // Brand (primary accent used in the app)
-  static const Color orange = Color(0xFFFF8A00); // brand orange
+  static const Color orange = Color(0xFFFF8A00);
   static const Color darkOrange = Color(0xFFE67A00);
 
   // Material Orange scale
