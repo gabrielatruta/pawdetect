@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
@@ -24,6 +25,7 @@ class SmallReportCard extends StatelessWidget {
     final theme = Theme.of(context);
     final ph = reportImagePath ?? AppAssets.reportImagePath;
     final radius = BorderRadius.circular(12);
+    final loc = AppLocalizations.of(context)!; // localized strings
 
     return SizedBox(
       width: 170,
@@ -63,7 +65,7 @@ class SmallReportCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 alignment: Alignment.center,
                 child: Text(
-                  title.isNotEmpty ? title : 'Found report',
+                  title.isNotEmpty ? title : loc.report_found,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,

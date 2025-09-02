@@ -740,6 +740,12 @@ abstract class AppLocalizations {
   /// **'Location'**
   String get location;
 
+  /// No description provided for @location_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a location!'**
+  String get location_error;
+
   /// No description provided for @description.
   ///
   /// In en, this message translates to:

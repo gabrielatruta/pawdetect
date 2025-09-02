@@ -19,7 +19,7 @@ class HomeBottomNavigation extends StatelessWidget {
         child: PrimaryButton(
           text: loc.report_add_new,
           onPressed: () async {
-            // Push the add-report page and WAIT for it to finish
+            // Push the add-report page and wait for it to finish
             await Navigator.push<bool>(
               context,
               MaterialPageRoute(builder: (_) => const AddNewReportScreen()),

@@ -347,6 +347,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get location => 'Location';
 
   @override
+  String get location_error => 'Please select a location!';
+
+  @override
   String get description => 'Description';
 
   @override

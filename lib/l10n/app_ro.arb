@@ -124,6 +124,7 @@
   "gender_empty": "Selectează un gen",
 
   "location": "Locație",
+  "location_error": "Introdu o locație!",
   "description": "Descriere",
 
   "pick_photo": "Alege poză",

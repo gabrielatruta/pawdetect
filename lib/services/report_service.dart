@@ -113,42 +113,6 @@ class ReportService {
         );
   }
 
-  // watch for reports based on animal and areas for 'reports in area'
-  Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
-  watchFoundReportsByAnimalAndAreas({
-    required String animalType,
-    required List<String> areas,
-  }) {
-    final storedAnimal = _animalStoredValue(animalType);
-
-    final query = _firestore
-        .collection('reports')
-        .where('type', isEqualTo: report.ReportType.found.value)
-        .where('animal', isEqualTo: storedAnimal);
-
-    final normalized = areas
-        .map(_normalize)
-        .where((e) => e.isNotEmpty)
-        .toList();
-    final matchAll = normalized.isEmpty || normalized.contains('romania');
-
-    return query.snapshots().map((snap) {
-      final docs = snap.docs.where((doc) {
-        if (matchAll) return true;
-        final addrNorm = _normalize(_extractAddress(doc.data()));
-        return normalized.any((a) => addrNorm.contains(a));
-      }).toList();
-
-      docs.sort((a, b) {
-        final ta = a.data()['createdAt'];
-        final tb = b.data()['createdAt'];
-        if (ta is Timestamp && tb is Timestamp) return tb.compareTo(ta);
-        return 0;
-      });
-      return docs;
-    });
-  }
-
   // watch for reports based on multiple animals and areas for 'reports in area'
   Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
   watchFoundReportsByAnimalAreaFilters({
@@ -220,14 +184,6 @@ class ReportService {
         data['locationText'] ??
         '';
     return (v ?? '').toString();
-  }
-
-  // convert 'dog' -> 'Dog' to match Firestore values
-  String _animalStoredValue(String animalTypeName) {
-    final lower = (animalTypeName).toLowerCase();
-    if (lower == report.AnimalType.dog.name) return report.AnimalType.dog.value;
-    if (lower == report.AnimalType.cat.name) return report.AnimalType.cat.value;
-    return report.AnimalType.other.value;
   }
 
   String _normalize(String input) {

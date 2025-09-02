@@ -26,24 +26,11 @@ class ReportDetailsViewModel extends ChangeNotifier {
     }
   }
 
-  // title of the report without status
-  String get title => reportData == null
-      ? ''
-      : '${reportData!.type.value} ${reportData!.animal.value}';
-
-  // status string 
+  // status string
   String get statusLabel {
     final s = reportData?.status;
     if (s == null) return '';
     return s == report.ReportStatus.solved ? 'solved' : 'unsolved';
-  }
-
-  /// title of the report + status
-  String get titleWithStatus {
-    if (reportData == null) return '';
-    final base = title;
-    final status = statusLabel;
-    return status.isEmpty ? base : '$base ($status)';
   }
 
   // image of the report

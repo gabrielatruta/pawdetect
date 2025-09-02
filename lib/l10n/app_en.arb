@@ -124,6 +124,7 @@
   "colors_empty": "Please select a color",
 
   "location": "Location",
+  "location_error": "Please select a location!",
   "description": "Description",
 
   "pick_photo": "Pick Photo",

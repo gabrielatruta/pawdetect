@@ -43,7 +43,7 @@ class AllReportsViewModel extends ChangeNotifier {
   List<report.Report> get visibleReports =>
       _filteredReports.take(visibleCount).toList();
 
-  /// Start listening for changes (initial load). Call once from HomeScreen.
+  /// Start listening for changes (initial load)
   Future<void> fetchReports() async {
     if (_listening) return; // prevent duplicate listeners on hot reload
     _listening = true;
@@ -58,7 +58,6 @@ class AllReportsViewModel extends ChangeNotifier {
             .map((d) => report.Report.fromFirestore(d.id, d.data()))
             .toList();
 
-        // Works no matter which param name your file used previously.
         _applyPagination(resetIfEmpty: true);
 
         isLoading = false;
@@ -80,13 +79,9 @@ class AllReportsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Accepts any of: reset, resetIfEmpty, resetIfFirstTime.
-  void _applyPagination({
-    bool reset = false,
-    bool resetIfEmpty = false,
-    bool resetIfFirstTime = false,
-  }) {
-    final shouldReset = reset || resetIfEmpty || resetIfFirstTime;
+  // Accepts any of: reset, resetIfEmpty
+  void _applyPagination({bool reset = false, bool resetIfEmpty = false}) {
+    final shouldReset = reset || resetIfEmpty;
 
     if (shouldReset || visibleCount == 0) {
       // Initialize or reinitialize the window

@@ -33,7 +33,7 @@ class ReportDetailsScreen extends StatelessWidget {
               );
             }
             if (vm.error != null) {
-              final msg = vm.error == 'Report not found'
+              final msg = vm.error == loc.report_not_found
                   ? loc.report_not_found
                   : loc.report_error_generic;
               return Center(child: Text(msg));

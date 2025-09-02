@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_border_services.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
@@ -56,6 +57,8 @@ class LoadMoreAreaReports extends StatefulWidget {
 class _LoadMoreAreaReportsState extends State<LoadMoreAreaReports> {
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!; // localized strings
+    
     return SizedBox(
       height: widget.rowHeight,
       child: ListView.separated(
@@ -113,7 +116,7 @@ class _LoadMoreAreaReportsState extends State<LoadMoreAreaReports> {
                 builder: (context, snap) {
                   final borderColor = snap.data ?? AppColors.border;
                   return SmallReportCard(
-                    title: r.location.isNotEmpty ? r.location : 'Found report',
+                    title: r.location.isNotEmpty ? r.location : loc.report_found,
                     imageUrl: img,
                     borderColor: borderColor,
                   );

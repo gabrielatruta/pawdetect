@@ -351,6 +351,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get location => 'Locație';
 
   @override
+  String get location_error => 'Introdu o locație!';
+
+  @override
   String get description => 'Descriere';
 
   @override
