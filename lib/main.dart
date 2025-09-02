@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pawdetect/views/auth/auth_gate.dart';
 import 'firebase_options.dart';
 
 import 'package:provider/provider.dart';
@@ -80,8 +81,9 @@ class PawDetectApp extends StatelessWidget {
       title: 'PawDetect',
       debugShowCheckedModeBanner: false,
       navigatorKey: appNavigatorKey,
-      initialRoute: "/welcome",
+      initialRoute: "/",
       routes: {
+        "/": (_) => const AuthGate(),
         "/welcome": (_) => const WelcomeScreen(),
         "/login": (_) => const LoginScreen(),
         "/signup": (_) => const SignUpScreen(),

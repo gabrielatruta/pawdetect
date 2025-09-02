@@ -46,7 +46,7 @@
   "profile_account_info": "Informații cont",
   "profile_preferences": "Preferințe",
   "profile_turn_notifications": "Dezactivează notificările",
-  "profile_switch_to_romanian": "Schimbă pe română",
+  "profile_switch_language": "Schimbă pe engleză",
 
   "welcome_title": "Bunvenit pe PawDetect!",
   "welcome_subtitle": "Detectivul tău în timp real, pe urmele animalului de companie dispărut!",
@@ -94,6 +94,7 @@
   "guest_create_profile": "Creează-ți un cont pentru acces la toate funcționalitățile",
   "guest_text": "Găsește-ți animalele de companie, personalizează-ți experiența și explorează tot ce are de oferit PawDetect!",
   "guest_back_welcome": "Înapoi la pagina de pornire",
+  "guest_switch_language": "Schimbă limba",
 
   "alerts_receive": "Primește alerte",
   "alerts_subtitle": "Primești notificări când apare un raport „Găsit” într-o zonă aleasă de tine.",

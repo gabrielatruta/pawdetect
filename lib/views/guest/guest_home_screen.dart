@@ -18,7 +18,11 @@ class GuestHomeScreen extends StatelessWidget {
       create: (_) => AllReportsViewModel()..fetchReports(),
       child: Scaffold(
         backgroundColor: AppColors.white,
-        appBar: const CustomAppBar(title: "", showProfileIcon: true),
+        appBar: const CustomAppBar(
+          title: "",
+          showProfileIcon: true,
+          showGuestLanguageIcon: true,
+        ),
         bottomNavigationBar: const GuestBottomButtons(),
         body: SingleChildScrollView(
           child: Column(

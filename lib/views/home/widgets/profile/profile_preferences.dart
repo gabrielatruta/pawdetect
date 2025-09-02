@@ -54,7 +54,7 @@ class PreferencesForm extends StatelessWidget {
 
               // Language switch
               SwitchListTile(
-                title: Text(loc.profile_switch_to_romanian),
+                title: Text(loc.profile_switch_language),
                 value: romanianLanguage,
                 activeThumbColor: AppColors.orange,
                 inactiveThumbColor: AppColors.lightBackground,

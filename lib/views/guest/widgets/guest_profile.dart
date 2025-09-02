@@ -9,8 +9,8 @@ import 'package:pawdetect/views/welcome/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/home/profile_viewmodel.dart';
 
-class GuestProfileReplacement extends StatelessWidget {
-  const GuestProfileReplacement({super.key});
+class GuestProfile extends StatelessWidget {
+  const GuestProfile({super.key});
 
   @override
   Widget build(BuildContext context) {

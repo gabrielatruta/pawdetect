@@ -124,7 +124,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get profile_turn_notifications => 'Dezactivează notificările';
 
   @override
-  String get profile_switch_to_romanian => 'Schimbă pe română';
+  String get profile_switch_language => 'Schimbă pe engleză';
 
   @override
   String get welcome_title => 'Bunvenit pe PawDetect!';
@@ -261,6 +261,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get guest_back_welcome => 'Înapoi la pagina de pornire';
+
+  @override
+  String get guest_switch_language => 'Schimbă limba';
 
   @override
   String get alerts_receive => 'Primește alerte';

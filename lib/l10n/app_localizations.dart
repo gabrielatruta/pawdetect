@@ -320,11 +320,11 @@ abstract class AppLocalizations {
   /// **'Turn off push notifications'**
   String get profile_turn_notifications;
 
-  /// No description provided for @profile_switch_to_romanian.
+  /// No description provided for @profile_switch_language.
   ///
   /// In en, this message translates to:
   /// **'Switch to Romanian'**
-  String get profile_switch_to_romanian;
+  String get profile_switch_language;
 
   /// No description provided for @welcome_title.
   ///
@@ -583,6 +583,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to Welcome page'**
   String get guest_back_welcome;
+
+  /// No description provided for @guest_switch_language.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch language'**
+  String get guest_switch_language;
 
   /// No description provided for @alerts_receive.
   ///
