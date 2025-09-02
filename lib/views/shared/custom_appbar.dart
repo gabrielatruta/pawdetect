@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
-import 'package:pawdetect/views/guest/widgets/guest_profile.dart';
+import 'package:pawdetect/views/guest/guest_profile_screen.dart';
 import 'package:pawdetect/views/home/profile_screen.dart';
 import 'package:pawdetect/views/reports/my_reports_screen.dart';
 import 'package:provider/provider.dart';
@@ -110,7 +110,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () async {
                 final route = isLoggedIn
                     ? MaterialPageRoute(builder: (_) => ProfileScreen())
-                    : MaterialPageRoute(builder: (_) => const GuestProfile());
+                    : MaterialPageRoute(builder: (_) => const GuestProfileScreen());
                 await Navigator.push(context, route);
 
                 if (!context.mounted) return;
