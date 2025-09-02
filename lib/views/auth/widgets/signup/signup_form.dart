@@ -71,6 +71,7 @@ class _SignupFormState extends State<SignupForm> {
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 await signupViewModel.signUp(
+                  context: context,
                   name: _name.text.trim(),
                   email: _email.text.trim(),
                   phone: _phone.text.trim(),

@@ -88,6 +88,7 @@ class _LoginFormState extends State<LoginForm> {
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 final success = await loginViewModel.login(
+                  context,
                   _emailController.text.trim(),
                   _passwordController.text.trim(),
                 );

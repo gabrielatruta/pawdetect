@@ -242,6 +242,30 @@ abstract class AppLocalizations {
   /// **'Welcome back! Please log in to continue.'**
   String get login_subtitle;
 
+  /// No description provided for @login_no_user_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No user with the provided email address.'**
+  String get login_no_user_found;
+
+  /// No description provided for @login_invalid_password.
+  ///
+  /// In en, this message translates to:
+  /// **'The password is invalid. Please try again.'**
+  String get login_invalid_password;
+
+  /// No description provided for @login_invalid_credentials.
+  ///
+  /// In en, this message translates to:
+  /// **'The email or password are invalid. Please check and try again.'**
+  String get login_invalid_credentials;
+
+  /// No description provided for @login_invalid_email.
+  ///
+  /// In en, this message translates to:
+  /// **'The email is not valid. Please check and try again.'**
+  String get login_invalid_email;
+
   /// No description provided for @signup_description.
   ///
   /// In en, this message translates to:
@@ -253,6 +277,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create Account'**
   String get singup_create_account;
+
+  /// No description provided for @singup_email_already_used.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already in use. Please use another.'**
+  String get singup_email_already_used;
+
+  /// No description provided for @signup_password_weak.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password is too weak. Please choose a stronger one.'**
+  String get signup_password_weak;
+
+  /// No description provided for @signup_network_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Please check your internet connection.'**
+  String get signup_network_error;
+
+  /// No description provided for @singup_firebase_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up with email/password is not enabled. Enable it in Firebase Console.'**
+  String get singup_firebase_error;
+
+  /// No description provided for @signup_default_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get signup_default_error;
 
   /// No description provided for @location_consent_question.
   ///
@@ -547,6 +601,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create found report'**
   String get report_guest_create;
+
+  /// No description provided for @report_user_unauthenticated.
+  ///
+  /// In en, this message translates to:
+  /// **'User not authenticated'**
+  String get report_user_unauthenticated;
 
   /// No description provided for @guest_error.
   ///

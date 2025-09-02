@@ -30,9 +30,18 @@
   "login_forgot_password": "Ai uitat parola?",
   "login_no_account": "Nu ai cont? ",
   "login_subtitle": "Bine ai revenit! Conectează-te ca să continui.",
+  "login_no_user_found": "Niciun utilizator găsit cu adresa de email introdusă",
+  "login_invalid_password": "Parola este invalidă. Mai încearcă.",
+  "login_invalid_credentials": "Email sau parolă incorectă. Mai încearcă.",
+  "login_invalid_email": "Emailul este invalid. Mai încearcă.",
 
   "signup_description": "Creează-ți propriul cont pentru a accesa toate funcționalitățile.",
   "singup_create_account": "Crează contul",
+  "singup_email_already_used": "Emailul este deja folosit. Introdu altul.",
+  "signup_password_weak": "Parola este prea slabă. Introdu o parolă mai puternică.",
+  "signup_network_error": "Eroare de rețea. Verifică-ți conexiunea la internet.",
+  "singup_firebase_error": "Înregistrarea cu email/parolă nu este disponibilă. Contactează un PawDetect.",
+  "signup_default_error": "O eroare neprevăzută s-a iscat. Te rog încearcă din nou.",
 
   "location_consent_question": "Permiteți accesul la locație pentru acest cont?",
   "location_consent_description": "Folosim locația ta doar pentru a centra mapa în jurul tău.\n Poți schimba ulterior această preferință în setări.",
@@ -87,6 +96,7 @@
   "report_type_empty": "Selectează un tip de raport",
   "report_not_filled": "Completează toate câmpurile obligatorii.",
   "report_guest_create": "Creare raport 'Găsit'",
+  "report_user_unauthenticated": "Utilizator neutentificat",
 
   "guest_error": "Trimiterea ca vizitator nu este disponibilă momentan.",
   "guest_create_report": "Raportează un animal găsit",

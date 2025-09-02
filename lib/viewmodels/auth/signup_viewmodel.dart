@@ -11,6 +11,7 @@ class SignupViewModel extends ChangeNotifier {
   String? errorMessage;
 
   Future<void> signUp({
+    required BuildContext context,
     required String name,
     required String email,
     required String phone,
@@ -22,6 +23,7 @@ class SignupViewModel extends ChangeNotifier {
 
       // create FirebaseAuth account
       final user = await _authService.signUp(
+        context: context,
         name: name,
         email: email,
         phone: phone,

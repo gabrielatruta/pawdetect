@@ -82,11 +82,45 @@ class AppLocalizationsRo extends AppLocalizations {
   String get login_subtitle => 'Bine ai revenit! Conectează-te ca să continui.';
 
   @override
+  String get login_no_user_found =>
+      'Niciun utilizator găsit cu adresa de email introdusă';
+
+  @override
+  String get login_invalid_password => 'Parola este invalidă. Mai încearcă.';
+
+  @override
+  String get login_invalid_credentials =>
+      'Email sau parolă incorectă. Mai încearcă.';
+
+  @override
+  String get login_invalid_email => 'Emailul este invalid. Mai încearcă.';
+
+  @override
   String get signup_description =>
       'Creează-ți propriul cont pentru a accesa toate funcționalitățile.';
 
   @override
   String get singup_create_account => 'Crează contul';
+
+  @override
+  String get singup_email_already_used =>
+      'Emailul este deja folosit. Introdu altul.';
+
+  @override
+  String get signup_password_weak =>
+      'Parola este prea slabă. Introdu o parolă mai puternică.';
+
+  @override
+  String get signup_network_error =>
+      'Eroare de rețea. Verifică-ți conexiunea la internet.';
+
+  @override
+  String get singup_firebase_error =>
+      'Înregistrarea cu email/parolă nu este disponibilă. Contactează un PawDetect.';
+
+  @override
+  String get signup_default_error =>
+      'O eroare neprevăzută s-a iscat. Te rog încearcă din nou.';
 
   @override
   String get location_consent_question =>
@@ -240,6 +274,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get report_guest_create => 'Creare raport \'Găsit\'';
+
+  @override
+  String get report_user_unauthenticated => 'Utilizator neutentificat';
 
   @override
   String get guest_error =>

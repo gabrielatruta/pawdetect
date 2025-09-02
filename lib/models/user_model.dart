@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+
+@immutable
 class UserModel {
   final String uid;
   final String name;
@@ -5,7 +8,7 @@ class UserModel {
   final String phone;
   final bool notificationsEnabled;
 
-  UserModel({
+  const UserModel({
     required this.uid,
     required this.name,
     required this.email,
@@ -13,32 +16,47 @@ class UserModel {
     this.notificationsEnabled = false,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'phone': phone,
-      'email': email,
-      'notificationsEnabled': notificationsEnabled,
-    };
-  }
-
-  factory UserModel.fromMap(String uid, Map<String, dynamic> data) {
+  UserModel copyWith({
+    String? uid,
+    String? name,
+    String? email,
+    String? phone,
+    bool? notificationsEnabled,
+  }) {
     return UserModel(
-      uid: uid,
-      name: data['name'] ?? '',
-      phone: data['phone'] ?? '',
-      email: data['email'] ?? '',
-      notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
+      uid: uid ?? this.uid,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
     );
   }
 
-   factory UserModel.fromFirestore(String id, Map<String, dynamic> data) {
+  factory UserModel.fromMap(String id, Map<String, dynamic> data) {
     return UserModel(
       uid: id,
-      name: data['name'] ?? '',
-      email: data['email'] ?? '',
-      phone: data['phone'] ?? '',
+      name: (data['name'] as String?) ?? '',
+      email: (data['email'] as String?) ?? '',
+      phone: (data['phone'] as String?) ?? '',
       notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? false,
     );
   }
+
+  factory UserModel.fromFirestore(String id, Map<String, dynamic> data) =>
+      UserModel.fromMap(id, data);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is UserModel &&
+        other.uid == uid &&
+        other.name == name &&
+        other.email == email &&
+        other.phone == phone &&
+        other.notificationsEnabled == notificationsEnabled;
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(uid, name, email, phone, notificationsEnabled);
 }

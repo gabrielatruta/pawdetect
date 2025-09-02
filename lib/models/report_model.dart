@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Pet report model stored in Firestore.
 @immutable
 class Report {
   final String? id; // Firestore doc id
@@ -18,7 +17,7 @@ class Report {
   final ReportStatus status; // Solved / Unsolved
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final double? lat;
+  final double? lat; // location coordinates
   final double? lng;
 
   const Report({
@@ -40,44 +39,6 @@ class Report {
     this.lng,
   });
 
-  Report copyWith({
-    String? id,
-    String? userId,
-    ReportType? type,
-    AnimalType? animal,
-    List<FurColor>? colors,
-    Gender? gender,
-    String? location,
-    String? additionalInfo,
-    List<String>? photoUrls,
-    String? phoneNumber1,
-    String? phoneNumber2,
-    ReportStatus? status,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    double? lat,
-    double? lng,
-  }) {
-    return Report(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      type: type ?? this.type,
-      animal: animal ?? this.animal,
-      colors: colors ?? this.colors,
-      gender: gender ?? this.gender,
-      location: location ?? this.location,
-      additionalInfo: additionalInfo ?? this.additionalInfo,
-      photoUrls: photoUrls ?? this.photoUrls,
-      phoneNumber1: phoneNumber1 ?? this.phoneNumber1,
-      phoneNumber2: phoneNumber2 ?? this.phoneNumber2,
-      status: status ?? this.status,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      lat: lat ?? this.lat,
-      lng: lng ?? this.lng,
-    );
-  }
-
   /// Serialize for Firestore.
   Map<String, dynamic> toMap() => {
     'userId': userId,
@@ -97,13 +58,6 @@ class Report {
     'lng': lng,
   };
 
-  static double? _toD(dynamic v) {
-    if (v == null) return null;
-    if (v is num) return v.toDouble();
-    if (v is String) return double.tryParse(v);
-    return null;
-  }
-
   /// Create from Firestore document data.
   factory Report.fromFirestore(String id, Map<String, dynamic> data) {
     DateTime? _toDate(dynamic v) {
@@ -115,9 +69,6 @@ class Report {
 
     final List colorsRaw = (data['colors'] as List?) ?? const [];
     final List photosRaw = (data['photoUrls'] as List?) ?? const [];
-
-    final geo = data['geo'] is GeoPoint ? data['geo'] as GeoPoint : null;
-    final loc = data['location'] is Map ? (data['location'] as Map) : null;
 
     return Report(
       id: id,
@@ -134,16 +85,6 @@ class Report {
       status: ReportStatusX.parse(data['status']),
       createdAt: _toDate(data['createdAt']),
       updatedAt: _toDate(data['updatedAt']),
-      lat:
-          _toD(data['lat']) ??
-          _toD(data['latitude']) ??
-          (loc?['lat'] is num ? (loc!['lat'] as num).toDouble() : null) ??
-          (geo?.latitude),
-      lng:
-          _toD(data['lng']) ??
-          _toD(data['longitude']) ??
-          (loc?['lng'] is num ? (loc!['lng'] as num).toDouble() : null) ??
-          (geo?.longitude),
     );
   }
 }

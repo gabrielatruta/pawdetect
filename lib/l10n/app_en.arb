@@ -30,9 +30,18 @@
   "login_forgot_password": "Forgot Password?",
   "login_no_account": "Don't have an account? ",
   "login_subtitle": "Welcome back! Please log in to continue.",
+  "login_no_user_found": "No user with the provided email address.",
+  "login_invalid_password": "The password is invalid. Please try again.",
+  "login_invalid_credentials": "The email or password are invalid. Please check and try again.",
+  "login_invalid_email": "The email is not valid. Please check and try again.",
 
   "signup_description": "Create your account to access all functionalities.",
   "singup_create_account": "Create Account",
+  "singup_email_already_used": "This email is already in use. Please use another.",
+  "signup_password_weak": "Your password is too weak. Please choose a stronger one.",
+  "signup_network_error": "Network error. Please check your internet connection.",
+  "singup_firebase_error": "Sign up with email/password is not enabled. Enable it in Firebase Console.",
+  "signup_default_error": "Something went wrong. Please try again.",
 
   "location_consent_question": "Allow location for this account?",
   "location_consent_description": "We use your location only to center the home map near you.\n You can change this anytime in Settings.",
@@ -87,6 +96,7 @@
   "report_type_empty": "Please select a report type",
   "report_not_filled": "Please fill all required fields.",
   "report_guest_create": "Create found report",
+  "report_user_unauthenticated": "User not authenticated",
   
   "guest_error": "Unable to submit as guest.",
   "guest_create_report": "Report a found animal",

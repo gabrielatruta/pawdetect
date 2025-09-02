@@ -75,7 +75,7 @@ class ReportService {
     partial.remove('userId');
     partial.remove('createdAt');
 
-    // keep areaKey in sync
+    // area keys also updated
     if (partial.containsKey('foundAlertSubscription.area')) {
       final a = (partial['foundAlertSubscription.area'] ?? '').toString();
       partial['foundAlertSubscription.areaKey'] = a.isEmpty
@@ -92,14 +92,14 @@ class ReportService {
     await _reportsCol.doc(id).update(partial);
   }
 
-  // get by id
+  // get report by id
   Future<report.Report?> getReportById(String id) async {
     final snap = await _reportsCol.doc(id).get();
     if (!snap.exists) return null;
     return report.Report.fromFirestore(snap.id, snap.data()!);
   }
 
-  // --- STREAM with reports with location that are unsolved -------------------------------------------
+  // reports with location and status unsolved
   Stream<List<report.Report>> streamReportsWithLocation() {
     return _reportsCol
         .where('status', isEqualTo: report.ReportStatus.unsolved.value)
@@ -113,10 +113,10 @@ class ReportService {
         );
   }
 
-  // --- AREA FILTERS: single animal ------------------------------------------
+  // watch for reports based on animal and areas for 'reports in area'
   Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
   watchFoundReportsByAnimalAndAreas({
-    required String animalType, // 'dog' / 'cat' / 'other'
+    required String animalType,
     required List<String> areas,
   }) {
     final storedAnimal = _animalStoredValue(animalType);
@@ -149,32 +149,27 @@ class ReportService {
     });
   }
 
-  // --- AREA FILTERS: multiple animals --------------------------
+  // watch for reports based on multiple animals and areas for 'reports in area'
   Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
   watchFoundReportsByAnimalAreaFilters({
     required Map<report.AnimalType, List<String>> filters,
-    int? limit, // page size for your "load more" (+4 each tap)
+    int? limit, 
   }) {
     if (filters.isEmpty) return Stream.value(const []);
 
-    // normalize areas by animal key 'dog'/'cat'/'other'
     final Map<String, List<String>> normalizedByAnimal = {
       for (final e in filters.entries)
         e.key.name: e.value.map(_normalize).where((s) => s.isNotEmpty).toList(),
     };
-
-    // NOTE: we DO NOT use orderBy here to avoid the composite index requirement.
     final q = _firestore
         .collection('reports')
         .where('type', isEqualTo: report.ReportType.found.value);
 
     return q.snapshots().map((snap) {
-      // client-side filter by selected animal + area text
       final docs = <QueryDocumentSnapshot<Map<String, dynamic>>>[];
       for (final doc in snap.docs) {
         final data = doc.data();
 
-        // 'animal' may be stored as 'Dog'/'Cat' or enum index; normalize to 'dog'/'cat'
         final animalStr = (() {
           final raw = data['animal'];
           if (raw is String) return raw.toLowerCase();
@@ -187,7 +182,6 @@ class ReportService {
         final areasForAnimal = normalizedByAnimal[animalStr];
         if (areasForAnimal == null || areasForAnimal.isEmpty) continue;
 
-        // country-wide shortcut used elsewhere
         if (areasForAnimal.contains('romania')) {
           docs.add(doc);
           continue;
@@ -199,7 +193,7 @@ class ReportService {
         }
       }
 
-      // sort newest first (client-side, since we dropped orderBy)
+      // sort newest first
       docs.sort((a, b) {
         final ta = a.data()['createdAt'];
         final tb = b.data()['createdAt'];
@@ -215,8 +209,8 @@ class ReportService {
       return docs;
     });
   }
-  // --- HELPERS ---------------------------------------------------------------
 
+  // HELPERS
   String _extractAddress(Map<String, dynamic> data) {
     final v =
         data['location'] ??

@@ -19,19 +19,17 @@ class ReportBorderService {
 
   Future<Color> colorFor(Object r) async {
     final dyn = r as dynamic;
-
-    // --- required fields pulled via dynamic ---
     final String? id = dyn.id as String?;
     final models.ReportStatus? status = dyn.status as models.ReportStatus?;
     final DateTime? updatedAt = _toDate(dyn.updatedAt);
     final DateTime? createdAt = _toDate(dyn.createdAt);
 
-    // 1) SOLVED ALWAYS WINS (enum from report_model.dart)
+    // SOLVED will replace any color with GREEN
     if (status == models.ReportStatus.solved) {
       return AppColors.successGreen;
     }
 
-    // 2) New/updated since last open → ORANGE
+    // NEW/UPDATED since last open is ORANGE
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null || (id ?? '').isEmpty) return AppColors.border;
 
@@ -48,7 +46,7 @@ class ReportBorderService {
       return AppColors.orange;
     }
 
-    // 3) Opened and not updated → GREY
+    // OPENED and not updated is GREY
     return AppColors.border;
   }
 

@@ -10,13 +10,13 @@ class LoginViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(BuildContext context, String email, String password) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final user = await _authService.signIn(email, password);
+      final user = await _authService.signIn(context, email, password);
       _isLoading = false;
       _errorMessage = null;
       notifyListeners();

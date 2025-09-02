@@ -6,7 +6,7 @@ class UserService {
     'users',
   );
 
- /// Create a new user document in Firestore
+ // Create a new user document in Firestore
  Future<void> createUser(UserModel user) async {
     await users.doc(user.uid).set({
       'name': user.name,
@@ -17,7 +17,7 @@ class UserService {
     });
   }
 
-  /// Fetch a user by UID
+  // Fetch a user by UID
   Future<UserModel?> getUser(String uid) async {
     final doc = await users.doc(uid).get();
     if (doc.exists) {
@@ -26,7 +26,7 @@ class UserService {
     return null;
   }
 
-  /// Update user data
+  // Update user data
    Future<void> updateUser(UserModel user) async {
     await users.doc(user.uid).update({
       'name': user.name,

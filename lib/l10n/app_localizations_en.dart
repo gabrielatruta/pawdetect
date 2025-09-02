@@ -82,11 +82,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_subtitle => 'Welcome back! Please log in to continue.';
 
   @override
+  String get login_no_user_found => 'No user with the provided email address.';
+
+  @override
+  String get login_invalid_password =>
+      'The password is invalid. Please try again.';
+
+  @override
+  String get login_invalid_credentials =>
+      'The email or password are invalid. Please check and try again.';
+
+  @override
+  String get login_invalid_email =>
+      'The email is not valid. Please check and try again.';
+
+  @override
   String get signup_description =>
       'Create your account to access all functionalities.';
 
   @override
   String get singup_create_account => 'Create Account';
+
+  @override
+  String get singup_email_already_used =>
+      'This email is already in use. Please use another.';
+
+  @override
+  String get signup_password_weak =>
+      'Your password is too weak. Please choose a stronger one.';
+
+  @override
+  String get signup_network_error =>
+      'Network error. Please check your internet connection.';
+
+  @override
+  String get singup_firebase_error =>
+      'Sign up with email/password is not enabled. Enable it in Firebase Console.';
+
+  @override
+  String get signup_default_error => 'Something went wrong. Please try again.';
 
   @override
   String get location_consent_question => 'Allow location for this account?';
@@ -237,6 +271,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get report_guest_create => 'Create found report';
+
+  @override
+  String get report_user_unauthenticated => 'User not authenticated';
 
   @override
   String get guest_error => 'Unable to submit as guest.';
