@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
 
   #Firebase
   firebase_core: ^4.0.0
@@ -52,6 +55,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   latlong2: ^0.9.1
   firebase_storage: ^13.0.0
+  shared_preferences: ^2.5.3
+  flutter_gen: ^5.11.0
+
+  country_flags: ^2.2.0
+
  
 
 dev_dependencies:
@@ -75,11 +83,14 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - web/icons/ForgotPassword.jpg
-    - web/icons/welcomeScreenPaw.png
+    - assets/icons/ForgotPassword.jpg
+    - assets/icons/welcomeScreenPaw.png
+    - assets/icons/placeholder.jpeg
+    - assets/icons/reportDetails.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

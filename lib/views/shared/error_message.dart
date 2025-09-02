@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/styles/app_colors.dart';
 
 class ErrorMessage extends StatelessWidget {
   final String message;
@@ -8,7 +9,7 @@ class ErrorMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       message,
-      style: const TextStyle(color: Colors.red),
+      style: const TextStyle(color: AppColors.errorRed),
     );
   }
 }

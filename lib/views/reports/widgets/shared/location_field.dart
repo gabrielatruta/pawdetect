@@ -1,22 +1,22 @@
-// lib/pawdetect/views/shared/location_field.dart
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
 class LocationField extends StatefulWidget {
   final TextEditingController controller;
   final void Function(String address, double lat, double lng) onSelected;
   final String? country;
-  final String labelText;
+  final String? labelText;
 
   const LocationField({
     super.key,
     required this.controller,
     required this.onSelected,
     this.country,
-    this.labelText = 'Location',
+    this.labelText,
   });
 
   @override
@@ -101,6 +101,8 @@ class _LocationFieldState extends State<LocationField> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         TextFormField(
@@ -111,27 +113,27 @@ class _LocationFieldState extends State<LocationField> {
           decoration: InputDecoration(
             label: RichText(
               text: TextSpan(
-                text: widget.labelText,
-                style: const TextStyle(color: Colors.black),
+                text: loc.location,
+                style: const TextStyle(color: AppColors.black),
                 children: const [
                   TextSpan(
                     text: ' *',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: AppColors.errorRed),
                   ),
                 ],
               ),
             ),
-            labelStyle: const TextStyle(color: Colors.black),
+            labelStyle: const TextStyle(color: AppColors.black),
             filled: true,
             fillColor: AppColors.lightBackground,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.black),
+              borderSide: const BorderSide(color: AppColors.black),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.black, width: 2),
+              borderSide: const BorderSide(color: AppColors.black, width: 2),
             ),
             suffixIcon: _loading
                 ? const Padding(
@@ -151,7 +153,7 @@ class _LocationFieldState extends State<LocationField> {
             decoration: BoxDecoration(
               color: AppColors.lightBackground,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.black),
+              border: Border.all(color: AppColors.black),
             ),
             constraints: const BoxConstraints(maxHeight: 220),
             child: ListView.separated(

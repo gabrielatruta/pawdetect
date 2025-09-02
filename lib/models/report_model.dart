@@ -4,20 +4,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /// Pet report model stored in Firestore.
 @immutable
 class Report {
-  final String? id;                // Firestore doc id
-  final String userId;             // who created it
-  final ReportType type;           // Found / Lost
-  final AnimalType animal;         // Dog / Cat / Other
-  final List<FurColor> colors;     // allowed set below
-  final Gender gender;             // F / M / ?
-  final String location;           // address/area text
-  final String additionalInfo;     // notes
-  final List<String> photoUrls;    // image URLs
-  final String phoneNumber1;       // primary contact number
-  final String phoneNumber2;       // secondary contact number (optional)
-  final ReportStatus status;       // Solved / Unsolved
+  final String? id; // Firestore doc id
+  final String userId; // who created it
+  final ReportType type; // Found / Lost
+  final AnimalType animal; // Dog / Cat / Other
+  final List<FurColor> colors; // allowed set below
+  final Gender gender; // F / M / ?
+  final String location; // address/area text
+  final String additionalInfo; // notes
+  final List<String> photoUrls; // image URLs
+  final String phoneNumber1; // primary contact number
+  final String phoneNumber2; // secondary contact number (optional)
+  final ReportStatus status; // Solved / Unsolved
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final double? lat;
+  final double? lng;
 
   const Report({
     this.id,
@@ -34,6 +36,8 @@ class Report {
     this.status = ReportStatus.unsolved,
     this.createdAt,
     this.updatedAt,
+    this.lat,
+    this.lng,
   });
 
   Report copyWith({
@@ -51,6 +55,8 @@ class Report {
     ReportStatus? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    double? lat,
+    double? lng,
   }) {
     return Report(
       id: id ?? this.id,
@@ -67,25 +73,36 @@ class Report {
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
     );
   }
 
   /// Serialize for Firestore.
   Map<String, dynamic> toMap() => {
-        'userId': userId,
-        'type': type.value,
-        'animal': animal.value,
-        'colors': colors.map((c) => c.value).toList(),
-        'gender': gender.value,
-        'location': location,
-        'additionalInfo': additionalInfo,
-        'photoUrls': photoUrls,
-        'phoneNumber1': phoneNumber1,
-        'phoneNumber2': phoneNumber2,
-        'status': status.value,
-        'createdAt': createdAt,
-        'updatedAt': updatedAt,
-      };
+    'userId': userId,
+    'type': type.value,
+    'animal': animal.value,
+    'colors': colors.map((c) => c.value).toList(),
+    'gender': gender.value,
+    'location': location,
+    'additionalInfo': additionalInfo,
+    'photoUrls': photoUrls,
+    'phoneNumber1': phoneNumber1,
+    'phoneNumber2': phoneNumber2,
+    'status': status.value,
+    'createdAt': createdAt,
+    'updatedAt': updatedAt,
+    'lat': lat,
+    'lng': lng,
+  };
+
+  static double? _toD(dynamic v) {
+    if (v == null) return null;
+    if (v is num) return v.toDouble();
+    if (v is String) return double.tryParse(v);
+    return null;
+  }
 
   /// Create from Firestore document data.
   factory Report.fromFirestore(String id, Map<String, dynamic> data) {
@@ -98,6 +115,9 @@ class Report {
 
     final List colorsRaw = (data['colors'] as List?) ?? const [];
     final List photosRaw = (data['photoUrls'] as List?) ?? const [];
+
+    final geo = data['geo'] is GeoPoint ? data['geo'] as GeoPoint : null;
+    final loc = data['location'] is Map ? (data['location'] as Map) : null;
 
     return Report(
       id: id,
@@ -114,89 +134,134 @@ class Report {
       status: ReportStatusX.parse(data['status']),
       createdAt: _toDate(data['createdAt']),
       updatedAt: _toDate(data['updatedAt']),
+      lat:
+          _toD(data['lat']) ??
+          _toD(data['latitude']) ??
+          (loc?['lat'] is num ? (loc!['lat'] as num).toDouble() : null) ??
+          (geo?.latitude),
+      lng:
+          _toD(data['lng']) ??
+          _toD(data['longitude']) ??
+          (loc?['lng'] is num ? (loc!['lng'] as num).toDouble() : null) ??
+          (geo?.longitude),
     );
   }
 }
 
 /// Found / Lost
 enum ReportType { found, lost }
+
 extension ReportTypeX on ReportType {
   String get value => switch (this) {
-        ReportType.found => 'Found',
-        ReportType.lost => 'Lost',
-      };
-  static ReportType parse(dynamic v) =>
-      (v?.toString().toLowerCase() == 'found') ? ReportType.found : ReportType.lost;
+    ReportType.found => 'Found',
+    ReportType.lost => 'Lost',
+  };
+  static ReportType parse(dynamic v) => (v?.toString().toLowerCase() == 'found')
+      ? ReportType.found
+      : ReportType.lost;
 }
 
 /// Dog / Cat / Other
 enum AnimalType { dog, cat, other }
+
 extension AnimalTypeX on AnimalType {
   String get value => switch (this) {
-        AnimalType.dog => 'Dog',
-        AnimalType.cat => 'Cat',
-        AnimalType.other => 'Other',
-      };
+    AnimalType.dog => 'Dog',
+    AnimalType.cat => 'Cat',
+    AnimalType.other => 'Other',
+  };
   static AnimalType parse(dynamic v) {
     final s = (v ?? '').toString().toLowerCase();
-    return s == 'dog' ? AnimalType.dog : s == 'cat' ? AnimalType.cat : AnimalType.other;
+    return s == 'dog'
+        ? AnimalType.dog
+        : s == 'cat'
+        ? AnimalType.cat
+        : AnimalType.other;
   }
 }
 
 /// F / M / ?
 enum Gender { female, male, unknown }
+
 extension GenderX on Gender {
   String get value => switch (this) {
-        Gender.female => 'F',
-        Gender.male => 'M',
-        Gender.unknown => '?',
-      };
+    Gender.female => 'F',
+    Gender.male => 'M',
+    Gender.unknown => '?',
+  };
   static Gender parse(dynamic v) {
     final s = (v ?? '').toString().toUpperCase();
-    return s == 'F' ? Gender.female : s == 'M' ? Gender.male : Gender.unknown;
+    return s == 'F'
+        ? Gender.female
+        : s == 'M'
+        ? Gender.male
+        : Gender.unknown;
   }
 }
 
 /// Allowed colors: Black, White, Brown, Gray, Golden, Cream, Orange, Brindle, Spotted, Mixed
-enum FurColor { black, white, brown, gray, golden, cream, orange, brindle, spotted, mixed }
+enum FurColor {
+  black,
+  white,
+  brown,
+  gray,
+  golden,
+  cream,
+  orange,
+  brindle,
+  spotted,
+  mixed,
+}
+
 extension FurColorX on FurColor {
   String get value => switch (this) {
-        FurColor.black => 'Black',
-        FurColor.white => 'White',
-        FurColor.brown => 'Brown',
-        FurColor.gray => 'Gray',
-        FurColor.golden => 'Golden',
-        FurColor.cream => 'Cream',
-        FurColor.orange => 'Orange',
-        FurColor.brindle => 'Brindle',
-        FurColor.spotted => 'Spotted',
-        FurColor.mixed => 'Mixed',
-      };
+    FurColor.black => 'Black',
+    FurColor.white => 'White',
+    FurColor.brown => 'Brown',
+    FurColor.gray => 'Gray',
+    FurColor.golden => 'Golden',
+    FurColor.cream => 'Cream',
+    FurColor.orange => 'Orange',
+    FurColor.brindle => 'Brindle',
+    FurColor.spotted => 'Spotted',
+    FurColor.mixed => 'Mixed',
+  };
   static FurColor parse(dynamic v) {
     final s = (v ?? '').toString().toLowerCase();
     switch (s) {
-      case 'black': return FurColor.black;
-      case 'white': return FurColor.white;
-      case 'brown': return FurColor.brown;
+      case 'black':
+        return FurColor.black;
+      case 'white':
+        return FurColor.white;
+      case 'brown':
+        return FurColor.brown;
       case 'gray':
-      case 'grey':  return FurColor.gray;
-      case 'golden': return FurColor.golden;
-      case 'cream':  return FurColor.cream;
-      case 'orange': return FurColor.orange;
-      case 'brindle': return FurColor.brindle;
-      case 'spotted': return FurColor.spotted;
-      default: return FurColor.mixed;
+      case 'grey':
+        return FurColor.gray;
+      case 'golden':
+        return FurColor.golden;
+      case 'cream':
+        return FurColor.cream;
+      case 'orange':
+        return FurColor.orange;
+      case 'brindle':
+        return FurColor.brindle;
+      case 'spotted':
+        return FurColor.spotted;
+      default:
+        return FurColor.mixed;
     }
   }
 }
 
 /// Solved / Unsolved
 enum ReportStatus { solved, unsolved }
+
 extension ReportStatusX on ReportStatus {
   String get value => switch (this) {
-        ReportStatus.solved => 'Solved',
-        ReportStatus.unsolved => 'Unsolved',
-      };
+    ReportStatus.solved => 'Solved',
+    ReportStatus.unsolved => 'Unsolved',
+  };
   static ReportStatus parse(dynamic v) {
     final s = (v ?? '').toString().toLowerCase();
     return s == 'solved' ? ReportStatus.solved : ReportStatus.unsolved;

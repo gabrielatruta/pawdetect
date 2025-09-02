@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
 import 'package:provider/provider.dart';
-import 'package:pawdetect/viewmodels/my_reports_viewmodel.dart';
+import 'package:pawdetect/viewmodels/report/my_reports_viewmodel.dart';
 import 'package:pawdetect/views/reports/widgets/my_reports/my_report_form.dart';
 
 class MyReportsScreen extends StatefulWidget {
@@ -26,8 +28,11 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
     // Keep the watch to trigger rebuilds if needed at screen level
     context.watch<MyReportsViewModel>();
 
-    return const Scaffold(
-      appBar: CustomAppBar(title: "My reports"),
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
+    return Scaffold(
+      appBar: CustomAppBar(title: loc.report_my_reports),
       body: MyReportsForm(),
       backgroundColor: AppColors.surface,
     );

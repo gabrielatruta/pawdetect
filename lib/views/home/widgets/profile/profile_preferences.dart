@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
-import 'package:pawdetect/viewmodels/profile_viewmodel.dart';
+import 'package:pawdetect/viewmodels/home/profile_viewmodel.dart';
+import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class PreferencesForm extends StatelessWidget {
@@ -17,12 +19,15 @@ class PreferencesForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileViewModel = context.watch<ProfileViewModel>();
 
+    final loc = AppLocalizations.of(context)!; // localized strings
+    context.watch<LocalizationViewModel>(); // current language
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Preferences",
-          style: TextStyle(fontSize: 18, color: Colors.black54),
+          loc.profile_preferences,
+          style: TextStyle(fontSize: 18, color: AppColors.black),
         ),
         const SizedBox(height: 8),
 
@@ -37,7 +42,7 @@ class PreferencesForm extends StatelessWidget {
             children: [
               // Notification switch
               SwitchListTile(
-                title: const Text("Turn off push notifications"),
+                title: Text(loc.profile_turn_notifications),
                 value: profileViewModel.profileUser!.notificationsEnabled,
                 activeThumbColor: AppColors.orange,
                 inactiveThumbColor: AppColors.lightBackground,
@@ -49,7 +54,7 @@ class PreferencesForm extends StatelessWidget {
 
               // Language switch
               SwitchListTile(
-                title: const Text("Switch to Romanian"),
+                title: Text(loc.profile_switch_language),
                 value: romanianLanguage,
                 activeThumbColor: AppColors.orange,
                 inactiveThumbColor: AppColors.lightBackground,

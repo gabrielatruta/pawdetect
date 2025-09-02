@@ -23,11 +23,15 @@ class ReportService {
     XFile? photo,
     double? lat,
     double? lng,
+
+    // for push notifications
+    bool receiveFoundAlerts = false,
+    String? alertArea,
+    double? alertLat,
+    double? alertLng,
   }) async {
     final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw Exception('User not authenticated');
-    }
+    if (user == null) throw Exception('User not authenticated');
 
     final docRef = _reportsCol.doc();
 
@@ -49,15 +53,20 @@ class ReportService {
     );
 
     final data = newReport.toMap();
-    // server timestamps to satisfy Firestore rules
     data['createdAt'] = FieldValue.serverTimestamp();
     data['updatedAt'] = FieldValue.serverTimestamp();
     if (lat != null) data['lat'] = lat;
     if (lng != null) data['lng'] = lng;
 
-    // a small timeout to avoid UI hanging forever
-    await docRef.set(data).timeout(const Duration(seconds: 15));
+    data['foundAlertSubscription'] = {
+      'enabled': receiveFoundAlerts,
+      'area': alertArea ?? '',
+      'areaKey': _normalize(alertArea ?? ''),
+      'lat': alertLat,
+      'lng': alertLng,
+    };
 
+    await docRef.set(data).timeout(const Duration(seconds: 15));
     return docRef.id;
   }
 
@@ -65,18 +74,204 @@ class ReportService {
   Future<void> updateReport(String id, Map<String, dynamic> partial) async {
     partial.remove('userId');
     partial.remove('createdAt');
+
+    // keep areaKey in sync
+    if (partial.containsKey('foundAlertSubscription.area')) {
+      final a = (partial['foundAlertSubscription.area'] ?? '').toString();
+      partial['foundAlertSubscription.areaKey'] = a.isEmpty
+          ? FieldValue.delete()
+          : _normalize(a);
+    } else if (partial['foundAlertSubscription'] is Map) {
+      final fs = Map<String, dynamic>.from(partial['foundAlertSubscription']);
+      final a = (fs['area'] ?? '').toString();
+      fs['areaKey'] = a.isEmpty ? FieldValue.delete() : _normalize(a);
+      partial['foundAlertSubscription'] = fs;
+    }
+
     partial['updatedAt'] = FieldValue.serverTimestamp();
     await _reportsCol.doc(id).update(partial);
   }
 
-  // get report by id
+  // get by id
   Future<report.Report?> getReportById(String id) async {
-    final snap = await _reportsCol
-        .doc(id)
-        .get();
+    final snap = await _reportsCol.doc(id).get();
     if (!snap.exists) return null;
+    return report.Report.fromFirestore(snap.id, snap.data()!);
+  }
 
-    final data = snap.data()!; 
-    return report.Report.fromFirestore(snap.id, data);
+  // --- STREAM with reports with location that are unsolved -------------------------------------------
+  Stream<List<report.Report>> streamReportsWithLocation() {
+    return _reportsCol
+        .where('status', isEqualTo: report.ReportStatus.unsolved.value)
+        .snapshots()
+        .map(
+          (qs) => qs.docs
+              .map((d) => report.Report.fromFirestore(d.id, d.data()))
+              // keep only items that actually have coordinates
+              .where((r) => r.lat != null && r.lng != null)
+              .toList(),
+        );
+  }
+
+  // --- AREA FILTERS: single animal ------------------------------------------
+  Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+  watchFoundReportsByAnimalAndAreas({
+    required String animalType, // 'dog' / 'cat' / 'other'
+    required List<String> areas,
+  }) {
+    final storedAnimal = _animalStoredValue(animalType);
+
+    final query = _firestore
+        .collection('reports')
+        .where('type', isEqualTo: report.ReportType.found.value)
+        .where('animal', isEqualTo: storedAnimal);
+
+    final normalized = areas
+        .map(_normalize)
+        .where((e) => e.isNotEmpty)
+        .toList();
+    final matchAll = normalized.isEmpty || normalized.contains('romania');
+
+    return query.snapshots().map((snap) {
+      final docs = snap.docs.where((doc) {
+        if (matchAll) return true;
+        final addrNorm = _normalize(_extractAddress(doc.data()));
+        return normalized.any((a) => addrNorm.contains(a));
+      }).toList();
+
+      docs.sort((a, b) {
+        final ta = a.data()['createdAt'];
+        final tb = b.data()['createdAt'];
+        if (ta is Timestamp && tb is Timestamp) return tb.compareTo(ta);
+        return 0;
+      });
+      return docs;
+    });
+  }
+
+  // --- AREA FILTERS: multiple animals --------------------------
+  Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+  watchFoundReportsByAnimalAreaFilters({
+    required Map<report.AnimalType, List<String>> filters,
+    int? limit, // page size for your "load more" (+4 each tap)
+  }) {
+    if (filters.isEmpty) return Stream.value(const []);
+
+    // normalize areas by animal key 'dog'/'cat'/'other'
+    final Map<String, List<String>> normalizedByAnimal = {
+      for (final e in filters.entries)
+        e.key.name: e.value.map(_normalize).where((s) => s.isNotEmpty).toList(),
+    };
+
+    // NOTE: we DO NOT use orderBy here to avoid the composite index requirement.
+    final q = _firestore
+        .collection('reports')
+        .where('type', isEqualTo: report.ReportType.found.value);
+
+    return q.snapshots().map((snap) {
+      // client-side filter by selected animal + area text
+      final docs = <QueryDocumentSnapshot<Map<String, dynamic>>>[];
+      for (final doc in snap.docs) {
+        final data = doc.data();
+
+        // 'animal' may be stored as 'Dog'/'Cat' or enum index; normalize to 'dog'/'cat'
+        final animalStr = (() {
+          final raw = data['animal'];
+          if (raw is String) return raw.toLowerCase();
+          if (raw is int && raw >= 0 && raw < report.AnimalType.values.length) {
+            return report.AnimalType.values[raw].name.toLowerCase();
+          }
+          return '';
+        })();
+
+        final areasForAnimal = normalizedByAnimal[animalStr];
+        if (areasForAnimal == null || areasForAnimal.isEmpty) continue;
+
+        // country-wide shortcut used elsewhere
+        if (areasForAnimal.contains('romania')) {
+          docs.add(doc);
+          continue;
+        }
+
+        final addrNorm = _normalize(_extractAddress(data));
+        if (areasForAnimal.any((a) => addrNorm.contains(a))) {
+          docs.add(doc);
+        }
+      }
+
+      // sort newest first (client-side, since we dropped orderBy)
+      docs.sort((a, b) {
+        final ta = a.data()['createdAt'];
+        final tb = b.data()['createdAt'];
+        final tsa = ta is Timestamp ? ta : Timestamp(0, 0);
+        final tsb = tb is Timestamp ? tb : Timestamp(0, 0);
+        return tsb.compareTo(tsa);
+      });
+
+      // apply the page size after filtering
+      if (limit != null && docs.length > limit) {
+        return docs.sublist(0, limit);
+      }
+      return docs;
+    });
+  }
+  // --- HELPERS ---------------------------------------------------------------
+
+  String _extractAddress(Map<String, dynamic> data) {
+    final v =
+        data['location'] ??
+        data['fullAddress'] ??
+        data['address'] ??
+        data['addressText'] ??
+        data['locationText'] ??
+        '';
+    return (v ?? '').toString();
+  }
+
+  // convert 'dog' -> 'Dog' to match Firestore values
+  String _animalStoredValue(String animalTypeName) {
+    final lower = (animalTypeName).toLowerCase();
+    if (lower == report.AnimalType.dog.name) return report.AnimalType.dog.value;
+    if (lower == report.AnimalType.cat.name) return report.AnimalType.cat.value;
+    return report.AnimalType.other.value;
+  }
+
+  String _normalize(String input) {
+    final lower = input.toLowerCase();
+    const map = {
+      'ă': 'a',
+      'â': 'a',
+      'á': 'a',
+      'à': 'a',
+      'ä': 'a',
+      'ã': 'a',
+      'î': 'i',
+      'í': 'i',
+      'ì': 'i',
+      'ï': 'i',
+      'ș': 's',
+      'ş': 's',
+      'ț': 't',
+      'ţ': 't',
+      'é': 'e',
+      'è': 'e',
+      'ë': 'e',
+      'ó': 'o',
+      'ò': 'o',
+      'ö': 'o',
+      'õ': 'o',
+      'ú': 'u',
+      'ù': 'u',
+      'ü': 'u',
+    };
+    final buf = StringBuffer();
+    for (final ch in lower.runes.map((r) => String.fromCharCode(r))) {
+      buf.write(map[ch] ?? ch);
+    }
+    return buf
+        .toString()
+        .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
   }
 }
