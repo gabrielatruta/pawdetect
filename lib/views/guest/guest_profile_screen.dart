@@ -7,10 +7,10 @@ import 'package:pawdetect/views/shared/custom_primary_button.dart';
 import 'package:pawdetect/views/shared/custom_secondary_button.dart';
 import 'package:pawdetect/views/welcome/welcome_screen.dart';
 import 'package:provider/provider.dart';
-import '../../../viewmodels/home/profile_viewmodel.dart';
+import '../../viewmodels/home/profile_viewmodel.dart';
 
-class GuestProfile extends StatelessWidget {
-  const GuestProfile({super.key});
+class GuestProfileScreen extends StatelessWidget {
+  const GuestProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
