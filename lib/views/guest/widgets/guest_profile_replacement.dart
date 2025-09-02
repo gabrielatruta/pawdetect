@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/auth/signup_screen.dart';
 import 'package:pawdetect/views/shared/custom_appbar.dart';
@@ -15,10 +16,11 @@ class GuestProfileReplacement extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileViewModel = context.watch<ProfileViewModel>();
     final textTheme = Theme.of(context).textTheme;
+    final loc = AppLocalizations.of(context)!; // localized strings
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: const CustomAppBar(title: "Guest profile"),
+      appBar: CustomAppBar(title: loc.guest_profile),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -51,20 +53,17 @@ class GuestProfileReplacement extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Create an account to unlock every feature",
+                          loc.guest_create_profile,
                           style: textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(height: 6),
-                        Text(
-                          "Track your pets, customize your experience, and explore everything PawDetect has to offer!",
-                          style: textTheme.bodyMedium,
-                        ),
+                        Text(loc.guest_text, style: textTheme.bodyMedium),
                         const SizedBox(height: 12),
-                     
+
                         PrimaryButton(
-                          text: "Create account",
+                          text: loc.singup_create_account,
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
@@ -85,7 +84,7 @@ class GuestProfileReplacement extends StatelessWidget {
 
             // Back to welcome screen
             SecondaryButton(
-              text: "Back to Welcome page",
+              text: loc.guest_back_welcome,
               onPressed: () async {
                 await profileViewModel.logout();
                 if (context.mounted) {

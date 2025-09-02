@@ -542,6 +542,48 @@ abstract class AppLocalizations {
   /// **'Please fill all required fields.'**
   String get report_not_filled;
 
+  /// No description provided for @report_guest_create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create found report'**
+  String get report_guest_create;
+
+  /// No description provided for @guest_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to submit as guest.'**
+  String get guest_error;
+
+  /// No description provided for @guest_create_report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a found animal'**
+  String get guest_create_report;
+
+  /// No description provided for @guest_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest profile'**
+  String get guest_profile;
+
+  /// No description provided for @guest_create_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account to unlock every feature'**
+  String get guest_create_profile;
+
+  /// No description provided for @guest_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your pets, customize your experience, and explore everything PawDetect has to offer!'**
+  String get guest_text;
+
+  /// No description provided for @guest_back_welcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Welcome page'**
+  String get guest_back_welcome;
+
   /// No description provided for @alerts_receive.
   ///
   /// In en, this message translates to:

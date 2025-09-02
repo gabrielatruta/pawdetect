@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/views/guest/guest_home_screen.dart';
 import 'package:pawdetect/views/reports/widgets/add_new_report/guest_add_new_report_form.dart';
@@ -9,6 +10,8 @@ class GuestAddNewReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!; // localized strings
+
     return PopScope(
       canPop: false, // prevent default pop so we can override it
       onPopInvokedWithResult: (didPop, result) {
@@ -21,7 +24,7 @@ class GuestAddNewReportScreen extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: AppColors.white,
-        appBar: const CustomAppBar(title: "Create found report"),
+        appBar: CustomAppBar(title: loc.report_guest_create),
         body: const SafeArea(
           child: Padding(
             padding: EdgeInsets.all(16.0),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/views/guest/guest_home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,6 +52,7 @@ class _AddNewReportFormState extends State<GuestAddNewReportForm> {
   @override
   Widget build(BuildContext context) {
     final addReportViewModel = context.watch<AddReportViewModel>();
+    final loc = AppLocalizations.of(context)!; // localized strings
 
     return Column(
       children: [
@@ -118,7 +120,7 @@ class _AddNewReportFormState extends State<GuestAddNewReportForm> {
             // cancel
             Expanded(
               child: SecondaryButton(
-                text: "Cancel",
+                text: loc.cancel,
                 onPressed: () {
                   if (addReportViewModel.isLoading) return; // just ignore tap
                   Navigator.pushAndRemoveUntil(
@@ -134,7 +136,7 @@ class _AddNewReportFormState extends State<GuestAddNewReportForm> {
             // create report
             Expanded(
               child: PrimaryButton(
-                text: "Create report",
+                text: loc.report_create,
                 onPressed: () async {
                   if (addReportViewModel.isLoading) {
                     return; // ignore taps while saving
@@ -146,9 +148,7 @@ class _AddNewReportFormState extends State<GuestAddNewReportForm> {
                       _furColor == null ||
                       _locationCtrl.text.trim().isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill all required fields.'),
-                      ),
+                      SnackBar(content: Text(loc.report_not_filled)),
                     );
                     return;
                   }
@@ -162,11 +162,7 @@ class _AddNewReportFormState extends State<GuestAddNewReportForm> {
                   } on FirebaseAuthException catch (e) {
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            e.message ?? 'Unable to submit as guest.',
-                          ),
-                        ),
+                        SnackBar(content: Text(e.message ?? loc.guest_error)),
                       );
                     }
                     return;

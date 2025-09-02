@@ -86,6 +86,15 @@
   "report_type": "Report type",
   "report_type_empty": "Please select a report type",
   "report_not_filled": "Please fill all required fields.",
+  "report_guest_create": "Create found report",
+  
+  "guest_error": "Unable to submit as guest.",
+  "guest_create_report": "Report a found animal",
+  "guest_profile": "Guest profile",
+  "guest_create_profile": "Create an account to unlock every feature",
+  "guest_text": "Track your pets, customize your experience, and explore everything PawDetect has to offer!",
+  "guest_back_welcome": "Back to Welcome page",
+
 
   "alerts_receive": "Receive found alerts",
   "alerts_subtitle": "Get notified when a new 'Found' report appears in a chosen area.",

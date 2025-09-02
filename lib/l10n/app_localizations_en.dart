@@ -236,6 +236,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get report_not_filled => 'Please fill all required fields.';
 
   @override
+  String get report_guest_create => 'Create found report';
+
+  @override
+  String get guest_error => 'Unable to submit as guest.';
+
+  @override
+  String get guest_create_report => 'Report a found animal';
+
+  @override
+  String get guest_profile => 'Guest profile';
+
+  @override
+  String get guest_create_profile =>
+      'Create an account to unlock every feature';
+
+  @override
+  String get guest_text =>
+      'Track your pets, customize your experience, and explore everything PawDetect has to offer!';
+
+  @override
+  String get guest_back_welcome => 'Back to Welcome page';
+
+  @override
   String get alerts_receive => 'Receive found alerts';
 
   @override

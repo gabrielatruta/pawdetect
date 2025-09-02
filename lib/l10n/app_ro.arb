@@ -86,6 +86,14 @@
   "report_type": "Tipul raportului",
   "report_type_empty": "Selectează un tip de raport",
   "report_not_filled": "Completează toate câmpurile obligatorii.",
+  "report_guest_create": "Creare raport 'Găsit'",
+
+  "guest_error": "Trimiterea ca vizitator nu este disponibilă momentan.",
+  "guest_create_report": "Raportează un animal găsit",
+  "guest_profile": "Profil de vizitator",
+  "guest_create_profile": "Creează-ți un cont pentru acces la toate funcționalitățile",
+  "guest_text": "Găsește-ți animalele de companie, personalizează-ți experiența și explorează tot ce are de oferit PawDetect!",
+  "guest_back_welcome": "Înapoi la pagina de pornire",
 
   "alerts_receive": "Primește alerte",
   "alerts_subtitle": "Primești notificări când apare un raport „Găsit” într-o zonă aleasă de tine.",

@@ -239,6 +239,30 @@ class AppLocalizationsRo extends AppLocalizations {
   String get report_not_filled => 'Completează toate câmpurile obligatorii.';
 
   @override
+  String get report_guest_create => 'Creare raport \'Găsit\'';
+
+  @override
+  String get guest_error =>
+      'Trimiterea ca vizitator nu este disponibilă momentan.';
+
+  @override
+  String get guest_create_report => 'Raportează un animal găsit';
+
+  @override
+  String get guest_profile => 'Profil de vizitator';
+
+  @override
+  String get guest_create_profile =>
+      'Creează-ți un cont pentru acces la toate funcționalitățile';
+
+  @override
+  String get guest_text =>
+      'Găsește-ți animalele de companie, personalizează-ți experiența și explorează tot ce are de oferit PawDetect!';
+
+  @override
+  String get guest_back_welcome => 'Înapoi la pagina de pornire';
+
+  @override
   String get alerts_receive => 'Primește alerte';
 
   @override
