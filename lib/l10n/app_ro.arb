@@ -8,6 +8,7 @@
   "cancel": "Anulează",
   "close": "Închide",
   "open": "Deschide",
+  "default_error": "O eroare neprevăzută s-a iscat. Te rog încearcă din nou.",
 
   "username": "Nume utilizator",
   "username_empty": "Te rog introdu un nume de utilizator!",
@@ -41,7 +42,6 @@
   "signup_password_weak": "Parola este prea slabă. Introdu o parolă mai puternică.",
   "signup_network_error": "Eroare de rețea. Verifică-ți conexiunea la internet.",
   "singup_firebase_error": "Înregistrarea cu email/parolă nu este disponibilă. Contactează un PawDetect.",
-  "signup_default_error": "O eroare neprevăzută s-a iscat. Te rog încearcă din nou.",
 
   "location_consent_question": "Permiteți accesul la locație pentru acest cont?",
   "location_consent_description": "Folosim locația ta doar pentru a centra mapa în jurul tău.\n Poți schimba ulterior această preferință în setări.",

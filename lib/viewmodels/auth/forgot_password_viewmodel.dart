@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pawdetect/l10n/app_localizations.dart';
 
 class ForgotPasswordViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  bool isLoading = false;
   String? errorMessage;
 
-  Future<void> sendResetEmail(String email) async {
+  Future<void> sendResetEmail(BuildContext context, String email) async {
+    final loc = AppLocalizations.of(context)!; // localized strings
+
     if (email.isEmpty) {
-      errorMessage = "Please enter your email";
+      errorMessage = loc.email_empty;
       notifyListeners();
       return;
     }
 
-    isLoading = true;
     errorMessage = null;
     notifyListeners();
 
@@ -22,16 +23,16 @@ class ForgotPasswordViewModel extends ChangeNotifier {
       await _auth.sendPasswordResetEmail(email: email.trim());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        errorMessage = "There is no account associated with this email.";
-         notifyListeners();
+        errorMessage = loc.login_no_user_found;
+        notifyListeners();
       } else {
-        errorMessage = "Invalid email";
-         notifyListeners();
+        errorMessage = loc.login_invalid_email;
+        notifyListeners();
       }
     } catch (e) {
-      errorMessage = "Something went wrong. Please try again.";
-       notifyListeners();
-    } 
+      errorMessage = loc.default_error;
+      notifyListeners();
+    }
   }
 
   void clearMessages() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../services/auth_service.dart';
+import 'package:pawdetect/services/auth_service.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
@@ -10,22 +10,24 @@ class LoginViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  Future<bool> login(BuildContext context, String email, String password) async {
+  Future<bool> login(
+    BuildContext context,
+    String email,
+    String password,
+  ) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
       final user = await _authService.signIn(context, email, password);
-      _isLoading = false;
-      _errorMessage = null;
-      notifyListeners();
       return user != null;
     } catch (e) {
-      _isLoading = false;
       _errorMessage = e.toString();
-      notifyListeners();
       return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 

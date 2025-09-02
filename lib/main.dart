@@ -13,7 +13,6 @@ import 'package:pawdetect/services/user_service.dart';
 
 // ViewModels
 import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
-import 'package:pawdetect/viewmodels/auth/welcome_viewmodel.dart';
 import 'package:pawdetect/viewmodels/auth/login_viewmodel.dart';
 import 'package:pawdetect/viewmodels/auth/signup_viewmodel.dart';
 import 'package:pawdetect/viewmodels/auth/forgot_password_viewmodel.dart';
@@ -50,7 +49,6 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => LocalizationViewModel()..load()),
 
         // Auth
-        ChangeNotifierProvider(create: (_) => WelcomeViewModel()),
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => SignupViewModel()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),

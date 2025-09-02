@@ -8,6 +8,7 @@
   "cancel": "Cancel",
   "close": "Close",
   "open": "Open",
+  "default_error": "Something went wrong. Please try again.",
 
   "username": "Username",
   "username_empty": "Please enter your username!",
@@ -41,7 +42,6 @@
   "signup_password_weak": "Your password is too weak. Please choose a stronger one.",
   "signup_network_error": "Network error. Please check your internet connection.",
   "singup_firebase_error": "Sign up with email/password is not enabled. Enable it in Firebase Console.",
-  "signup_default_error": "Something went wrong. Please try again.",
 
   "location_consent_question": "Allow location for this account?",
   "location_consent_description": "We use your location only to center the home map near you.\n You can change this anytime in Settings.",

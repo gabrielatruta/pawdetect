@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Open'**
   String get open;
 
+  /// No description provided for @default_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get default_error;
+
   /// No description provided for @username.
   ///
   /// In en, this message translates to:
@@ -301,12 +307,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign up with email/password is not enabled. Enable it in Firebase Console.'**
   String get singup_firebase_error;
-
-  /// No description provided for @signup_default_error.
-  ///
-  /// In en, this message translates to:
-  /// **'Something went wrong. Please try again.'**
-  String get signup_default_error;
 
   /// No description provided for @location_consent_question.
   ///

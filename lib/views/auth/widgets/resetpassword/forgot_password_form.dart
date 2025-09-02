@@ -55,7 +55,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
         PrimaryButton(
           text: loc.password_reset,
           onPressed: () async {
-            await forgotPasswordViewModel.sendResetEmail(_emailController.text);
+            await forgotPasswordViewModel.sendResetEmail(context, _emailController.text);
 
             if (forgotPasswordViewModel.errorMessage == null &&
                 context.mounted) {

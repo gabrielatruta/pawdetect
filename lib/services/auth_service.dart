@@ -49,7 +49,7 @@ class AuthService {
       await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
       final l10n = AppLocalizations.of(context)!;
-      throw Exception(e.message ?? l10n.signup_default_error);
+      throw Exception(e.message ?? l10n.default_error);
     }
   }
 
@@ -72,7 +72,7 @@ class AuthService {
       case 'network-request-failed':
         return l10n.signup_network_error;
       default:
-        return l10n.signup_default_error;
+        return l10n.default_error;
     }
   }
 
@@ -88,7 +88,7 @@ class AuthService {
       case 'operation-not-allowed':
         return l10n.singup_firebase_error;
       default:
-        return l10n.signup_default_error;
+        return l10n.default_error;
     }
   }
 

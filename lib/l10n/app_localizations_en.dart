@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get open => 'Open';
 
   @override
+  String get default_error => 'Something went wrong. Please try again.';
+
+  @override
   String get username => 'Username';
 
   @override
@@ -118,9 +121,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get singup_firebase_error =>
       'Sign up with email/password is not enabled. Enable it in Firebase Console.';
-
-  @override
-  String get signup_default_error => 'Something went wrong. Please try again.';
 
   @override
   String get location_consent_question => 'Allow location for this account?';

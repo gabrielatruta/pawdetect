@@ -30,6 +30,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get open => 'Deschide';
 
   @override
+  String get default_error =>
+      'O eroare neprevăzută s-a iscat. Te rog încearcă din nou.';
+
+  @override
   String get username => 'Nume utilizator';
 
   @override
@@ -117,10 +121,6 @@ class AppLocalizationsRo extends AppLocalizations {
   @override
   String get singup_firebase_error =>
       'Înregistrarea cu email/parolă nu este disponibilă. Contactează un PawDetect.';
-
-  @override
-  String get signup_default_error =>
-      'O eroare neprevăzută s-a iscat. Te rog încearcă din nou.';
 
   @override
   String get location_consent_question =>

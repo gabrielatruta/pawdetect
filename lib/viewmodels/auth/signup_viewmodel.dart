@@ -7,7 +7,6 @@ class SignupViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
   final UserService _userService = UserService();
 
-  bool isLoading = false;
   String? errorMessage;
 
   Future<void> signUp({
@@ -43,7 +42,7 @@ class SignupViewModel extends ChangeNotifier {
     } catch (e) {
       errorMessage = e.toString();
       notifyListeners();
-    } 
+    }
   }
 
   void clearError() {
