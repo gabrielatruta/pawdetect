@@ -19,7 +19,6 @@ import 'package:pawdetect/viewmodels/auth/forgot_password_viewmodel.dart';
 import 'package:pawdetect/viewmodels/report/add_report_viewmodel.dart';
 import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
 import 'package:pawdetect/viewmodels/report/my_reports_viewmodel.dart';
-import 'package:pawdetect/viewmodels/home/home_viewmodel.dart';
 import 'package:pawdetect/viewmodels/home/profile_viewmodel.dart';
 
 // Screens
@@ -58,8 +57,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => AllReportsViewModel()),
         ChangeNotifierProvider(create: (_) => MyReportsViewModel()),
 
-        // Home/Profile
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        // Profile
         ChangeNotifierProvider(create: (_) => ProfileViewModel(UserService())),
       ],
       child: const PawDetectApp(),

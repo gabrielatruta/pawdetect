@@ -356,6 +356,12 @@ abstract class AppLocalizations {
   /// **'Profile updated successfully'**
   String get profile_updated_s;
 
+  /// No description provided for @profile_updated_f.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update profile.'**
+  String get profile_updated_f;
+
   /// No description provided for @profile_account_info.
   ///
   /// In en, this message translates to:
@@ -679,6 +685,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please choose an alert area before enabling notifications.'**
   String get alerts_empty_area;
+
+  /// No description provided for @alerts_fail.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update preferences.'**
+  String get alerts_fail;
 
   /// No description provided for @animal.
   ///

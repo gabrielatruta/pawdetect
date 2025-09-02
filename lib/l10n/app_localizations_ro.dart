@@ -149,6 +149,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get profile_updated_s => 'Profil actualizat cu succes';
 
   @override
+  String get profile_updated_f => 'Actualizarea profilului a eșuat';
+
+  @override
   String get profile_account_info => 'Informații cont';
 
   @override
@@ -319,6 +322,9 @@ class AppLocalizationsRo extends AppLocalizations {
   @override
   String get alerts_empty_area =>
       'Alege o arie de alertare pentru a activa alertele';
+
+  @override
+  String get alerts_fail => 'Actualizare preferințe eșuată';
 
   @override
   String get animal => 'Animal';

@@ -52,6 +52,7 @@
   "profile_update": "Update Profile",
   "profile_unavailable": "No user profile available",
   "profile_updated_s": "Profile updated successfully",
+  "profile_updated_f": "Failed to update profile.",
   "profile_account_info": "Account Information",
   "profile_preferences": "Preferences",
   "profile_turn_notifications": "Turn off push notifications",
@@ -111,6 +112,7 @@
   "alerts_helper": "Tip: Choose how broad you want alerts to be:\n• Whole country (e.g., Romania)\n'• City (e.g., Cluj-Napoca)\n'• Neighbourhood (e.g., Mănăștur)",
   "alerts_area": "Alert area",
   "alerts_empty_area": "Please choose an alert area before enabling notifications.",
+  "alerts_fail": "Failed to update preferences.",
 
   "animal": "Animal",
   "animal_type_dog": "Dog",

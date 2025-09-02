@@ -148,6 +148,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile_updated_s => 'Profile updated successfully';
 
   @override
+  String get profile_updated_f => 'Failed to update profile.';
+
+  @override
   String get profile_account_info => 'Account Information';
 
   @override
@@ -315,6 +318,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get alerts_empty_area =>
       'Please choose an alert area before enabling notifications.';
+
+  @override
+  String get alerts_fail => 'Failed to update preferences.';
 
   @override
   String get animal => 'Animal';

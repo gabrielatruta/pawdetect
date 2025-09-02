@@ -20,10 +20,10 @@ class MapViewModel extends ChangeNotifier {
   double zoom = 12.0;
   bool isLocating = false;
 
-  // selected (for dialog)
+  // selected - used for the report preview for pins
   report.Report? selected;
 
-  // zoom-in/out
+  // zoom-in/out limits 
   static const double minZoom = 3.0;
   static const double maxZoom = 18.0;
 
@@ -47,13 +47,6 @@ class MapViewModel extends ChangeNotifier {
 
   void zoomIn() => setZoom(zoom + 1.0);
   void zoomOut() => setZoom(zoom - 1.0);
-
-  void setCenter(LatLng newCenter) {
-    if (newCenter != center) {
-      center = newCenter;
-      notifyListeners();
-    }
-  }
 
   Future<void> init({required bool useLocation}) async {
     if (!useLocation) return;
@@ -90,7 +83,7 @@ class MapViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ---------------- Typeahead search state ----------------
+  // ------ SEARCH ------ 
   List<PlaceSuggestion> suggestions = [];
   Timer? _debounce;
 

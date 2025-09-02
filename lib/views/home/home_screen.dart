@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pawdetect/viewmodels/report/all_reports_viewmodel.dart';
-import 'package:pawdetect/viewmodels/home/home_viewmodel.dart';
 import 'package:pawdetect/views/home/home_map.dart';
 import 'package:pawdetect/views/home/widgets/home_bottom_navigation.dart';
 import 'package:pawdetect/views/reports/widgets/all_reports/all_reports_form.dart';
@@ -19,7 +18,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<HomeViewModel>();
 
     return ChangeNotifierProvider(
       create: (_) => AllReportsViewModel()..fetchReports(),

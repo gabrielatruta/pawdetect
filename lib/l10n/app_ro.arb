@@ -52,6 +52,7 @@
   "profile_update": "Actualizează profilul",
   "profile_unavailable": "Niciun profil disponibil",
   "profile_updated_s": "Profil actualizat cu succes",
+  "profile_updated_f": "Actualizarea profilului a eșuat",
   "profile_account_info": "Informații cont",
   "profile_preferences": "Preferințe",
   "profile_turn_notifications": "Dezactivează notificările",
@@ -111,6 +112,7 @@
   "alerts_helper": "Sfat: Alege cât de amplă vrei să fie aria alertelor:\n• Întreaga țară (de ex., România)\n• Oraș (de ex., Cluj-Napoca)\n• Cartier (de ex., Mănăștur)",
   "alerts_area": "Arie de alertare",
   "alerts_empty_area": "Alege o arie de alertare pentru a activa alertele",
+  "alerts_fail": "Actualizare preferințe eșuată",
 
   "animal": "Animal",
   "animal_type_dog": "Câine",
