@@ -85,6 +85,10 @@ class Report {
       status: ReportStatusX.parse(data['status']),
       createdAt: _toDate(data['createdAt']),
       updatedAt: _toDate(data['updatedAt']),
+
+      // coordinates for pins on map
+      lat: (data['lat'] as num?)?.toDouble(),
+      lng: (data['lng'] as num?)?.toDouble(),
     );
   }
 }

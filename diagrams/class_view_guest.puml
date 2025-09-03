@@ -1,0 +1,112 @@
+@startuml
+title PawDetect — Guest Views
+left to right direction
+skinparam shadowing false
+skinparam RoundCorner 10
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 26
+skinparam ranksep 28
+skinparam ArrowThickness 1
+skinparam packageStyle rectangle
+skinparam ClassFontSize 12
+skinparam PackageTitleFontSize 13
+scale 800 width
+
+' ------------------- SHARED WIDGETS (GUEST-ONLY) -------------------
+package "Branding & Actions" as PBrand {
+  class CustomAppBar {
+    +title : String
+    +showProfileIcon : boolean
+    +showGuestLanguageIcon : boolean
+  }
+  class AppLogo {
+    +render()
+  }
+  class AppNameTitle {
+    +text : String
+  }
+  class PrimaryButton {
+    +text : String
+    +onPressed()
+  }
+  class SecondaryButton {
+    +text : String
+    +onPressed()
+  }
+}
+
+package "Language & Theme" as PSettings {
+  class LanguageSelector {
+    +current : String
+    +onChanged()
+  }
+}
+
+package "Feedback" as PFeedback {
+  class ErrorMessage {
+    +text : String
+  }
+}
+
+' ------------------- SCREENS (GUEST, NON-REPORT) -------------------
+package "Screens" as Screens {
+  rectangle GuestHomeScreen as RGuestHome {
+    class GuestWelcomeBanner {
+      +title : String
+      +subtitle : String
+    }
+    class GuestHomeActions {
+      +openProfile()
+      +changeLanguage()
+      +goToAuth()
+    }
+  }
+
+  rectangle GuestProfileScreen as RGuestProfile {
+    class GuestProfileHeader {
+      +title : String
+    }
+    class GuestProfileActions {
+      +createAccount()
+      +backToWelcome()
+      +changeLanguage()
+    }
+  }
+}
+
+' ------------------- LAYOUT ANCHORS -------------------
+PBrand -[hidden]-> RGuestHome
+PFeedback -[hidden]-> RGuestHome
+RGuestHome -[hidden]-> RGuestProfile
+
+' ------------------- COLORED USAGE (shared -> screens) -------------------
+' Colors: AppBar=#1E88E5, Branding Logo=#43A047, NameTitle=#00897B
+' PrimaryBtn=#2E7D32, SecondaryBtn=#546E7A, Language=#009688, Theme=#7E57C2
+' Consent=#3949AB, Info=#039BE5, Error=#E53935
+
+' Branding & actions
+CustomAppBar -[#1E88E5]-> RGuestHome
+CustomAppBar -[#1E88E5]-> RGuestProfile
+AppLogo -[#43A047]-> RGuestHome
+AppLogo -[#43A047]-> RGuestProfile
+AppNameTitle -[#00897B]-> RGuestHome
+AppNameTitle -[#00897B]-> RGuestProfile
+PrimaryButton -[#2E7D32]-> RGuestHome
+PrimaryButton -[#2E7D32]-> RGuestProfile
+SecondaryButton -[#546E7A]-> RGuestHome
+SecondaryButton -[#546E7A]-> RGuestProfile
+
+' Language & theme
+LanguageSelector -[#009688]-> RGuestHome
+LanguageSelector -[#009688]-> RGuestProfile
+
+' Feedback
+ErrorMessage -[#E53935]-> RGuestProfile
+
+' ------------------- LEGEND -------------------
+legend left
+|=<color:#1E88E5>AppBar</color>|=<color:#43A047>Logo</color>|=<color:#00897B>NameTitle</color>|=<color:#2E7D32>PrimaryBtn</color>|=<color:#546E7A>SecondaryBtn</color>|
+|=<color:#009688>Language</color>|=<color:#E53935>Error</color>|
+endlegend
+@enduml

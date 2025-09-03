@@ -1,0 +1,243 @@
+@startuml
+title PawDetect — Report Views
+left to right direction
+skinparam shadowing false
+skinparam RoundCorner 10
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 28
+skinparam ranksep 32
+skinparam ArrowThickness 2
+skinparam packageStyle rectangle
+
+' --- larger, readable text ---
+skinparam TitleFontSize 22
+skinparam ClassFontSize 18
+skinparam PackageTitleFontSize 18
+skinparam LegendFontSize 16
+skinparam ArrowFontSize 14
+skinparam DefaultFontName "Segoe UI"  ' or Arial/Helvetica—use a clean UI font
+
+' --- bigger rendering ---
+scale 1.8          
+skinparam dpi 300 
+
+' ------------------- SHARED WIDGETS (GROUPED) -------------------
+package "Branding & Actions" as PBrand {
+  class CustomAppBar {
+    +title : String
+    +showProfileIcon : boolean
+    +showGuestLanguageIcon : boolean
+  }
+  class PrimaryButton {
+    +text : String
+    +onPressed()
+  }
+  class SecondaryButton {
+    +text : String
+    +onPressed()
+  }
+  class ErrorMessage {
+    +text : String
+  }
+}
+
+package "List — Filters & Cards" as PList {
+  class FilterButton { 
+    +tap() 
+    }
+  class FilterBottomSheet { 
+    +show() 
+    }
+  class FilterDropdown {
+    +label : String
+    +hint : String
+    +value : String
+    +items : List
+    +display()
+    +onChanged()
+  }
+  class FilterActionButtons { 
+    +clearAll() 
+    +apply() 
+    }
+  class ReportCardStretched {
+    +title : String
+    +image : ImageProvider
+    +borderColor : Color
+  }
+  class ReportCardLoadMore { 
+    +render() 
+    }
+  class ReportsImage { 
+    +image : ImageProvider 
+    +size : double 
+    }
+}
+
+package "Details — Components" as PDetails {
+  class ReportHeaderCard { 
+    +title : String
+    +imageUrl : String 
+    +imageHeight : double 
+    }
+  class ReportDetailsCard { 
+    +items : List 
+    }
+  class ReportDetailsItem { 
+    +label : String 
+    +value : String 
+    }
+}
+
+package "Form — Inputs" as PFormInputs {
+  class TextInputField {
+    +label : String
+    +controller : TextEditingController
+    +keyboardType : TextInputType
+    +obscureText : boolean
+    +validator()
+    +onChanged()
+    +suffixIcon : Widget
+    +isRequired : boolean
+  }
+  class PhoneField { 
+    +controller : TextEditingController 
+    +isRequired : boolean 
+    }
+  class LocationField { 
+    +controller : TextEditingController 
+    +country : String 
+    +labelText : String 
+    +onSelected() 
+    }
+  class DescriptionField { 
+    +controller : TextEditingController 
+    }
+}
+
+package "Form — Dropdowns & Media" as PFormDrops {
+  class ReportTypeField { 
+    +value : String 
+    +onChanged() 
+    }
+  class PetTypeDropdown { 
+    +value : String 
+    +onChanged() 
+    }
+  class PetGenderDropdown { 
+    +value : String
+    +onChanged() 
+    }
+  class PetColorDropdown { 
+    +value : String 
+    +onChanged() 
+    }
+  class CustomDropdown {
+    +value : String
+    +items : List
+    +onChanged()
+    +labelText : String
+    +validator()
+    +isExpanded : boolean
+  }
+  class PhotoPicker { 
+    +onChanged() 
+    }
+}
+
+' ------------------- SCREENS (REPORTS ONLY) -------------------
+package "Screens" as Screens {
+  rectangle ReportsHomeScreen as RReportsHome {
+    class ReportsToolbar { 
+        +render() 
+        }
+    class ReportsList { 
+        +render() 
+        }
+  }
+
+  rectangle MyReportsScreen as RMyReports {
+    class MyReportsList { 
+        +render() 
+        }
+  }
+
+  rectangle ReportDetailsScreen as RReportDetails {
+    class ReportDetailsView { 
+        +showHeader() 
+        +showDetails() 
+        }
+  }
+
+  rectangle ReportCreateScreen as RReportCreate {
+    class ReportCreateForm { 
+        +submit() 
+        +cancel() 
+        }
+  }
+
+  rectangle ReportEditScreen as RReportEdit {
+    class ReportEditForm { 
+        +submit() 
+        +cancel() 
+        }
+  }
+}
+
+' ------------------- LAYOUT ANCHORS -------------------
+PList -[hidden]-> RReportsHome
+PDetails -[hidden]-> RReportDetails
+PFormInputs -[hidden]-> RReportCreate
+PFormDrops -[hidden]-> RReportCreate
+RReportsHome -[hidden]-> RMyReports
+RMyReports -[hidden]-> RReportDetails
+RReportDetails -[hidden]-> RReportCreate
+RReportCreate -[hidden]-> RReportEdit
+
+' ------------------- COLORED USAGE (shared -> screens) -------------------
+' AppBar=#1E88E5, PrimaryBtn=#2E7D32, SecondaryBtn=#546E7A, Error=#E53935
+' Inputs=#7CB342, Dropdowns & Media=#7B1FA2, Filters=#00ACC1, Cards=#F4511E, Images=#6D4C41, Details=#8D6E63
+
+' Branding & actions
+CustomAppBar -[#1E88E5]-> RReportsHome
+CustomAppBar -[#1E88E5]-> RMyReports
+CustomAppBar -[#1E88E5]-> RReportDetails
+CustomAppBar -[#1E88E5]-> RReportCreate
+CustomAppBar -[#1E88E5]-> RReportEdit
+PrimaryButton -[#2E7D32]-> RReportCreate
+PrimaryButton -[#2E7D32]-> RReportEdit
+SecondaryButton -[#546E7A]-> RReportCreate
+SecondaryButton -[#546E7A]-> RReportEdit
+ErrorMessage -[#E53935]-> RReportCreate
+ErrorMessage -[#E53935]-> RReportEdit
+
+' Lists — filters, cards, images (home)
+FilterButton -[#00ACC1]-> RReportsHome
+FilterBottomSheet -[#00ACC1]-> RReportsHome
+FilterDropdown -[#00ACC1]-> RReportsHome
+FilterActionButtons -[#00ACC1]-> RReportsHome
+ReportCardStretched -[#F4511E]-> RReportsHome
+ReportCardLoadMore -[#F4511E]-> RReportsHome
+ReportsImage -[#6D4C41]-> RReportsHome
+
+' My reports (grouped)
+PList -[#F4511E]-> RMyReports : Cards & Filters
+
+' Details
+ReportHeaderCard -[#8D6E63]-> RReportDetails
+ReportDetailsCard -[#8D6E63]-> RReportDetails
+ReportDetailsItem -[#8D6E63]-> RReportDetails
+
+' Forms — grouped to keep compact
+PFormInputs -[#7CB342]-> RReportCreate : Inputs
+PFormDrops  -[#7B1FA2]-> RReportCreate : Dropdowns & Media
+PFormInputs -[#7CB342]-> RReportEdit   : Inputs
+PFormDrops  -[#7B1FA2]-> RReportEdit   : Dropdowns & Media
+
+' ------------------- LEGEND -------------------
+legend left
+|=<color:#1E88E5>AppBar</color>|=<color:#2E7D32>PrimaryBtn</color>|=<color:#546E7A>SecondaryBtn</color>|=<color:#E53935>Error</color>|
+|=<color:#7CB342>Inputs</color>|=<color:#7B1FA2>Dropdowns & Media</color>|=<color:#00ACC1>Filters</color>|=<color:#F4511E>Cards</color>|=<color:#6D4C41>Images</color>|=<color:#8D6E63>Details</color>|
+endlegend
+@enduml

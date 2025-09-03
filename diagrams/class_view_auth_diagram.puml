@@ -1,127 +1,139 @@
 @startuml
-title PawDetect — Views (Auth & Welcome)
+title PawDetect — Class Diagram (Auth & Welcome)
 left to right direction
 skinparam shadowing false
-skinparam RoundCorner 12
+skinparam RoundCorner 10
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
+skinparam nodesep 28
+skinparam ranksep 32
+skinparam PackageStyle rectangle
 scale 900 width
 
-' ----- Shared widgets -----
-class AppLogo { 
-  +render() 
+package "Shared Widgets" as Shared {
+  class CustomAppBar {
+    +title : String
+    +showProfileIcon : boolean
+    +showGuestLanguageIcon : boolean
   }
-class AppNameTitle { 
-  +text : String 
+  class AppLogo {
+    +render()
   }
-class EmailField { 
-  +controller 
-   +validator() 
-   }
-class PasswordField { 
-  +controller  
-  +validator() 
+  class AppNameTitle {
+    +text : String
   }
-class PhoneField { 
-  +controller  
-  +validator() 
+  class EmailField {
+    +controller : TextEditingController
+    +validator()
   }
-class CustomPrimaryButton { 
-  +text : String
-  +onPressed : VoidCallback 
+  class PasswordField {
+    +controller : TextEditingController
+    +validator()
   }
-class CustomSecondaryButton { 
-  +text : String
-  +onPressed : VoidCallback
+  class PhoneField {
+    +controller : TextEditingController
+    +validator()
   }
-class ErrorMessage { 
-  +text : String 
+  class PrimaryButton {
+    +text : String
+    +onPressed()
   }
-class LocationConsentPopup {
-   +show() 
-   }
+  class SecondaryButton {
+    +text : String
+    +onPressed()
+  }
+  class ErrorMessage {
+    +text : String
+  }
+  class LocationConsentPopup {
+    +show()
+  }
+}
 
-' ----- Screens as rectangles -----
-rectangle WelcomeScreen as RWelcome {
+package "Screens" as Screens {
+  class WelcomeScreen <<screen>> { }
   class WelcomeTitle { 
     +text : String 
     }
   class WelcomeDescription { 
     +text : String 
     }
-  class WelcomeForm { 
-    +login()  
-    +signup()  
+  class WelcomeActions { 
+    +login() \n +signup() 
     +continueAsGuest() 
     }
-}
 
-rectangle LoginScreen as RLogin {
+  class LoginScreen <<screen>> { }
   class LoginSubtitle { 
     +text : String 
     }
   class LoginForm { 
-    +email : EmailField  
-    +password : PasswordField  
     +submit() 
     }
-}
-
-rectangle SignupScreen as RSignup {
+  
+  class SignupScreen <<screen>> { }
   class SignupForm { 
-    +name : NameField  
-    +email : EmailField  
-    +phone : PhoneField  
-    +password : PasswordField  
-    +confirm : ConfirmPasswordField  
     +submit() 
     }
   class NameField { 
-    +controller  
-  +validator() 
-  }
-  class ConfirmPasswordField { 
-    +controller  
+    +controller : TextEditingController 
     +validator() 
     }
-}
+  class ConfirmPasswordField { 
+    +controller : TextEditingController 
+    +validator() 
+    }
 
-rectangle ForgotPasswordScreen as RForgot {
+  class ForgotPasswordScreen <<screen>> { }
   class ForgotPasswordForm { 
-    +email : EmailField  
     +submit() 
     }
 }
 
-' ----- Shared -> screens usage -----
-AppLogo ..> RWelcome
-AppNameTitle ..> RWelcome
-CustomSecondaryButton ..> RWelcome
+' -------- Composition: screens own their internal parts
+WelcomeScreen "1" *-- "1" WelcomeTitle
+WelcomeScreen "1" *-- "1" WelcomeDescription
+WelcomeScreen "1" *-- "1" WelcomeActions
 
-AppLogo ..> RLogin
-AppNameTitle ..> RLogin
-AppLogo ..> RSignup
+LoginScreen  "1" *-- "1" LoginForm
+LoginScreen  "1" *-- "0..1" LoginSubtitle
+LoginForm    "1" *-- "1" EmailField
+LoginForm    "1" *-- "1" PasswordField
 
+SignupScreen "1" *-- "1" SignupForm
+SignupScreen "1" *-- "1" NameField
+SignupScreen "1" *-- "1" ConfirmPasswordField
+SignupForm   "1" *-- "1" NameField
+SignupForm   "1" *-- "1" EmailField
+SignupForm   "1" *-- "1" PhoneField
+SignupForm   "1" *-- "1" PasswordField
+SignupForm   "1" *-- "1" ConfirmPasswordField
 
-AppNameTitle ..> RSignup
+ForgotPasswordScreen "1" *-- "1" ForgotPasswordForm
+ForgotPasswordForm   "1" *-- "1" EmailField
 
-EmailField ..> RLogin
-EmailField ..> RSignup
-EmailField ..> RForgot
+' -------- Aggregation: shared widgets attached to specific screens
+LoginScreen  "1" o-- "1" CustomAppBar
+SignupScreen "1" o-- "1" CustomAppBar
+ForgotPasswordScreen "1" o-- "1" CustomAppBar
 
-PasswordField ..> RLogin
-PasswordField ..> RSignup
+WelcomeScreen  "0..1" o-- "1" AppLogo
+LoginScreen    "0..1" o-- "1" AppLogo
+SignupScreen   "0..1" o-- "1" AppLogo
+WelcomeScreen  "0..1" o-- "1" AppNameTitle
+LoginScreen    "0..1" o-- "1" AppNameTitle
+SignupScreen   "0..1" o-- "1" AppNameTitle
 
-PhoneField ..> RSignup
+LoginScreen    "0..*" o-- "0..*" PrimaryButton
+SignupScreen   "0..*" o-- "0..*" PrimaryButton
+ForgotPasswordScreen "0..*" o-- "0..*" PrimaryButton
+WelcomeScreen  "0..*" o-- "0..*" SecondaryButton
 
-CustomPrimaryButton ..> RLogin
-CustomPrimaryButton ..> RSignup
-CustomPrimaryButton ..> RForgot
+LoginScreen    "0..*" o-- "0..*" ErrorMessage
+SignupScreen   "0..*" o-- "0..*" ErrorMessage
+ForgotPasswordScreen "0..*" o-- "0..*" ErrorMessage
 
-
-ErrorMessage ..> RLogin
-ErrorMessage ..> RSignup
-ErrorMessage ..> RForgot
-LocationConsentPopup ..> RLogin
+' -------- Dependency: transient interaction
+LoginForm ..> LocationConsentPopup : shows()
 
 @enduml

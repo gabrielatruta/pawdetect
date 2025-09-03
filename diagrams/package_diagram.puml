@@ -1,0 +1,107 @@
+@startuml
+title PawDetect — Project Package Diagram (wide, aligned)
+left to right direction
+
+' --- readable + bigger text at fixed page width ---
+skinparam packageStyle folder
+skinparam TitleFontSize 22
+skinparam PackageTitleFontSize 20
+skinparam DefaultFontName "Segoe UI"
+skinparam dpi 300
+scale 800 width
+skinparam nodesep 60
+skinparam ranksep 26
+
+' ================== APPLICATION CODE ==================
+package "lib" as Lib {
+
+  ' ---- TOP ROW inside lib (small packages) ----
+  package "models"  as Models  {}
+  package "l10n"    as L10n    {}
+  package "styles"  as Styles  {}
+  package "routing (navigation.dart)" as Routing {}
+  package "config (firebase_options.dart)" as Config {}
+
+  ' keep top row on one line
+  Models -[hidden]-> L10n
+  L10n  -[hidden]-> Styles
+  Styles -[hidden]-> Routing
+  Routing -[hidden]-> Config
+
+  ' ---- SERVICES (row 2, centered between left/right) ----
+  package "services" as Services {
+    package "auth_service"           as SAuth     {}
+    package "report_service"         as SReport   {}
+    package "user_service"           as SUser     {}
+    package "localization_service"   as SLocSvc   {}
+    package "location_consent"       as SConsent  {}
+    package "report_border_services" as SBorder   {}
+    ' keep inner services on one row
+    SAuth -[hidden]-> SReport
+    SReport -[hidden]-> SUser
+    SUser -[hidden]-> SLocSvc
+    SLocSvc -[hidden]-> SConsent
+    SConsent -[hidden]-> SBorder
+  }
+
+  ' ---- VIEWMODELS (row 3) ----
+  package "viewmodels" as VMs {
+    package "auth"          as VMsAuth {}
+    package "home"          as VMsHome {}
+    package "report"        as VMsReport {}
+    package "localization"  as VMsLoc {}
+    ' one row
+    VMsAuth -[hidden]-> VMsHome
+    VMsHome -[hidden]-> VMsReport
+    VMsReport -[hidden]-> VMsLoc
+  }
+
+  ' ---- VIEWS (row 4 — exactly like your picture) ----
+  package "views" as Views {
+    package "auth"    as VAuth    { 
+        package "widgets" {} 
+        package "screens" {} 
+        }
+    package "guest"   as VGuest   { 
+        package "widgets" {} 
+        package "screens" {} 
+        }
+    package "home"    as VHome    { 
+        package "widgets" {} 
+        package "screens" {}
+         }
+    package "reports" as VReports { 
+        package "widgets" {} 
+        package "screens" {} 
+        }
+    package "welcome" as VWelcome { 
+        package "widgets" {} 
+        package "screens" {} 
+        }
+    package "shared (custom widgets)" as VSharedWidgets {}
+
+    ' lay the feature folders on one horizontal row
+    VAuth -[hidden]-> VGuest
+    VGuest -[hidden]-> VHome
+    VHome -[hidden]-> VReports
+    VReports -[hidden]-> VWelcome
+    VWelcome -[hidden]-> VSharedWidgets
+  }
+
+  ' ---- vertical alignment: top row -> services -> VMs -> views ----
+  Config  -[hidden]down-> Services
+  Services -[hidden]down-> VMs
+  VMs      -[hidden]down-> Views
+}
+
+' ================== RESOURCES (UNDER lib) ==================
+package "assets" as Assets {
+  package "l10n"   {}
+  package "fonts"  {}
+  package "images" {}
+  package "icons"  {}
+}
+
+' place assets directly beneath lib
+Lib -[hidden]down-> Assets
+@enduml
