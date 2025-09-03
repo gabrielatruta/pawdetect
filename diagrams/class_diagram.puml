@@ -1,0 +1,227 @@
+@startuml
+title PawDetect — Class Diagram (MVVM + Services)
+left to right direction
+skinparam shadowing false
+skinparam RoundCorner 10
+skinparam classAttributeIconSize 0
+scale 800 width
+
+package Models {
+  class Report {
+    +id : String
+    +userId : String
+    +type : ReportType
+    +animal : AnimalType
+    +gender : Gender
+    +colors : List
+    +location : String
+    +additionalInfo : String
+    +photoUrls : List
+    +phoneNumber1 : String
+    +phoneNumber2 : String
+    +status : ReportStatus
+    +createdAt : DateTime
+    +updatedAt : DateTime
+    +lat : double
+    +lng : double
+  }
+
+  enum ReportType {
+    found
+    lost
+  }
+  enum AnimalType {
+    dog
+    cat
+    other
+  }
+  enum Gender {
+    female
+    male
+    unknown
+  }
+  enum FurColor {
+    black
+    white
+    brown
+    gray
+    golden
+    cream
+    orange
+    brindle
+    spotted
+    mixed
+  }
+  enum ReportStatus {
+    solved
+    unsolved
+  }
+
+  class UserModel {
+    +uid : String
+    +name : String
+    +email : String
+    +phone : String
+    +notificationsEnabled : boolean
+  }
+}
+
+package Services {
+  class AuthService {
+    +signIn(
+      email : String
+      password : String
+    ) : User
+    +signUp(
+      email : String
+      password : String
+    ) : User
+    +signOut() : void
+    +resetPassword(
+      email : String
+    ) : void
+  }
+
+  class UserService {
+    +createUser(
+      user : UserModel
+    ) : void
+    +getUser(
+      uid : String
+    ) : UserModel
+    +updateUser(
+      user : UserModel
+    ) : void
+  }
+
+  class ReportService {
+    +streamReportsWithLocation() : Stream
+    +createReport(
+      report : Report
+    ) : String
+    +updateReport(
+      id : String
+      report : Report
+    ) : void
+    +deleteReport(
+      id : String
+    ) : void
+  }
+
+  class LocalizationService {
+    +load() : String
+    +save(
+      code : String
+    ) : void
+  }
+
+  class LocationConsent {
+    +ensureForUser(
+      userId : String
+    ) : boolean
+  }
+
+  class ReportBorderService {
+    +colorFor(
+      r : Object
+    ) : Color
+    +markSeen(
+      uid : String
+      id : String
+    ) : void
+  }
+}
+
+package ViewModels {
+  class LoginViewModel {
+    +login(
+      email : String
+      password : String
+    ) : boolean
+  }
+
+  class SignupViewModel {
+    +signUp(
+      name : String
+      email : String
+      phone : String
+      password : String
+    ) : void
+  }
+
+  class ForgotPasswordViewModel {
+    +sendResetEmail(
+      email : String
+    ) : void
+  }
+
+  class LocalizationViewModel {
+    +locale : String
+    +load() : void
+    +setLocale(
+      code : String
+    ) : void
+  }
+
+  class AddReportViewModel {
+    +submitReport(
+      report : Report
+    ) : boolean
+  }
+
+  class AllReportsViewModel {
+    +reports : List
+    +fetchReports() : void
+  }
+
+  class MyReportsViewModel {
+    +load() : void
+    +delete(
+      id : String
+    ) : void
+  }
+
+  class ReportDetailsViewModel {
+    +getById(
+      id : String
+    ) : Report
+    +markSolved(
+      id : String
+    ) : void
+  }
+
+  class ProfileViewModel {
+    +user : UserModel
+    +load(
+      uid : String
+    ) : void
+    +update(
+      user : UserModel
+    ) : void
+  }
+
+  class MapViewModel {
+    +reportsStream : Stream
+    +onMapMoved(
+      center : LatLng
+      zoom : double
+    ) : void
+  }
+}
+
+' Dependencies (optional)
+LoginViewModel --> AuthService
+SignupViewModel --> AuthService
+SignupViewModel --> UserService
+ForgotPasswordViewModel --> AuthService
+LocalizationViewModel --> LocalizationService
+AddReportViewModel --> ReportService
+AllReportsViewModel --> ReportService
+MyReportsViewModel --> ReportService
+ReportDetailsViewModel --> ReportService
+ProfileViewModel --> UserService
+MapViewModel --> ReportService
+
+ReportService --> Report
+UserService --> UserModel
+@enduml

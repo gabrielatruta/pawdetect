@@ -1,36 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pawdetect/l10n/app_localizations.dart';
+import 'package:pawdetect/services/auth_service.dart';
 
 class ForgotPasswordViewModel extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _authService = AuthService();
 
   String? errorMessage;
 
   Future<void> sendResetEmail(BuildContext context, String email) async {
-    final loc = AppLocalizations.of(context)!; // localized strings
-
-    if (email.isEmpty) {
+    final loc = AppLocalizations.of(context)!;
+    if (email.trim().isEmpty) {
       errorMessage = loc.email_empty;
       notifyListeners();
       return;
     }
-
     errorMessage = null;
     notifyListeners();
-
     try {
-      await _auth.sendPasswordResetEmail(email: email.trim());
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        errorMessage = loc.login_no_user_found;
-        notifyListeners();
-      } else {
-        errorMessage = loc.login_invalid_email;
-        notifyListeners();
-      }
+      await _authService.resetPassword(context, email.trim());
     } catch (e) {
-      errorMessage = loc.default_error;
+      errorMessage = e.toString();
       notifyListeners();
     }
   }

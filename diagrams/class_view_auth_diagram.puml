@@ -1,0 +1,127 @@
+@startuml
+title PawDetect — Views (Auth & Welcome)
+left to right direction
+skinparam shadowing false
+skinparam RoundCorner 12
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+scale 900 width
+
+' ----- Shared widgets -----
+class AppLogo { 
+  +render() 
+  }
+class AppNameTitle { 
+  +text : String 
+  }
+class EmailField { 
+  +controller 
+   +validator() 
+   }
+class PasswordField { 
+  +controller  
+  +validator() 
+  }
+class PhoneField { 
+  +controller  
+  +validator() 
+  }
+class CustomPrimaryButton { 
+  +text : String
+  +onPressed : VoidCallback 
+  }
+class CustomSecondaryButton { 
+  +text : String
+  +onPressed : VoidCallback
+  }
+class ErrorMessage { 
+  +text : String 
+  }
+class LocationConsentPopup {
+   +show() 
+   }
+
+' ----- Screens as rectangles -----
+rectangle WelcomeScreen as RWelcome {
+  class WelcomeTitle { 
+    +text : String 
+    }
+  class WelcomeDescription { 
+    +text : String 
+    }
+  class WelcomeForm { 
+    +login()  
+    +signup()  
+    +continueAsGuest() 
+    }
+}
+
+rectangle LoginScreen as RLogin {
+  class LoginSubtitle { 
+    +text : String 
+    }
+  class LoginForm { 
+    +email : EmailField  
+    +password : PasswordField  
+    +submit() 
+    }
+}
+
+rectangle SignupScreen as RSignup {
+  class SignupForm { 
+    +name : NameField  
+    +email : EmailField  
+    +phone : PhoneField  
+    +password : PasswordField  
+    +confirm : ConfirmPasswordField  
+    +submit() 
+    }
+  class NameField { 
+    +controller  
+  +validator() 
+  }
+  class ConfirmPasswordField { 
+    +controller  
+    +validator() 
+    }
+}
+
+rectangle ForgotPasswordScreen as RForgot {
+  class ForgotPasswordForm { 
+    +email : EmailField  
+    +submit() 
+    }
+}
+
+' ----- Shared -> screens usage -----
+AppLogo ..> RWelcome
+AppNameTitle ..> RWelcome
+CustomSecondaryButton ..> RWelcome
+
+AppLogo ..> RLogin
+AppNameTitle ..> RLogin
+AppLogo ..> RSignup
+
+
+AppNameTitle ..> RSignup
+
+EmailField ..> RLogin
+EmailField ..> RSignup
+EmailField ..> RForgot
+
+PasswordField ..> RLogin
+PasswordField ..> RSignup
+
+PhoneField ..> RSignup
+
+CustomPrimaryButton ..> RLogin
+CustomPrimaryButton ..> RSignup
+CustomPrimaryButton ..> RForgot
+
+
+ErrorMessage ..> RLogin
+ErrorMessage ..> RSignup
+ErrorMessage ..> RForgot
+LocationConsentPopup ..> RLogin
+
+@enduml

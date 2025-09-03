@@ -99,7 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                       FirebaseAuth.instance.currentUser?.uid ??
                       _emailController.text.trim().toLowerCase();
 
-                  // Show your in-app consent dialog here:
+                  // Show in-app consent dialog
                   final bool useLocation =
                       (await LocationConsent.ensureForUser(
                         userId: userId,

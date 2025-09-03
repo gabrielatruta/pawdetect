@@ -1,0 +1,35 @@
+@startuml
+' Layout & style
+left to right direction
+skinparam shadowing false
+skinparam RoundCorner 12
+skinparam ArrowColor Black
+skinparam ArrowThickness 1
+skinparam defaultFontName Arial
+' Make it compact
+scale 650 width
+
+rectangle "View\nScreens · Widgets · Styles · l10n" as View #ADD8E6
+rectangle "ViewModel\nUI state · Validation · Mapping" as VM #9EE7F7
+rectangle "Services\nAuth · Firestore · Storage · Device" as Srv #B8E0D2
+cloud "Firebase\nExternal backend" as FB #FAD4A6
+
+' Main flow
+View --> VM : user actions / data binding
+VM --> Srv  : requests
+Srv --> FB  : API calls
+FB --> Srv  : results
+Srv --> VM  : mapped data
+VM --> View : state updates
+
+' Model shared by VM & Services (placed below)
+rectangle "Model\nEntities · Enums · (De)serialization" as Model #E7E1F7
+Model -up-> VM
+Model -up-> Srv
+
+' Composition root above
+rectangle "main.dart\nComposition root · Firebase init\nProviders · Theme · Localizations" as Main #EEEBDD
+Main -down-> View
+Main -down-> VM
+
+@enduml
