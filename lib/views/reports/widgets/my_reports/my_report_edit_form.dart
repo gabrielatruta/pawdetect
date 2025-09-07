@@ -124,8 +124,11 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
           controller: _locationCtrl,
           country: 'ro',
           onSelected: (addr, lat, lng) {
-            _lat = lat;
-            _lng = lng;
+            setState(() {
+              _lat = lat;
+              _lng = lng;
+              _locationCtrl.text = addr;
+            });
           },
         ),
         const SizedBox(height: 16),
