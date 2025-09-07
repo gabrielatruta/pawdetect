@@ -72,6 +72,8 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
       _phone1Ctrl.text = r.phoneNumber1;
       _phone2Ctrl.text = r.phoneNumber2;
       _locationCtrl.text = r.location;
+      _lat = r.lat;
+      _lng = r.lng;
 
       _receiveFoundAlerts = vm.openedReceiveFoundAlerts;
       _alertAreaCtrl.text = vm.openedAlertArea;

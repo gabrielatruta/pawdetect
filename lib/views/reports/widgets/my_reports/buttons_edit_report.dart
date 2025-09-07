@@ -116,7 +116,7 @@ class ButtonsEditReport extends StatelessWidget {
 
               // if the user edited the address text but didn't pick a suggestion
               // clear stale coords so the pin disappears 
-              if ((lat == null || lng == null) && locationCtrl.text.trim().isNotEmpty) {
+              if (locationCtrl.text.trim().isEmpty) {
                 partial['lat'] = fs.FieldValue.delete();
                 partial['lng'] = fs.FieldValue.delete();
               }
