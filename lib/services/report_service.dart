@@ -244,17 +244,6 @@ class ReportService {
     });
   }
 
-  String _extractAddress(Map<String, dynamic> data) {
-    final v =
-        data['location'] ??
-        data['fullAddress'] ??
-        data['address'] ??
-        data['addressText'] ??
-        data['locationText'] ??
-        '';
-    return (v ?? '').toString();
-  }
-
   String _normalize(String input) {
     final lower = input.toLowerCase();
     const map = {
