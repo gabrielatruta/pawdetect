@@ -14,11 +14,10 @@ import '../../../styles/app_colors.dart';
 class HomeScreen extends StatelessWidget {
   final bool useLocation;
   const HomeScreen({super.key, bool? useLocation})
-      : useLocation = useLocation ?? false;
+    : useLocation = useLocation ?? false;
 
   @override
   Widget build(BuildContext context) {
-
     return ChangeNotifierProvider(
       create: (_) => AllReportsViewModel()..fetchReports(),
       child: Scaffold(
@@ -61,19 +60,28 @@ class HomeScreen extends StatelessWidget {
 
                         final rawAnimal = (data['animal'] ?? '').toString();
                         final animal = report.AnimalType.values.firstWhere(
-                          (a) => a.value.toLowerCase() == rawAnimal.toLowerCase(),
+                          (a) =>
+                              a.value.toLowerCase() == rawAnimal.toLowerCase(),
                           orElse: () => report.AnimalType.other,
                         );
 
                         final fs = data['foundAlertSubscription'];
-                        final area = (fs is Map ? (fs['area'] ?? '') : '').toString().trim();
+                        final areaKey = (fs is Map ? (fs['areaKey'] ?? '') : '')
+                            .toString()
+                            .trim();
+                        final area = areaKey.isNotEmpty
+                            ? areaKey
+                            : (fs is Map ? (fs['area'] ?? '') : '')
+                                  .toString()
+                                  .trim();
                         if (area.isEmpty) continue;
 
                         buckets.putIfAbsent(animal, () => <String>{}).add(area);
                       }
 
                       final filters = {
-                        for (final e in buckets.entries) e.key: e.value.toList()..sort()
+                        for (final e in buckets.entries)
+                          e.key: e.value.toList()..sort(),
                       };
 
                       return ReportsFromAreaSection(

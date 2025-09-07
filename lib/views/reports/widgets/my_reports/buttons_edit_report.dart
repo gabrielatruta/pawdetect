@@ -47,6 +47,49 @@ class ButtonsEditReport extends StatelessWidget {
   final double? lat;
   final double? lng;
 
+  String _normalizeArea(String? s) {
+    if (s == null) return '';
+    final lower = s.toLowerCase();
+    const map = {
+      'ă': 'a',
+      'â': 'a',
+      'î': 'i',
+      'ș': 's',
+      'ş': 's',
+      'ț': 't',
+      'ţ': 't',
+      'á': 'a',
+      'à': 'a',
+      'ä': 'a',
+      'ã': 'a',
+      'å': 'a',
+      'é': 'e',
+      'è': 'e',
+      'ë': 'e',
+      'ê': 'e',
+      'í': 'i',
+      'ì': 'i',
+      'ï': 'i',
+      'ó': 'o',
+      'ò': 'o',
+      'ö': 'o',
+      'õ': 'o',
+      'ú': 'u',
+      'ù': 'u',
+      'ü': 'u',
+    };
+    final buf = StringBuffer();
+    for (final r in lower.runes) {
+      final ch = String.fromCharCode(r);
+      buf.write(map[ch] ?? ch);
+    }
+    return buf
+        .toString()
+        .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!; // localized strings
@@ -115,7 +158,7 @@ class ButtonsEditReport extends StatelessWidget {
               if (lng != null) partial['lng'] = lng;
 
               // if the user edited the address text but didn't pick a suggestion
-              // clear stale coords so the pin disappears 
+              // clear stale coords so the pin disappears
               if (locationCtrl.text.trim().isEmpty) {
                 partial['lat'] = fs.FieldValue.delete();
                 partial['lng'] = fs.FieldValue.delete();
@@ -125,22 +168,22 @@ class ButtonsEditReport extends StatelessWidget {
                 partial['foundAlertSubscription.enabled'] = receiveFoundAlerts;
 
                 if (receiveFoundAlerts) {
+                  final areaText = alertAreaCtrl.text.trim();
                   partial.addAll({
-                    'foundAlertSubscription.area': alertAreaCtrl.text.trim(),
+                    'foundAlertSubscription.area': areaText,
+                    'foundAlertSubscription.areaKey': _normalizeArea(areaText),
                     'foundAlertSubscription.lat': alertLat,
                     'foundAlertSubscription.lng': alertLng,
                   });
                 } else {
-                  // disabling → clear the extras
                   partial.addAll({
+                    'foundAlertSubscription.enabled': false,
                     'foundAlertSubscription.area': fs.FieldValue.delete(),
+                    'foundAlertSubscription.areaKey': fs.FieldValue.delete(),
                     'foundAlertSubscription.lat': fs.FieldValue.delete(),
                     'foundAlertSubscription.lng': fs.FieldValue.delete(),
                   });
                 }
-              } else {
-                // not a lost report → alerts always off
-                partial['foundAlertSubscription.enabled'] = false;
               }
 
               await myReportViewModel.updateOpenedReport(partial);

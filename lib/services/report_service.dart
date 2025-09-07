@@ -66,6 +66,26 @@ class ReportService {
       'lng': alertLng,
     };
 
+    try {
+      final _locText =
+          (data['location'] ??
+                  data['fullAddress'] ??
+                  data['address'] ??
+                  data['addressText'] ??
+                  data['locationText'] ??
+                  '')
+              .toString()
+              .trim();
+
+      final _locKey = _normalize(_locText);
+      final _locTokens = _locKey.isEmpty
+          ? <String>[]
+          : _locKey.split(' ').where((t) => t.isNotEmpty).toSet().toList();
+
+      data['locationKey'] = _locKey;
+      data['locationTokens'] = _locTokens;
+    } catch (_) {}
+
     await docRef.set(data).timeout(const Duration(seconds: 15));
     return docRef.id;
   }
@@ -88,6 +108,32 @@ class ReportService {
       partial['foundAlertSubscription'] = fs;
     }
 
+    try {
+      if (partial.containsKey('location') ||
+          partial.containsKey('fullAddress') ||
+          partial.containsKey('address') ||
+          partial.containsKey('addressText') ||
+          partial.containsKey('locationText')) {
+        final _base =
+            (partial['location'] ??
+                    partial['fullAddress'] ??
+                    partial['address'] ??
+                    partial['addressText'] ??
+                    partial['locationText'] ??
+                    '')
+                .toString()
+                .trim();
+
+        final _lk = _normalize(_base);
+        final _lt = _lk.isEmpty
+            ? <String>[]
+            : _lk.split(' ').where((t) => t.isNotEmpty).toSet().toList();
+
+        partial['locationKey'] = _lk;
+        partial['locationTokens'] = _lt;
+      }
+    } catch (_) {}
+
     partial['updatedAt'] = FieldValue.serverTimestamp();
     await _reportsCol.doc(id).update(partial);
   }
@@ -107,7 +153,6 @@ class ReportService {
         .map(
           (qs) => qs.docs
               .map((d) => report.Report.fromFirestore(d.id, d.data()))
-              // keep only items that actually have coordinates
               .where((r) => r.lat != null && r.lng != null)
               .toList(),
         );
@@ -117,23 +162,43 @@ class ReportService {
   Stream<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
   watchFoundReportsByAnimalAreaFilters({
     required Map<report.AnimalType, List<String>> filters,
-    int? limit, 
+    int? limit,
   }) {
     if (filters.isEmpty) return Stream.value(const []);
 
-    final Map<String, List<String>> normalizedByAnimal = {
+    // Normalize areas per animal (use areaKey strings from Home)
+    final Map<String, List<String>> areasByAnimal = {
       for (final e in filters.entries)
         e.key.name: e.value.map(_normalize).where((s) => s.isNotEmpty).toList(),
     };
-    final q = _firestore
+
+    // Build a token set (max 10 for arrayContainsAny)
+    final Set<String> tokenSet = {};
+    for (final areas in areasByAnimal.values) {
+      for (final a in areas) {
+        for (final t in a.split(' ')) {
+          if (t.isNotEmpty) tokenSet.add(t);
+        }
+      }
+    }
+    final tokens = tokenSet.take(10).toList();
+
+    // If we have tokens, narrow server-side with arrayContainsAny; else fall back to type-only query
+    Query<Map<String, dynamic>> q = _firestore
         .collection('reports')
         .where('type', isEqualTo: report.ReportType.found.value);
 
+    if (tokens.isNotEmpty) {
+      q = q.where('locationTokens', arrayContainsAny: tokens);
+    }
+
     return q.snapshots().map((snap) {
       final docs = <QueryDocumentSnapshot<Map<String, dynamic>>>[];
+
       for (final doc in snap.docs) {
         final data = doc.data();
 
+        // Resolve animal as string name
         final animalStr = (() {
           final raw = data['animal'];
           if (raw is String) return raw.toLowerCase();
@@ -143,21 +208,27 @@ class ReportService {
           return '';
         })();
 
-        final areasForAnimal = normalizedByAnimal[animalStr];
-        if (areasForAnimal == null || areasForAnimal.isEmpty) continue;
+        final wantedAreas = areasByAnimal[animalStr];
+        if (wantedAreas == null || wantedAreas.isEmpty) continue;
 
-        if (areasForAnimal.contains('romania')) {
-          docs.add(doc);
-          continue;
-        }
+        final locKey = (data['locationKey'] ?? '').toString();
+        if (locKey.isEmpty) continue;
 
-        final addrNorm = _normalize(_extractAddress(data));
-        if (areasForAnimal.any((a) => addrNorm.contains(a))) {
-          docs.add(doc);
+        // Strict-ish check: all tokens of at least one wanted area must be present in locKey
+        bool matchesAnyArea = false;
+        for (final areaKey in wantedAreas) {
+          final tokens = areaKey.split(' ').where((t) => t.isNotEmpty);
+          if (tokens.every((t) => locKey.contains(t))) {
+            matchesAnyArea = true;
+            break;
+          }
         }
+        if (!matchesAnyArea) continue;
+
+        docs.add(doc);
       }
 
-      // sort newest first
+      // Newest first
       docs.sort((a, b) {
         final ta = a.data()['createdAt'];
         final tb = b.data()['createdAt'];
@@ -166,7 +237,6 @@ class ReportService {
         return tsb.compareTo(tsa);
       });
 
-      // apply the page size after filtering
       if (limit != null && docs.length > limit) {
         return docs.sublist(0, limit);
       }
@@ -174,7 +244,6 @@ class ReportService {
     });
   }
 
-  // HELPERS
   String _extractAddress(Map<String, dynamic> data) {
     final v =
         data['location'] ??
