@@ -27,20 +27,20 @@ class MapViewModel extends ChangeNotifier {
   static const double minZoom = 3.0;
   static const double maxZoom = 18.0;
 
-  void setZoom(double newZoom) {
-    final clamped = newZoom.clamp(minZoom, maxZoom);
-    if (clamped != zoom) {
-      zoom = clamped;
-      notifyListeners();
-    }
-  }
-
   void onMapMoved(LatLng c, double z) {
     // single notify for center+zoom
     final nz = z.clamp(minZoom, maxZoom);
     if (center != c || zoom != nz) {
       center = c;
       zoom = nz;
+      notifyListeners();
+    }
+  }
+
+   void setZoom(double newZoom) {
+    final clamped = newZoom.clamp(minZoom, maxZoom);
+    if (clamped != zoom) {
+      zoom = clamped;
       notifyListeners();
     }
   }

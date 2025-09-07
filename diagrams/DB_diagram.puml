@@ -1,0 +1,43 @@
+@startuml
+entity "users" as Users {
+  * uid : string <<PK>>
+  --
+  name : string
+  email : string
+  phone : string
+  notificationsEnabled : boolean
+  createdAt : timestamp
+  updatedAt : timestamp
+}
+
+entity "reports" as Reports {
+  * id : string <<PK>>
+  userId : string <<FK -> users.uid>>
+  --
+  type : string  // Found | Lost
+  animal : string // Dog | Cat | Other
+  colors : string[] 
+  gender : string // F | M | ?
+  location : string
+  additionalInfo : string
+  photoUrls : string[]
+  phoneNumber1 : string
+  phoneNumber2 : string
+  status : string // Solved | Unsolved
+  createdAt : timestamp
+  updatedAt : timestamp
+  lat : number
+  lng : number
+}
+
+entity "foundAlertSubscription" as FAS {
+  enabled : boolean
+  area : string
+  areaKey : string
+  lat : number
+  lng : number
+}
+
+Users ||--o{ Reports : "has many"
+Reports }o--|| FAS : "embedded map"
+@enduml

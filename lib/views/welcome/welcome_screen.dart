@@ -22,10 +22,10 @@ class WelcomeScreen extends StatelessWidget {
               children: const [
                 Spacer(flex: 2),
                 AppnNameTitle(),
-                SizedBox(height: 20),
+                SizedBox(height: 5),
                 SizedBox(
-                  height: 400,
-                  width: 400,
+                  height: 300,
+                  width: 300,
                   child: AppLogo(),
                 ),
                 SizedBox(height: 24),

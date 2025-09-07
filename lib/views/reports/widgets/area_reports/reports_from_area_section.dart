@@ -139,7 +139,7 @@ class _ReportsFromAreaSectionState extends State<ReportsFromAreaSection> {
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      child: LinearProgressIndicator(),
+                      child: LinearProgressIndicator(color: AppColors.orange,),
                     );
                   }
                   final docs = snapshot.data ?? const [];

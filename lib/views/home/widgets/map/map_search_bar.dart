@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 class MapSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final MapViewModel mapViewModel;
-
   final VoidCallback moveToVm;
 
   const MapSearchBar({
