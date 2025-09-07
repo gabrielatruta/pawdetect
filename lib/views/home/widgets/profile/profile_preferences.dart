@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
-import 'package:pawdetect/viewmodels/home/profile_viewmodel.dart';
 import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +16,6 @@ class PreferencesForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileViewModel = context.watch<ProfileViewModel>();
 
     final loc = AppLocalizations.of(context)!; // localized strings
     context.watch<LocalizationViewModel>(); // current language
@@ -40,18 +38,6 @@ class PreferencesForm extends StatelessWidget {
           margin: EdgeInsets.zero,
           child: Column(
             children: [
-              // Notification switch
-              SwitchListTile(
-                title: Text(loc.profile_turn_notifications),
-                value: profileViewModel.profileUser!.notificationsEnabled,
-                activeThumbColor: AppColors.orange,
-                inactiveThumbColor: AppColors.lightBackground,
-                onChanged: (val) async {
-                  await profileViewModel.updateNotifications(val);
-                },
-              ),
-              const Divider(height: 1, color: AppColors.orange),
-
               // Language switch
               SwitchListTile(
                 title: Text(loc.profile_switch_language),
