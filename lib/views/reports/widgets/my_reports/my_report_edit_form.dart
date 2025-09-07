@@ -176,6 +176,8 @@ class _MyReportDetailsFormState extends State<MyReportEditForm> {
           alertLat: _alertLat,
           alertLng: _alertLng,
           solvedStatusValue: report.ReportStatus.solved.value,
+          lat: _lat,
+          lng: _lng,
         ),
       ],
     );

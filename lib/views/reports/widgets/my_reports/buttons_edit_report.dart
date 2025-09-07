@@ -22,6 +22,8 @@ class ButtonsEditReport extends StatelessWidget {
     required this.alertLat,
     required this.alertLng,
     required this.solvedStatusValue,
+    this.lat,
+    this.lng,
   });
 
   final dynamic myReportViewModel;
@@ -42,6 +44,8 @@ class ButtonsEditReport extends StatelessWidget {
   final double? alertLng;
 
   final String solvedStatusValue;
+  final double? lat;
+  final double? lng;
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +110,16 @@ class ButtonsEditReport extends StatelessWidget {
                   }..removeWhere(
                     (k, v) => v == null || (v is String && v.trim().isEmpty),
                   );
+              // write new coordinates when the user picked a suggestion
+              if (lat != null) partial['lat'] = lat;
+              if (lng != null) partial['lng'] = lng;
+
+              // if the user edited the address text but didn't pick a suggestion
+              // clear stale coords so the pin disappears 
+              if ((lat == null || lng == null) && locationCtrl.text.trim().isNotEmpty) {
+                partial['lat'] = fs.FieldValue.delete();
+                partial['lng'] = fs.FieldValue.delete();
+              }
 
               if (isLost) {
                 partial['foundAlertSubscription.enabled'] = receiveFoundAlerts;
