@@ -107,11 +107,11 @@
   "guest_back_welcome": "Back to Welcome page",
   "guest_switch_language": "Switch language",
 
-  "alerts_receive": "Receive found alerts",
-  "alerts_subtitle": "Get notified when a new 'Found' report appears in a chosen area.",
+  "alerts_receive": "See found alerts",
+  "alerts_subtitle": "See alerts when a new 'Found' report appears in a chosen area.",
   "alerts_helper": "Tip: Choose how broad you want alerts to be:\n• Whole country (e.g., Romania)\n'• City (e.g., Cluj-Napoca)\n'• Neighbourhood (e.g., Mănăștur)",
   "alerts_area": "Alert area",
-  "alerts_empty_area": "Please choose an alert area before enabling notifications.",
+  "alerts_empty_area": "Please choose an alert area before enabling this feature.",
   "alerts_fail": "Failed to update preferences.",
 
   "animal": "Animal",

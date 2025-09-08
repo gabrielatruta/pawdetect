@@ -302,11 +302,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guest_switch_language => 'Switch language';
 
   @override
-  String get alerts_receive => 'Receive found alerts';
+  String get alerts_receive => 'See found alerts';
 
   @override
   String get alerts_subtitle =>
-      'Get notified when a new \'Found\' report appears in a chosen area.';
+      'See alerts when a new \'Found\' report appears in a chosen area.';
 
   @override
   String get alerts_helper =>
@@ -317,7 +317,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alerts_empty_area =>
-      'Please choose an alert area before enabling notifications.';
+      'Please choose an alert area before enabling this feature.';
 
   @override
   String get alerts_fail => 'Failed to update preferences.';

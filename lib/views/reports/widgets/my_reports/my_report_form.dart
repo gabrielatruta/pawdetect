@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/l10n/loc_maps.dart';
+import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_border_services.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
@@ -88,26 +89,28 @@ class MyReportsForm extends StatelessWidget {
             ),
 
             // pencil icon
-            Positioned(
-              top: 8,
-              right: 8,
-              child: IconButton(
-                icon: const Icon(Icons.edit),
-                color: AppColors.darkOrange,
-                tooltip: loc.report_edit,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => MyReportDetailsScreen(reportId: item.id),
-                    ),
-                  ).then(
-                    // ignore: use_build_context_synchronously
-                    (_) => context.read<MyReportsViewModel>().fetchReports(),
-                  );
-                },
+            if (item.status == report.ReportStatus.unsolved)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: IconButton(
+                  icon: const Icon(Icons.edit),
+                  color: AppColors.darkOrange,
+                  tooltip: loc.report_edit,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            MyReportDetailsScreen(reportId: item.id),
+                      ),
+                    ).then(
+                      // ignore: use_build_context_synchronously
+                      (_) => context.read<MyReportsViewModel>().fetchReports(),
+                    );
+                  },
+                ),
               ),
-            ),
           ],
         );
       },

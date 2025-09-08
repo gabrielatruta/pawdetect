@@ -659,13 +659,13 @@ abstract class AppLocalizations {
   /// No description provided for @alerts_receive.
   ///
   /// In en, this message translates to:
-  /// **'Receive found alerts'**
+  /// **'See found alerts'**
   String get alerts_receive;
 
   /// No description provided for @alerts_subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Get notified when a new \'Found\' report appears in a chosen area.'**
+  /// **'See alerts when a new \'Found\' report appears in a chosen area.'**
   String get alerts_subtitle;
 
   /// No description provided for @alerts_helper.
@@ -683,7 +683,7 @@ abstract class AppLocalizations {
   /// No description provided for @alerts_empty_area.
   ///
   /// In en, this message translates to:
-  /// **'Please choose an alert area before enabling notifications.'**
+  /// **'Please choose an alert area before enabling this feature.'**
   String get alerts_empty_area;
 
   /// No description provided for @alerts_fail.

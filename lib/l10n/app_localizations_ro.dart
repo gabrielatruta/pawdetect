@@ -306,11 +306,11 @@ class AppLocalizationsRo extends AppLocalizations {
   String get guest_switch_language => 'Schimbă limba';
 
   @override
-  String get alerts_receive => 'Primește alerte';
+  String get alerts_receive => 'Crează alerte';
 
   @override
   String get alerts_subtitle =>
-      'Primești notificări când apare un raport „Găsit” într-o zonă aleasă de tine.';
+      'Vizualizează alerte când apare un raport „Găsit” într-o zonă aleasă de tine.';
 
   @override
   String get alerts_helper =>
