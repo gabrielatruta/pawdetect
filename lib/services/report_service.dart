@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
+import 'package:pawdetect/services/cloudinary_service.dart';
 
 class ReportService {
   final _firestore = FirebaseFirestore.instance;
@@ -30,6 +31,31 @@ class ReportService {
     double? alertLat,
     double? alertLng,
   }) async {
+    // 1) upload (if present)
+  List<String> photoUrls = [];
+  Map<String, dynamic>? photoMeta;
+
+  if (photo != null) {
+    try {
+      final cld = await CloudinaryService.uploadXFile(photo);
+      final url = (cld['secure_url'] ?? cld['url'])?.toString();
+      if (url != null && url.isNotEmpty) {
+        photoUrls = [url];
+      }
+      photoMeta = {
+        'publicId': cld['public_id'],
+        'width': cld['width'],
+        'height': cld['height'],
+        'format': cld['format'],
+        'bytes': cld['bytes'],
+      };
+    } catch (e) {
+      // decide: continue without photo or rethrow
+      photoUrls = [];
+      // optionally log e
+    }
+  }
+
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw Exception('User not authenticated');
 
@@ -44,7 +70,7 @@ class ReportService {
       gender: gender,
       location: location,
       additionalInfo: additionalInfo,
-      photoUrls: const [],
+      photoUrls: photoUrls,
       phoneNumber1: phoneNumber1,
       phoneNumber2: phoneNumber2 ?? '',
       status: report.ReportStatus.unsolved,
@@ -57,6 +83,8 @@ class ReportService {
     data['updatedAt'] = FieldValue.serverTimestamp();
     if (lat != null) data['lat'] = lat;
     if (lng != null) data['lng'] = lng;
+
+    if (photoMeta != null) data['photoMeta'] = photoMeta; 
 
     data['foundAlertSubscription'] = {
       'enabled': receiveFoundAlerts,

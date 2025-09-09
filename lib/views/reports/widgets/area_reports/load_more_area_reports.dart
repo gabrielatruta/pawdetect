@@ -80,7 +80,6 @@ class _LoadMoreAreaReportsState extends State<LoadMoreAreaReports> {
           }
 
           final r = widget.items[i];
-          final img = (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
 
           return GestureDetector(
             onTap: () async {
@@ -115,6 +114,7 @@ class _LoadMoreAreaReportsState extends State<LoadMoreAreaReports> {
                 future: ReportBorderService.instance.colorFor(r),
                 builder: (context, snap) {
                   final borderColor = snap.data ?? AppColors.border;
+                  final img = (r.photoUrls.isNotEmpty) ? r.photoUrls.first : '';
                   return SmallReportCard(
                     title: r.location.isNotEmpty
                         ? r.location

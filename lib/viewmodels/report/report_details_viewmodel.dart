@@ -34,9 +34,10 @@ class ReportDetailsViewModel extends ChangeNotifier {
   }
 
   // image of the report
-  String? get imageUrl => (reportData?.photoUrls.isNotEmpty ?? false)
-      ? reportData!.photoUrls.first
-      : null;
+  String? get imageUrl {
+    final list = reportData?.photoUrls ?? const <String>[];
+    return list.isNotEmpty ? list.first : null;
+  }
 
   // details of the report
   List<MapEntry<String, String>> get detailFields {

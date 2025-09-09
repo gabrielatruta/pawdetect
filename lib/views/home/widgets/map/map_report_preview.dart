@@ -32,6 +32,7 @@ class MapReportPreview extends StatelessWidget {
       data.phoneNumber1.isNotEmpty ? data.phoneNumber1 : data.phoneNumber2,
     );
     final info = _text(data.additionalInfo);
+    final img = (data.photoUrls.isNotEmpty) ? data.photoUrls.first : '';
 
     final loc = AppLocalizations.of(context)!; // localized strings
     context.watch<LocalizationViewModel>(); // current language
@@ -58,11 +59,14 @@ class MapReportPreview extends StatelessWidget {
           // image
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              AppAssets.placeholderImagePath,
-              width: 84,
-              height: 84,
-              fit: BoxFit.cover,
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: (img.isEmpty)
+                  ? Image.asset(
+                      AppAssets.placeholderImagePath,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(img, fit: BoxFit.cover),
             ),
           ),
           const SizedBox(height: 12),

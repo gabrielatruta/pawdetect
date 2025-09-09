@@ -3,6 +3,8 @@ import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/l10n/loc_maps.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 import 'package:pawdetect/services/report_border_services.dart';
+import 'package:pawdetect/services/report_service.dart';
+import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/reports/my_reports_edit_screen.dart';
@@ -79,10 +81,26 @@ class MyReportsForm extends StatelessWidget {
                 future: ReportBorderService.instance.colorFor(item),
                 builder: (context, snap) {
                   final c = snap.data ?? AppColors.grey300;
-                  return ReportCardStretched(
-                    title:
-                        '${LocMaps.type(item.reportType, loc)} ${LocMaps.animal(item.petType, loc)}',
-                    borderColor: c,
+                  return FutureBuilder<report.Report?>(
+                    future: ReportService().getReportById(item.id),
+                    builder: (context, rsnap) {
+                      final String? imgUrl =
+                          (rsnap.data?.photoUrls.isNotEmpty ?? false)
+                          ? rsnap.data!.photoUrls.first
+                          : null;
+
+                      final ImageProvider<Object> imageProvider =
+                          (imgUrl != null && imgUrl.isNotEmpty)
+                          ? NetworkImage(imgUrl)
+                          : const AssetImage(AppAssets.placeholderImagePath);
+
+                      return ReportCardStretched(
+                        title:
+                            '${LocMaps.type(item.reportType, loc)} ${LocMaps.animal(item.petType, loc)}',
+                        image: imageProvider, 
+                        borderColor: c,
+                      );
+                    },
                   );
                 },
               ),

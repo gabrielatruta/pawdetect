@@ -3,6 +3,7 @@ import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/l10n/loc_maps.dart';
 import 'package:pawdetect/models/report_model.dart' as models;
 import 'package:pawdetect/services/report_border_services.dart';
+import 'package:pawdetect/styles/app_assets.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 import 'package:pawdetect/viewmodels/localization_viewmodel.dart';
 import 'package:pawdetect/views/reports/report_details_screen.dart';
@@ -117,9 +118,15 @@ class AllReportsForm extends StatelessWidget {
                     builder: (context, snap) {
                       final borderColor =
                           snap.data ?? AppColors.grey300; // safe default
+                      final img = item.photoUrls.isNotEmpty
+                          ? item.photoUrls.first
+                          : '';
                       return ReportCardStretched(
                         title:
                             '${LocMaps.type(item.type.value, loc)} ${LocMaps.animal(item.animal.value, loc)}',
+                        image: img.isNotEmpty
+                            ? NetworkImage(img)
+                            : const AssetImage(AppAssets.reportImagePath),
                         // pass computed color into the card
                         borderColor: borderColor,
                       );
