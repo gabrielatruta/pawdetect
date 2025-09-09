@@ -110,7 +110,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () async {
                 final route = isLoggedIn
                     ? MaterialPageRoute(builder: (_) => ProfileScreen())
-                    : MaterialPageRoute(builder: (_) => const GuestProfileScreen());
+                    : MaterialPageRoute(
+                        builder: (_) => const GuestProfileScreen(),
+                      );
                 await Navigator.push(context, route);
 
                 if (!context.mounted) return;

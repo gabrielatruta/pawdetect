@@ -19,7 +19,10 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
   void initState() {
     super.initState();
     Future.microtask(
-      () => Provider.of<MyReportsViewModel>(context, listen: false).fetchReports(),
+      () => Provider.of<MyReportsViewModel>(
+        context,
+        listen: false,
+      ).fetchReports(),
     );
   }
 

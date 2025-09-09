@@ -28,7 +28,6 @@ class __SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final loc = AppLocalizations.of(context)!; // localized strings
     context.watch<LocalizationViewModel>(); // current language
 

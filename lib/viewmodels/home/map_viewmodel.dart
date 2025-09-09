@@ -10,7 +10,7 @@ import 'package:pawdetect/services/report_service.dart';
 class MapViewModel extends ChangeNotifier {
   // Create once, keep a stable stream instance
   MapViewModel(ReportService reportService)
-      : reports$ = reportService.streamReportsWithLocation();
+    : reports$ = reportService.streamReportsWithLocation();
 
   // Single shared stream used by the UI
   final Stream<List<report.Report>> reports$;
@@ -23,7 +23,7 @@ class MapViewModel extends ChangeNotifier {
   // selected - used for the report preview for pins
   report.Report? selected;
 
-  // zoom-in/out limits 
+  // zoom-in/out limits
   static const double minZoom = 3.0;
   static const double maxZoom = 18.0;
 
@@ -37,7 +37,7 @@ class MapViewModel extends ChangeNotifier {
     }
   }
 
-   void setZoom(double newZoom) {
+  void setZoom(double newZoom) {
     final clamped = newZoom.clamp(minZoom, maxZoom);
     if (clamped != zoom) {
       zoom = clamped;
@@ -83,7 +83,7 @@ class MapViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ------ SEARCH ------ 
+  // ------ SEARCH ------
   List<PlaceSuggestion> suggestions = [];
   Timer? _debounce;
 

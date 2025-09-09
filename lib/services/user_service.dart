@@ -6,8 +6,8 @@ class UserService {
     'users',
   );
 
- // Create a new user document in Firestore
- Future<void> createUser(UserModel user) async {
+  // Create a new user document in Firestore
+  Future<void> createUser(UserModel user) async {
     await users.doc(user.uid).set({
       'name': user.name,
       'email': user.email,
@@ -21,13 +21,16 @@ class UserService {
   Future<UserModel?> getUser(String uid) async {
     final doc = await users.doc(uid).get();
     if (doc.exists) {
-      return UserModel.fromFirestore(doc.id, doc.data() as Map<String, dynamic>);
+      return UserModel.fromFirestore(
+        doc.id,
+        doc.data() as Map<String, dynamic>,
+      );
     }
     return null;
   }
 
   // Update user data
-   Future<void> updateUser(UserModel user) async {
+  Future<void> updateUser(UserModel user) async {
     await users.doc(user.uid).update({
       'name': user.name,
       'email': user.email,

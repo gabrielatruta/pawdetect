@@ -4,7 +4,7 @@ import 'package:pawdetect/styles/app_assets.dart';
 
 class ReportHeaderCard extends StatelessWidget {
   final String title;
-  final String? imageUrl; 
+  final String? imageUrl;
   final double imageHeight;
 
   const ReportHeaderCard({

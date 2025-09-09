@@ -5,11 +5,7 @@ class ReportsImage extends StatelessWidget {
   final ImageProvider? image;
   final double size;
 
-  const ReportsImage({
-    super.key,
-    this.image,
-    this.size = 84,
-  });
+  const ReportsImage({super.key, this.image, this.size = 84});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +18,10 @@ class ReportsImage extends StatelessWidget {
         alignment: Alignment.center,
         child: image != null
             ? Image(image: image!, fit: BoxFit.cover)
-            : const Icon(Icons.add_a_photo_outlined, color: AppColors.lightGrey),
+            : const Icon(
+                Icons.add_a_photo_outlined,
+                color: AppColors.lightGrey,
+              ),
       ),
     );
   }

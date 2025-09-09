@@ -23,11 +23,7 @@ class WelcomeScreen extends StatelessWidget {
                 Spacer(flex: 2),
                 AppnNameTitle(),
                 SizedBox(height: 5),
-                SizedBox(
-                  height: 300,
-                  width: 300,
-                  child: AppLogo(),
-                ),
+                SizedBox(height: 300, width: 300, child: AppLogo()),
                 SizedBox(height: 24),
                 WelcomeTitle(),
                 SizedBox(height: 12),

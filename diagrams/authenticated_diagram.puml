@@ -7,22 +7,22 @@ actor "Registered User" as RU
 rectangle "Main Actions" {
   usecase "Sign in" as UC1
   usecase "Reset password" as UC2
-  usecase "Submit found/lost pet report" as UC3
-  usecase "Set push notifications" as UC4
-  usecase "See all reports from area" as UC5
-  usecase "View report details" as UC6
-  usecase "Explore interactive map" as UC7
+  usecase "Explore interactive map" as UC3
+  usecase "Open report preview" as UC4
+  usecase "View report details" as UC5
+  usecase "Submit found/lost pet report" as UC6
+  usecase "Set alert zone" as UC7
+  usecase "See all reports from alert zone" as UC8
 }
 
 rectangle "Additional Features" {
-  usecase "Filter all reports" as UC8
-  usecase "Access profile settings" as UC9
-  usecase "Edit profile" as UC10
-  usecase "Turn off notifications" as UC11
-  usecase "Sign out" as UC12
-  usecase "Access own reports" as UC13
-  usecase "Edit report" as UC14
-  usecase "Mark report as solved" as UC15
+  usecase "Access own reports" as UC9
+  usecase "Edit own reports" as UC10
+  usecase "Mark report as solved" as UC11
+  usecase "Filter all reports" as UC12
+  usecase "Edit profile information" as UC13
+  usecase "Switch language" as UC14
+  usecase "Sign out" as UC15
 }
 
 ' --- Connections ---

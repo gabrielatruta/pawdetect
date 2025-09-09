@@ -12,7 +12,9 @@ void main() {
       '2024-02-03 04:05',
     );
     expect(
-      ReportDetailsViewModel.convertDateToString(DateTime(2024, 12, 31, 23, 59)),
+      ReportDetailsViewModel.convertDateToString(
+        DateTime(2024, 12, 31, 23, 59),
+      ),
       '2024-12-31 23:59',
     );
   });

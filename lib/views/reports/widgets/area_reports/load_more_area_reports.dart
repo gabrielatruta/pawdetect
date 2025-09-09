@@ -58,7 +58,7 @@ class _LoadMoreAreaReportsState extends State<LoadMoreAreaReports> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!; // localized strings
-    
+
     return SizedBox(
       height: widget.rowHeight,
       child: ListView.separated(
@@ -116,7 +116,9 @@ class _LoadMoreAreaReportsState extends State<LoadMoreAreaReports> {
                 builder: (context, snap) {
                   final borderColor = snap.data ?? AppColors.border;
                   return SmallReportCard(
-                    title: r.location.isNotEmpty ? r.location : loc.report_found,
+                    title: r.location.isNotEmpty
+                        ? r.location
+                        : loc.report_found,
                     imageUrl: img,
                     borderColor: borderColor,
                   );

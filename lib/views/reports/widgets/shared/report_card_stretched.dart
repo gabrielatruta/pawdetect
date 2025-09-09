@@ -24,10 +24,7 @@ class ReportCardStretched extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border.all(
-          width: 2,
-          color: borderColor ?? AppColors.border,
-        ),
+        border: Border.all(width: 2, color: borderColor ?? AppColors.border),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(

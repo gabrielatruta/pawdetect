@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class FilterDropdown extends StatelessWidget {
   final String label;
   final String hint;
-  final String? value;                 // canonical code: 'dog' | 'cat' | 'other'
-  final List<String> items;            // canonical codes
+  final String? value; // canonical code: 'dog' | 'cat' | 'other'
+  final List<String> items; // canonical codes
   final ValueChanged<String?> onChanged;
-  final String Function(String value)? display;  // maps code -> UI label
+  final String Function(String value)? display; // maps code -> UI label
 
   const FilterDropdown({
     super.key,
@@ -29,10 +29,12 @@ class FilterDropdown extends StatelessWidget {
           hint: Text(hint),
           isExpanded: true,
           items: items
-              .map((code) => DropdownMenuItem<String>(
-                    value: code,
-                    child: Text(display?.call(code) ?? code),
-                  ))
+              .map(
+                (code) => DropdownMenuItem<String>(
+                  value: code,
+                  child: Text(display?.call(code) ?? code),
+                ),
+              )
               .toList(),
           onChanged: onChanged,
         ),

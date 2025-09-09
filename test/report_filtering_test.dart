@@ -26,16 +26,43 @@ Iterable<ReportLite> filter({
 void main() {
   test('filters by type + animal + status (pure)', () {
     final data = <ReportLite>[
-      ReportLite('1', m.ReportType.lost,  m.AnimalType.dog,  m.ReportStatus.unsolved),
-      ReportLite('2', m.ReportType.found, m.AnimalType.dog,  m.ReportStatus.unsolved),
-      ReportLite('3', m.ReportType.found, m.AnimalType.cat,  m.ReportStatus.solved),
-      ReportLite('4', m.ReportType.lost,  m.AnimalType.cat,  m.ReportStatus.unsolved),
+      ReportLite(
+        '1',
+        m.ReportType.lost,
+        m.AnimalType.dog,
+        m.ReportStatus.unsolved,
+      ),
+      ReportLite(
+        '2',
+        m.ReportType.found,
+        m.AnimalType.dog,
+        m.ReportStatus.unsolved,
+      ),
+      ReportLite(
+        '3',
+        m.ReportType.found,
+        m.AnimalType.cat,
+        m.ReportStatus.solved,
+      ),
+      ReportLite(
+        '4',
+        m.ReportType.lost,
+        m.AnimalType.cat,
+        m.ReportStatus.unsolved,
+      ),
     ];
 
-    final onlyFoundDogs = filter(src: data, type: m.ReportType.found, animal: m.AnimalType.dog).toList();
+    final onlyFoundDogs = filter(
+      src: data,
+      type: m.ReportType.found,
+      animal: m.AnimalType.dog,
+    ).toList();
     expect(onlyFoundDogs.map((e) => e.id), ['2']);
 
-    final onlyUnsolved = filter(src: data, status: m.ReportStatus.unsolved).toList();
+    final onlyUnsolved = filter(
+      src: data,
+      status: m.ReportStatus.unsolved,
+    ).toList();
     expect(onlyUnsolved.map((e) => e.id), ['1', '2', '4']);
   });
 

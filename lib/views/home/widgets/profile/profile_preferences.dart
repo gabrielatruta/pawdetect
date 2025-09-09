@@ -16,7 +16,6 @@ class PreferencesForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final loc = AppLocalizations.of(context)!; // localized strings
     context.watch<LocalizationViewModel>(); // current language
 

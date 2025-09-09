@@ -25,10 +25,20 @@ void main() {
   test('sorts by createdAt desc with stable tiebreakers (pure)', () {
     final base = DateTime(2025, 1, 10, 12, 0);
     final items = <ReportLite>[
-      ReportLite('C', m.ReportType.lost,  m.AnimalType.cat,  base.subtract(const Duration(minutes: 2))),
-      ReportLite('A', m.ReportType.found, m.AnimalType.dog,  base),
-      ReportLite('B', m.ReportType.found, m.AnimalType.dog,  base), 
-      ReportLite('D', m.ReportType.found, m.AnimalType.other,base.subtract(const Duration(minutes: 1))),
+      ReportLite(
+        'C',
+        m.ReportType.lost,
+        m.AnimalType.cat,
+        base.subtract(const Duration(minutes: 2)),
+      ),
+      ReportLite('A', m.ReportType.found, m.AnimalType.dog, base),
+      ReportLite('B', m.ReportType.found, m.AnimalType.dog, base),
+      ReportLite(
+        'D',
+        m.ReportType.found,
+        m.AnimalType.other,
+        base.subtract(const Duration(minutes: 1)),
+      ),
     ];
 
     items.sort(compareReports);

@@ -13,7 +13,7 @@ class MyReportDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!; // localized strings
-    
+
     return ChangeNotifierProvider(
       create: (_) => MyReportsViewModel()..loadReportById(reportId),
       child: Scaffold(
@@ -27,9 +27,7 @@ class MyReportDetailsScreen extends StatelessWidget {
                 if (vm.isDetailsLoading || vm.openedReport == null) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return const SingleChildScrollView(
-                  child: MyReportEditForm(),
-                );
+                return const SingleChildScrollView(child: MyReportEditForm());
               },
             ),
           ),

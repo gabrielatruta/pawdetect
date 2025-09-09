@@ -11,7 +11,6 @@ class GuestHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ChangeNotifierProvider(
       create: (_) => AllReportsViewModel()..fetchReports(),
       child: Scaffold(
