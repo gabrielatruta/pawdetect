@@ -23,7 +23,7 @@ class SmallReportCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final ph = reportImagePath ?? AppAssets.reportImagePath;
+    final ph = reportImagePath ?? AppAssets.noPhotoPath;
     final radius = BorderRadius.circular(12);
     final loc = AppLocalizations.of(context)!; // localized strings
 

@@ -93,6 +93,7 @@ flutter:
     - assets/icons/welcomeScreenPaw.png
     - assets/icons/placeholder.jpeg
     - assets/icons/reportDetails.jpeg
+    - assets/icons/nophoto.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

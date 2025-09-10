@@ -43,13 +43,13 @@ class ReportHeaderCard extends StatelessWidget {
                       height: imageHeight,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => Image.asset(
-                        AppAssets.reportImagePath,
+                        AppAssets.noPhotoPath,
                         height: imageHeight,
                         fit: BoxFit.cover,
                       ),
                     )
                   : Image.asset(
-                      AppAssets.reportImagePath,
+                      AppAssets.noPhotoPath,
                       height: imageHeight,
                       fit: BoxFit.cover,
                     ),

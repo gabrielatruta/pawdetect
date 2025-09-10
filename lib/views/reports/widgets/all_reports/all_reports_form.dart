@@ -126,7 +126,7 @@ class AllReportsForm extends StatelessWidget {
                             '${LocMaps.type(item.type.value, loc)} ${LocMaps.animal(item.animal.value, loc)}',
                         image: img.isNotEmpty
                             ? NetworkImage(img)
-                            : const AssetImage(AppAssets.reportImagePath),
+                            : const AssetImage(AppAssets.noPhotoPath),
                         // pass computed color into the card
                         borderColor: borderColor,
                       );

@@ -63,7 +63,7 @@ class MapReportPreview extends StatelessWidget {
               aspectRatio: 16 / 9,
               child: (img.isEmpty)
                   ? Image.asset(
-                      AppAssets.placeholderImagePath,
+                      AppAssets.noPhotoPath,
                       fit: BoxFit.cover,
                     )
                   : Image.network(img, fit: BoxFit.cover),

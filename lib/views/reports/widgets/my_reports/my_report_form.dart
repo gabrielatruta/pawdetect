@@ -92,7 +92,7 @@ class MyReportsForm extends StatelessWidget {
                       final ImageProvider<Object> imageProvider =
                           (imgUrl != null && imgUrl.isNotEmpty)
                           ? NetworkImage(imgUrl)
-                          : const AssetImage(AppAssets.placeholderImagePath);
+                          : const AssetImage(AppAssets.noPhotoPath);
 
                       return ReportCardStretched(
                         title:
