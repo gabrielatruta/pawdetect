@@ -131,6 +131,7 @@
   "pick_photo_gallery": "Gallery",
   "pick_photo_camera": "Camera",
   "pick_photo_change": "Change Photo",
+  "pick_photo_error_generic": "An error occured while uploading your photo, try again later",
 
   "last_updated": "Last updated",
   

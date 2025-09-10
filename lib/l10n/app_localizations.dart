@@ -776,6 +776,12 @@ abstract class AppLocalizations {
   /// **'Change Photo'**
   String get pick_photo_change;
 
+  /// No description provided for @pick_photo_error_generic.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occured while uploading your photo, try again later'**
+  String get pick_photo_error_generic;
+
   /// No description provided for @last_updated.
   ///
   /// In en, this message translates to:

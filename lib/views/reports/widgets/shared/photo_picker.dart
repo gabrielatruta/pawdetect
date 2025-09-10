@@ -1,6 +1,9 @@
 import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/styles/app_colors.dart';
 
@@ -40,17 +43,74 @@ class _PhotoPickerState extends State<PhotoPicker> {
       ),
     );
     if (source == null) return;
-    final file = await _picker.pickImage(
-      source: source,
-      imageQuality: 85,
-      maxWidth: 2000,
-    );
-    if (file == null) return;
-    final bytes = await file.readAsBytes();
-    setState(() {
-      _bytes = bytes;
-    });
-    widget.onChanged?.call(file);
+
+    // --- Primary path: image_picker (supports iCloud when plugin is up to date) ---
+    try {
+      final file = await _picker.pickImage(
+        source: source,
+        imageQuality: 85,
+        maxWidth: 2000,
+      );
+      if (file != null) {
+        // read as bytes for preview (this can throw on iCloud-only assets if not downloaded)
+        try {
+          final bytes = await file.readAsBytes();
+          if (!mounted) return;
+          setState(() => _bytes = bytes);
+        } catch (_) {
+          // If preview fails we still pass the file; UI just won't show the preview until later.
+        }
+        widget.onChanged?.call(file);
+        return;
+      }
+    } on PlatformException catch (e) {
+      // Common iOS error when the photo is only in iCloud or permission is limited
+      debugPrint('image_picker failed: ${e.code} ${e.message}');
+      // We’ll fall back to Files below
+    } catch (e, st) {
+      debugPrint('image_picker unexpected error: $e\n$st');
+      // Fall back below
+    }
+
+    // --- Fallback path: Files / iCloud Drive via file_picker ---
+    try {
+      final res = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: true, // important on iOS
+        allowMultiple: false,
+      );
+      if (res == null || res.files.isEmpty) return;
+
+      final f = res.files.first;
+      Uint8List? bytes = f.bytes;
+
+      // Some providers return only a path; load bytes manually if needed
+      if (bytes == null && f.path != null) {
+        bytes = await XFile(f.path!).readAsBytes();
+      }
+
+      if (bytes != null) {
+        if (!mounted) return;
+        setState(() => _bytes = bytes);
+
+        // Wrap the bytes in an XFile so the rest of your pipeline stays unchanged
+        final mime = lookupMimeType(f.name) ?? 'image/jpeg';
+        final xf = XFile.fromData(
+          bytes,
+          name: f.name.isNotEmpty ? f.name : 'image.jpg',
+          mimeType: mime,
+        );
+        widget.onChanged?.call(xf);
+        return;
+      }
+    } catch (e, st) {
+      debugPrint('file_picker fallback error: $e\n$st');
+    }
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(loc.pick_photo_error_generic)));
   }
 
   @override

@@ -365,6 +365,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pick_photo_change => 'Change Photo';
 
   @override
+  String get pick_photo_error_generic =>
+      'An error occured while uploading your photo, try again later';
+
+  @override
   String get last_updated => 'Last updated';
 
   @override

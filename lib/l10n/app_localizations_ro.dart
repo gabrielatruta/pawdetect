@@ -369,6 +369,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get pick_photo_change => 'Schimbă poza';
 
   @override
+  String get pick_photo_error_generic =>
+      'A apărut o eroare în timpul încărcării pozei, încearcă te rog mai târziu.';
+
+  @override
   String get last_updated => 'Ultima actualizare';
 
   @override

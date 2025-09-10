@@ -131,6 +131,7 @@
   "pick_photo_gallery": "Galerie",
   "pick_photo_camera": "Cameră",
   "pick_photo_change": "Schimbă poza",
+  "pick_photo_error_generic": "A apărut o eroare în timpul încărcării pozei, încearcă te rog mai târziu.",
 
   "last_updated": "Ultima actualizare",
 
