@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pawdetect/services/report_service.dart';
 import 'package:pawdetect/models/report_model.dart' as report;
 
@@ -172,12 +173,19 @@ class MyReportsViewModel extends ChangeNotifier {
   }
 
   // update opened report
-  Future<void> updateOpenedReport(Map<String, dynamic> partial) async {
+  Future<void> updateOpenedReport(
+    Map<String, dynamic> partial, {
+    XFile? newPhoto, // ← add this
+  }) async {
     if (openedReportId == null) return;
     isDetailsLoading = true;
     notifyListeners();
     try {
-      await _reportSvc.updateReport(openedReportId!, partial);
+      await _reportSvc.updateReport(
+        openedReportId!,
+        partial,
+        newPhoto: newPhoto,
+      );
       openedReport = await _reportSvc.getReportById(openedReportId!);
     } finally {
       isDetailsLoading = false;

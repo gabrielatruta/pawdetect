@@ -32,29 +32,29 @@ class ReportService {
     double? alertLng,
   }) async {
     // 1) upload (if present)
-  List<String> photoUrls = [];
-  Map<String, dynamic>? photoMeta;
+    List<String> photoUrls = [];
+    Map<String, dynamic>? photoMeta;
 
-  if (photo != null) {
-    try {
-      final cld = await CloudinaryService.uploadXFile(photo);
-      final url = (cld['secure_url'] ?? cld['url'])?.toString();
-      if (url != null && url.isNotEmpty) {
-        photoUrls = [url];
+    if (photo != null) {
+      try {
+        final cld = await CloudinaryService.uploadXFile(photo);
+        final url = (cld['secure_url'] ?? cld['url'])?.toString();
+        if (url != null && url.isNotEmpty) {
+          photoUrls = [url];
+        }
+        photoMeta = {
+          'publicId': cld['public_id'],
+          'width': cld['width'],
+          'height': cld['height'],
+          'format': cld['format'],
+          'bytes': cld['bytes'],
+        };
+      } catch (e) {
+        // decide: continue without photo or rethrow
+        photoUrls = [];
+        // optionally log e
       }
-      photoMeta = {
-        'publicId': cld['public_id'],
-        'width': cld['width'],
-        'height': cld['height'],
-        'format': cld['format'],
-        'bytes': cld['bytes'],
-      };
-    } catch (e) {
-      // decide: continue without photo or rethrow
-      photoUrls = [];
-      // optionally log e
     }
-  }
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw Exception('User not authenticated');
@@ -84,7 +84,7 @@ class ReportService {
     if (lat != null) data['lat'] = lat;
     if (lng != null) data['lng'] = lng;
 
-    if (photoMeta != null) data['photoMeta'] = photoMeta; 
+    if (photoMeta != null) data['photoMeta'] = photoMeta;
 
     data['foundAlertSubscription'] = {
       'enabled': receiveFoundAlerts,
@@ -119,9 +119,30 @@ class ReportService {
   }
 
   // update a report
-  Future<void> updateReport(String id, Map<String, dynamic> partial) async {
+  Future<void> updateReport(
+    String id,
+    Map<String, dynamic> partial, {
+    XFile? newPhoto,
+  }) async {
     partial.remove('userId');
     partial.remove('createdAt');
+
+    // Upload only if the user picked a new photo
+    if (newPhoto != null) {
+      final cld = await CloudinaryService.uploadXFile(newPhoto);
+      final url = (cld['secure_url'] ?? cld['url'])?.toString();
+      if (url != null && url.isNotEmpty) {
+        partial['photoUrls'] = <String>[url];
+        // (optional) meta
+        partial['photoMeta'] = {
+          'publicId': cld['public_id'],
+          'width': cld['width'],
+          'height': cld['height'],
+          'format': cld['format'],
+          'bytes': cld['bytes'],
+        };
+      }
+    }
 
     // area keys also updated
     if (partial.containsKey('foundAlertSubscription.area')) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pawdetect/l10n/app_localizations.dart';
 import 'package:pawdetect/navigation.dart';
 import 'package:pawdetect/views/shared/custom_primary_button.dart';
@@ -24,6 +25,7 @@ class ButtonsEditReport extends StatelessWidget {
     required this.solvedStatusValue,
     this.lat,
     this.lng,
+    this.newPhoto,  
   });
 
   final dynamic myReportViewModel;
@@ -46,6 +48,8 @@ class ButtonsEditReport extends StatelessWidget {
   final String solvedStatusValue;
   final double? lat;
   final double? lng;
+
+  final XFile? newPhoto;           
 
   String _normalizeArea(String? s) {
     if (s == null) return '';
@@ -186,7 +190,7 @@ class ButtonsEditReport extends StatelessWidget {
                 }
               }
 
-              await myReportViewModel.updateOpenedReport(partial);
+              await myReportViewModel.updateOpenedReport(partial, newPhoto: newPhoto);
               appNavigatorKey.currentState?.pop('/myreports');
             },
           ),
